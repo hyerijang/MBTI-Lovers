@@ -1,6 +1,7 @@
 package kr.hongik.mbti;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -106,6 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
 
+
             } catch (ApiException e) {
 
             }
@@ -127,6 +129,8 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(LoginActivity.this, mAuth.getUid() + "님이 접속하셨습니다", Toast.LENGTH_SHORT).show();
 //                            updateUI();
+                            Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
+                            startActivity(intent);
                         } else {
                             // 로그인 실패
                             Log.w(TAG, "signInWithCredential:failure", task.getException());

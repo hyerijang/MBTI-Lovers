@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MBTI">
-        <activity android:name=".TestActivity"></activity>
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".JoinActivity" />
+        <activity android:name=".TestActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
