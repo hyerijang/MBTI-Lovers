@@ -14,11 +14,19 @@
     </TextView>
 
     <Button
+        android:id="@+id/btn_join"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Join으로 이동" />
+
+    <Button
         android:id="@+id/btn_logout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="로그아웃"
         app:layout_constraintTop_toBottomOf="@+id/btn_google_login"></Button>
+
+
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>
