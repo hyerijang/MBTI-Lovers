@@ -129,8 +129,6 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(LoginActivity.this, mAuth.getUid() + "님이 접속하셨습니다", Toast.LENGTH_SHORT).show();
 //                            updateUI();
-                            Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
-                            startActivity(intent);
                         } else {
                             // 로그인 실패
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -151,6 +149,8 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this,   "로그아웃", Toast.LENGTH_SHORT).show();
         }
     }
+
+
 //    화면전환
 //    Note: Activity 간 user data 주고받을 수 있도록 수정할 것
 //    public void updateUI(){

@@ -52,7 +52,3 @@ public class JoinActivity extends AppCompatActivity {
         });
     }
 }
-
-public void profileUpdate() {
-    String nickname =
-}
