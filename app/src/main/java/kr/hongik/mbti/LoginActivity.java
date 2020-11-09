@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         // 파이어베이스 인증 객체 선언
         mAuth = FirebaseAuth.getInstance();
 
-        btn_login_google = findViewById(R.id.btn_google_logIn);
+        btn_login_google = findViewById(R.id.btn_google_login);
         signout = findViewById(R.id.signout);
 
         // Configure Google Sign In
@@ -129,6 +129,8 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(LoginActivity.this, mAuth.getUid() + "님이 접속하셨습니다", Toast.LENGTH_SHORT).show();
 //                            updateUI();
+                            Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
+                            startActivity(intent);
                         } else {
                             // 로그인 실패
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
