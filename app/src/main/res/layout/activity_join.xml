@@ -106,7 +106,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/Image"
             android:layout_width="match_parent"
             android:layout_height="196dp"
             tools:srcCompat="@tools:sample/avatars" />
