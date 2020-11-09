@@ -192,7 +192,7 @@ public class LoginActivity extends AppCompatActivity {
         //유저 확인 및 화면 전환
         if (user != null) {
             Toast.makeText(LoginActivity.this, mFirebaseAuth.getUid() + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, JoinActivity.class);
             startActivity(intent);
             finish();
         }

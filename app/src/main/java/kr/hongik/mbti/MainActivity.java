@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView tv_uid;
     private Button btn_logout2;
-    private Button btn_join;
+
 
     FirebaseAuth mfirebaseAuth;
     FirebaseUser currentUser;
@@ -47,19 +47,6 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        btn_join = findViewById(R.id.btn_join);
-
-        btn_join.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, JoinActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-
     }
 
 
