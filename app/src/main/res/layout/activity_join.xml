@@ -55,18 +55,37 @@
                 android:text="woman" />
         </RadioGroup>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/age"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/ageInput"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/age"
+                android:layout_width="200dp"
+                android:layout_height="50dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ageInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="나이" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/mbti"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="나이" />
+                android:layout_height="50dp">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/mbtiInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="MBTI" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/address"
@@ -79,18 +98,6 @@
                 android:layout_height="wrap_content"
                 android:hint="주소" />
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/mbti"
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/mbtiInput"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:hint="MBTI" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -108,9 +115,9 @@
         <ImageView
             android:id="@+id/Image"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="150dp"
             android:scaleType="fitCenter"
-            tools:srcCompat="@drawable/ic_image" />
+            app:srcCompat="@drawable/ic_image" />
 
         <Button
             android:id="@+id/JoinButton"
