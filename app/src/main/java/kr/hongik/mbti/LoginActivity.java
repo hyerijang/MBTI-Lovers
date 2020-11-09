@@ -1,7 +1,10 @@
 package kr.hongik.mbti;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Paint;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +14,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -21,119 +31,108 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final int RC_SIGN_IN = 900;
-    // 구글로그인 result 상수
     final String TAG = LoginActivity.class.getName();
-    // 파이어베이스 인증 객체 생성
-    private FirebaseAuth mAuth;
-    // 구글api클라이언트
-    private GoogleSignInClient mGoogleSignInClient;
-    // 구글  로그인 버튼
+
+    // 버튼
     private SignInButton btn_login_google;
-    private Button signout;
+    private LoginButton btn_login_facebook;
+
+    //result 상수
+    private static final int RC_SIGN_IN = 900;
+
+    private FirebaseAuth mFirebaseAuth;
+    private GoogleSignInClient mGoogleSignInClient;
+    private CallbackManager mCallbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // 파이어베이스 인증 객체 선언
-        mAuth = FirebaseAuth.getInstance();
-
         btn_login_google = findViewById(R.id.btn_google_login);
-        signout = findViewById(R.id.signout);
+
+        // 파이어베이스 인증 객체 선언
+        mFirebaseAuth= FirebaseAuth.getInstance();
 
         // Configure Google Sign In
-        // gso 개체를 구성할 때 requestIdToken을 호출
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
-        //Create a new instance of GoogleSignInClient
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
-
-
-        //updateUI();
-
         btn_login_google.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
+                //Create a new instance of GoogleSignInClient
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
 
-        signout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                logout();
+
+        //facebook login
+        mCallbackManager = CallbackManager.Factory.create();
+        btn_login_facebook = (LoginButton) findViewById(R.id.btn_facebook_login);
+        btn_login_facebook.setReadPermissions("email", "public_profile");
+        btn_login_facebook.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
             }
         });
+
     }
 
-    // [START on_start_check_user]
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-
-//      앱 시작시 로그인 유무 확인
-//      updateUI(currentUser);
-    }
-    // [END on_start_check_user]
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // 구글로그인 버튼 응답
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                // 로그인 성공
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
-
-
-            } catch (ApiException e) {
-
-            }
-        }
+        FirebaseUser currentUser  = mFirebaseAuth.getCurrentUser();
+        checkUser(currentUser);
     }
 
-    // 정상적으로 로그인되면 GoogleSignInAccount 개체에서 ID 토큰을 가져와서
-    // Firebase 사용자 인증 정보로 교환하고 Firebase 사용자 인증 정보를 사용해 Firebase에 인증한다.
+
+    // google token
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
+        mFirebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // 로그인 성공
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(LoginActivity.this, mAuth.getUid() + "님이 접속하셨습니다", Toast.LENGTH_SHORT).show();
-//                            updateUI();
-                            Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
-                            startActivity(intent);
+                            Log.d(TAG, "signInWithGoogle:success");
+                            // 토큰 얻은 후 google 로그아웃
+                            mGoogleSignInClient.signOut();
+                            checkUser(mFirebaseAuth.getCurrentUser());
                         } else {
                             // 로그인 실패
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Log.w(TAG, "signInWithGoogle:failure", task.getException());
                             Toast.makeText(LoginActivity.this, R.string.failed_login, Toast.LENGTH_SHORT).show();
                         }
 
@@ -142,32 +141,63 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void logout() {
-        if (mAuth.getCurrentUser() == null)
-            Toast.makeText(LoginActivity.this, "로그인한 유저가 없어 로그아웃 할 수 없습니다", Toast.LENGTH_SHORT).show();
-        else {
-            mAuth.signOut();
-            mGoogleSignInClient.signOut();
-            Toast.makeText(LoginActivity.this,   "로그아웃", Toast.LENGTH_SHORT).show();
-        }
+    // facebook Token
+    private void handleFacebookAccessToken(AccessToken token) {
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mFirebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // 로그인 성공
+                            Log.d(TAG, "signInWithFacebook:success");
+                            // 토큰 얻은 후 Facebook 로그아웃
+                            LoginManager.getInstance().logOut();
+                            checkUser(mFirebaseAuth.getCurrentUser());
+                        } else {
+                            // 로그인 실패
+                            Log.w(TAG, "signInWithFacebook:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, R.string.failed_login, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
 
-//    화면전환
-//    Note: Activity 간 user data 주고받을 수 있도록 수정할 것
-//    public void updateUI(){
-//        //로그인된 유저 있는지 확인 후 메인페이지로 이동
-//        if (mAuth.getCurrentUser() != null) {
-//            Intent intent = new Intent(this, TestActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
-//        else
-//        {
-//            Toast.makeText(LoginActivity.this, "로그인한 유저 없습니다.", Toast.LENGTH_SHORT).show();
-//        }
-//
-//    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //페이스북 로그인
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+
+        // 구글 로그인
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // 로그인 성공
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {
+
+            }
+        }
+
+
+
+    }
+
+
+
+    public void checkUser(FirebaseUser user) {
+        //유저 확인 및 화면 전환
+        if (user != null) {
+            Toast.makeText(LoginActivity.this, mFirebaseAuth.getUid() + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+    }
 
 
 }
