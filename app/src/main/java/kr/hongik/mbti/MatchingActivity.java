@@ -48,23 +48,32 @@ public class MatchingActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersRef = db.collection("users");
 
-        usersRef.whereEqualTo("mbti", ((EditText)findViewById(R.id.m_mbti)).getText().toString())
-                /*.whereGreaterThanOrEqualTo("age", ((EditText)findViewById(R.id.m_minage)).getText().toString())
-                .whereLessThanOrEqualTo("age", ((EditText)findViewById(R.id.m_maxage)).getText().toString())*/
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                               startToast(document.getId());
+        String m_mbti = ((EditText)findViewById(R.id.m_mbti)).getText().toString();
+        String m_minage = ((EditText)findViewById(R.id.m_minage)).getText().toString();
+        String m_maxage = ((EditText)findViewById(R.id.m_maxage)).getText().toString();
+
+        if(m_mbti.length()>0 && m_minage.length()>0 && m_maxage.length()>0){
+            usersRef.whereEqualTo("mbti", m_mbti)
+                    .whereGreaterThanOrEqualTo("age", m_minage)
+                    .whereLessThanOrEqualTo("age", m_maxage)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                    startToast(document.getId());
+                                }
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
                             }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-                    }
-                });
+                    });
+        }
+        else {
+            startToast("옵션을 전부 입력해주세요");
+        }
     }
 
     private void myStartActivity(Class c) {
