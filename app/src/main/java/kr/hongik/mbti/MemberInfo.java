@@ -1,6 +1,9 @@
 package kr.hongik.mbti;
 
-public class MemberInfo {
+import java.io.Serializable;
+
+public class MemberInfo  implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String nickname;
     private String age;
     private String address;

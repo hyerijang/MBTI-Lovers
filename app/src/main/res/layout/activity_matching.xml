@@ -7,8 +7,9 @@
     tools:context=".MatchingActivity">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="300dp"
         android:orientation="vertical">
 
         <TextView
@@ -54,6 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="설정 완료" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,12 +3,16 @@ package kr.hongik.mbti;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,15 +27,22 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.w3c.dom.Text;
+
 public class MatchingActivity extends AppCompatActivity {
 
     private Button btn_matchingOption;
     private static final String TAG = "MatchingActivity";
+    LinearLayout container;
+    String mp_nickname, mp_age, mp_mbti, mp_address, mp_stateMessage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matching);
+
+        container=findViewById(R.id.container);
 
         btn_matchingOption = findViewById(R.id.btn_matchingOption);
 
@@ -63,7 +74,17 @@ public class MatchingActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     Log.d(TAG, document.getId() + " => " + document.getData());
-                                    startToast(document.getId());
+
+                                    mp_nickname=document.getString("nickname");
+                                    mp_age=document.getString("age");
+                                    mp_mbti=document.getString("mbti");
+                                    mp_address=document.getString("address");
+                                    mp_stateMessage=document.getString("stateMessage");
+
+                                    MemberInfo m = new MemberInfo(mp_nickname, mp_age, mp_mbti, mp_address, mp_stateMessage);
+                                    Intent intent = new Intent(MatchingActivity.this,MatchingPersonActivity.class);
+                                    intent.putExtra("MemberInfo", m);
+                                    startActivity(intent);
                                 }
                             } else {
                                 Log.d(TAG, "Error getting documents: ", task.getException());
