@@ -19,6 +19,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 public class JoinActivity extends AppCompatActivity {
 
@@ -26,6 +29,7 @@ public class JoinActivity extends AppCompatActivity {
     private ImageView imageview;
     private Button JoinButton;
     private static final String TAG = "JoinActivity";
+    private StorageReference mStorageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class JoinActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.JoinButton).setOnClickListener(mClickListener);
+        mStorageRef = FirebaseStorage.getInstance().getReference();
     }
 
     Button.OnClickListener mClickListener = new View.OnClickListener() {
@@ -96,8 +101,9 @@ public class JoinActivity extends AppCompatActivity {
 
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri selectedImageUri = data.getData();
-            imageview.setImageURI(selectedImageUri);
+            Uri profileImage = data.getData();
+            imageview.setImageURI(profileImage);
+            uploadProfileImage(profileImage);
         }
     }
 
@@ -108,5 +114,25 @@ public class JoinActivity extends AppCompatActivity {
 
     private void startToast(String msg){
         Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
+    }
+
+    private void uploadProfileImage(Uri profileImage ){
+
+        StorageReference imageRef = mStorageRef.child("profileImages/"+FirebaseAuth.getInstance().getUid()+".jpg");
+
+        imageRef.putFile(profileImage)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        // ...
+                    }
+                });
     }
 }
