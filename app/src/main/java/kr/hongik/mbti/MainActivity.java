@@ -3,6 +3,7 @@ package kr.hongik.mbti;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,7 +27,7 @@ import kr.hongik.mbti.LoginActivity;
 public class MainActivity extends AppCompatActivity {
 
     private TextView tv_uid;
-    private Button btn_logout2;
+    private Button btn_logout2, btn_matching, btn_update;
     FirebaseAuth mfirebaseAuth;
     FirebaseUser currentUser;
     private static final String TAG = "MainActivity";
@@ -38,6 +39,36 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         init();
 
+        btn_logout2 = findViewById(R.id.btn_logout2);
+
+        btn_logout2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logout(mfirebaseAuth);
+                myStartActivity(LoginActivity.class);
+                finish();
+            }
+        });
+
+        btn_matching = findViewById(R.id.btn_matching);
+
+        btn_matching.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(MatchingActivity.class);
+                finish();
+            }
+        });
+
+        btn_update = findViewById(R.id.btn_update);
+
+        btn_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(UpdateActivity.class);
+                finish();
+            }
+        });
 
         }
 
@@ -55,17 +86,14 @@ public class MainActivity extends AppCompatActivity {
                             if (document != null) {
                                 if (document.exists()) {
                                     Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                    startToast("추가정보입력완료");
                                 } else {
                                     Log.d(TAG, "No such document");
-                                    startToast("추가정보입력하세요");
                                     myStartActivity(JoinActivity.class);
 
                                 }
                             }
                         } else {
                             Log.d(TAG, "get failed with ", task.getException());
-                            startToast("task 실패");
                         }
                     }
                 );
@@ -76,17 +104,6 @@ public class MainActivity extends AppCompatActivity {
             tv_uid = findViewById(R.id.tv_firebase_uid);
             String userNum = currentUser.getUid();
             tv_uid.setText(userNum);
-
-            btn_logout2 = findViewById(R.id.btn_logout2);
-
-            btn_logout2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    logout(mfirebaseAuth);
-                    myStartActivity(LoginActivity.class);
-                    finish();
-                }
-            });
 
         }
 
@@ -101,6 +118,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+    }
+
+    private void myButton (Button b) {
+
     }
 
     private void myStartActivity(Class c) {
