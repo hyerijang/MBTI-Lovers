@@ -18,31 +18,31 @@ public class MemberInfo {
     public String getNickname(){
         return this.nickname;
     }
-    public void setNickname(){
+    public void setNickname(String nickname){
         this.nickname=nickname;
     }
     public String getAge(){
         return this.age;
     }
-    public void setAge(){
+    public void setAge(String age){
         this.age=age;
     }
     public String getAddress(){
         return this.address;
     }
-    public void setAddress(){
+    public void setAddress(String address){
         this.address=address;
     }
     public String getMbti(){
         return this.mbti;
     }
-    public void setMbti(){
+    public void setMbti(String mbti){
         this.mbti=mbti;
     }
     public String getStateMessage(){
         return this.stateMessage;
     }
-    public void setStateMessage(){
+    public void setStateMessage(String stateMessage){
         this.stateMessage=stateMessage;
     }
 }
