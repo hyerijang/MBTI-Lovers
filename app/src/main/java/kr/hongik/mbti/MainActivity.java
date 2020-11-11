@@ -96,10 +96,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (mFirebaseAuth.getCurrentUser() != null) {
 
-            Toast.makeText(MainActivity.this,   mFirebaseAuth.getUid()+"님이 로그아웃하셨습니다", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, mFirebaseAuth.getUid() + "님이 로그아웃하셨습니다", Toast.LENGTH_SHORT).show();
             mFirebaseAuth.signOut();
 
 
+        }
     }
 
     private void myStartActivity(Class c) {
