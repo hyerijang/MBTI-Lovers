@@ -1,11 +1,8 @@
 package kr.hongik.mbti;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,21 +10,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import kr.hongik.mbti.LoginActivity;
-
 public class MainActivity extends AppCompatActivity {
 
     private TextView tv_uid;
-    private Button btn_logout2, btn_matching, btn_update;
+    private Button btn_logout2, btn_matching, btn_userdata;
     FirebaseAuth mfirebaseAuth;
     FirebaseUser currentUser;
     private static final String TAG = "MainActivity";
@@ -39,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-
 
         btn_logout2 = findViewById(R.id.btn_logout2);
 
@@ -62,12 +53,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btn_update = findViewById(R.id.btn_update);
+        btn_userdata = findViewById(R.id.btn_userdata);
 
-        btn_update.setOnClickListener(new View.OnClickListener() {
+        btn_userdata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myStartActivity(UpdateActivity.class);
+                myStartActivity(MyprofileActivity.class);
                 finish();
             }
         });

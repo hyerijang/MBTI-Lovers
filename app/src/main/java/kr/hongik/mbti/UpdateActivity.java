@@ -27,7 +27,7 @@ public class UpdateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 profileUpdate2();
-                myStartActivity(MainActivity.class);
+                myStartActivity(MyprofileActivity.class);
             }
         });
 
