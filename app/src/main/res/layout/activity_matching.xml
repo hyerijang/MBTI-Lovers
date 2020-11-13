@@ -27,7 +27,7 @@
 
             <EditText
                 android:id="@+id/m_minage"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="min age"
@@ -35,7 +35,7 @@
 
             <EditText
                 android:id="@+id/m_maxage"
-                android:layout_width="match_parent"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="max age"
@@ -44,7 +44,7 @@
 
         <EditText
             android:id="@+id/m_mbti"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="mbti"

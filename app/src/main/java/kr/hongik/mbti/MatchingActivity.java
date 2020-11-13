@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,16 +34,26 @@ public class MatchingActivity extends AppCompatActivity {
 
     private Button btn_matchingOption;
     private static final String TAG = "MatchingActivity";
-    LinearLayout container;
-    String mp_nickname, mp_age, mp_mbti, mp_address, mp_stateMessage;
+    String mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage, mp_gender2;
 
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference usersRef = db.collection("users");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matching);
 
-        container=findViewById(R.id.container);
+        usersRef.document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.getString("gender")=="남자"){
+                    mp_gender2 = "여자";
+                }
+                else mp_gender2 = "남자";
+            }
+        });
 
         btn_matchingOption = findViewById(R.id.btn_matchingOption);
 
@@ -55,16 +66,14 @@ public class MatchingActivity extends AppCompatActivity {
     }
 
     private void matchingAlgorithm (){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference usersRef = db.collection("users");
 
         String m_mbti = ((EditText)findViewById(R.id.m_mbti)).getText().toString();
         String m_minage = ((EditText)findViewById(R.id.m_minage)).getText().toString();
         String m_maxage = ((EditText)findViewById(R.id.m_maxage)).getText().toString();
 
         if(m_mbti.length()>0 && m_minage.length()>0 && m_maxage.length()>0){
-            usersRef.whereEqualTo("mbti", m_mbti)
+            usersRef.whereEqualTo("gender", mp_gender2)
+                    .whereEqualTo("mbti", m_mbti)
                     .whereGreaterThanOrEqualTo("age", m_minage)
                     .whereLessThanOrEqualTo("age", m_maxage)
                     .get()
@@ -75,23 +84,27 @@ public class MatchingActivity extends AppCompatActivity {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     Log.d(TAG, document.getId() + " => " + document.getData());
 
-                                    mp_nickname=document.getString("nickname");
-                                    mp_age=document.getString("age");
-                                    mp_mbti=document.getString("mbti");
-                                    mp_address=document.getString("address");
-                                    mp_stateMessage=document.getString("stateMessage");
+                                        mp_nickname=document.getString("nickname");
+                                        mp_gender=document.getString("gender");
+                                        mp_age=document.getString("age");
+                                        mp_mbti=document.getString("mbti");
+                                        mp_address=document.getString("address");
+                                        mp_stateMessage=document.getString("stateMessage");
 
-                                    MemberInfo m = new MemberInfo(mp_nickname, mp_age, mp_mbti, mp_address, mp_stateMessage);
-                                    Intent intent = new Intent(MatchingActivity.this,MatchingPersonActivity.class);
-                                    intent.putExtra("MemberInfo", m);
-                                    startActivity(intent);
+                                            MemberInfo m = new MemberInfo(mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage);
+
+                                            Intent intent = new Intent(MatchingActivity.this,MatchingPersonActivity.class);
+                                            intent.putExtra("MemberInfo", m);
+                                            startActivity(intent);
+                                        }
                                 }
-                            } else {
+                             else {
                                 Log.d(TAG, "Error getting documents: ", task.getException());
                             }
                         }
                     });
         }
+
         else {
             startToast("옵션을 전부 입력해주세요");
         }

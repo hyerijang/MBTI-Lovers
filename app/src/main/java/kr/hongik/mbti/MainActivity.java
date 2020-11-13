@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         init();
 
+
         btn_logout2 = findViewById(R.id.btn_logout2);
 
         btn_logout2.setOnClickListener(new View.OnClickListener() {

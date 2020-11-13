@@ -29,6 +29,8 @@ public class JoinActivity extends AppCompatActivity {
     private ImageView imageview;
     private Button JoinButton;
     private static final String TAG = "JoinActivity";
+    FirebaseAuth mfirebaseAuth;
+    FirebaseUser currentUser;
     private StorageReference mStorageRef;
 
     @Override
@@ -59,17 +61,21 @@ public class JoinActivity extends AppCompatActivity {
 
 
     private void profileUpdate(){
+        mfirebaseAuth = FirebaseAuth.getInstance();
+        currentUser = mfirebaseAuth.getCurrentUser();
+
         String nickname = ((EditText)findViewById(R.id.nickname)).getText().toString();
+        String gender = ((EditText)findViewById(R.id.gender)).getText().toString();
         String age = ((EditText)findViewById(R.id.age)).getText().toString();
         String mbti = ((EditText)findViewById(R.id.mbti)).getText().toString();
         String address = ((EditText)findViewById(R.id.address)).getText().toString();
         String stateMessage = ((EditText)findViewById(R.id.stateMessage)).getText().toString();
 
-        if(nickname.length()>0 && age.length()>0 && mbti.length()>0 && address.length()>0 && stateMessage.length()>0){
+        if(nickname.length()>0 && gender.length()>0 && age.length()>0 && mbti.length()>0 && address.length()>0 && stateMessage.length()>0){
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-            MemberInfo memberInfo = new MemberInfo(nickname, age, address, mbti, stateMessage);
+            MemberInfo memberInfo = new MemberInfo(nickname, gender, age, address, mbti, stateMessage);
             if(user !=null){
                 db.collection("users").document(user.getUid()).set(memberInfo)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {

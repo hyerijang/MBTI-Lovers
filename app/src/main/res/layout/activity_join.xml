@@ -31,7 +31,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="nickname"
+            android:hint="닉네임"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/gender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="남자/여자 로 적어주세요"
             android:inputType="textPersonName" />
 
         <EditText
@@ -39,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="age"
+            android:hint="나이"
             android:inputType="textPersonName" />
 
         <EditText
@@ -55,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="address"
+            android:hint="주소"
             android:inputType="textPersonName" />
 
         <EditText
@@ -63,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:ems="10"
-            android:hint="stateMessage"
+            android:hint="상태메시지"
             android:inputType="textPersonName" />
 
         <ImageView
