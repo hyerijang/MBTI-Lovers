@@ -27,7 +27,7 @@ public class JoinActivity extends AppCompatActivity {
 
     private final int GET_GALLERY_IMAGE = 200;
     private ImageView imageview;
-    private Button JoinButton;
+    private Button JoinButton, mbti_link;
     private static final String TAG = "JoinActivity";
     FirebaseAuth mfirebaseAuth;
     FirebaseUser currentUser;
@@ -47,7 +47,20 @@ public class JoinActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.JoinButton).setOnClickListener(mClickListener);
+        mbti_link = findViewById(R.id.mbtiLink);
+
+        mbti_link.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("https://www.16personalities.com/ko/%EB%AC%B4%EB%A3%8C-%EC%84%B1%EA%B2%A9-%EC%9C%A0%ED%98%95-%EA%B2%80%EC%82%AC");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
+
+        JoinButton = findViewById(R.id.JoinButton);
+
+        JoinButton.setOnClickListener(mClickListener);
         mStorageRef = FirebaseStorage.getInstance().getReference();
     }
 
