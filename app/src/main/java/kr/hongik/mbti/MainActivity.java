@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         tv_uid.setText(userNum);
 
         my_mbti = findViewById(R.id.mymbti);
+
         usersRef.get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                            @Override
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
                                                    if (document.exists()) {
                                                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                                        my_mbti.setText("나의 mbti는 " + document.getString("mbti") + "입니다");
+
                                                    } else {
                                                        Log.d(TAG, "No such document");
                                                    }

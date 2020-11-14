@@ -3,6 +3,7 @@ package kr.hongik.mbti;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,12 +15,23 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class UpdateActivity extends AppCompatActivity {
 
-    private Button btn_updateButton;
+    private Button btn_updateButton, mbti_link;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update);
+
+        mbti_link = findViewById(R.id.mbtiLink2);
+
+        mbti_link.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("https://www.16personalities.com/ko/%EB%AC%B4%EB%A3%8C-%EC%84%B1%EA%B2%A9-%EC%9C%A0%ED%98%95-%EA%B2%80%EC%82%AC");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
 
         btn_updateButton = findViewById(R.id.btn_updateButton);
 
