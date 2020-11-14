@@ -34,7 +34,7 @@ public class MatchingActivity extends AppCompatActivity {
 
     private Button btn_matchingOption;
     private static final String TAG = "MatchingActivity";
-    String mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage, mp_gender2;
+    String mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage, ck_gender, mp_gender2;
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -48,12 +48,14 @@ public class MatchingActivity extends AppCompatActivity {
         usersRef.document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.getString("gender")=="남자"){
+                ck_gender=documentSnapshot.getString(("gender"));
+                if(ck_gender.equals("남자")){
                     mp_gender2 = "여자";
                 }
                 else mp_gender2 = "남자";
             }
         });
+
 
         btn_matchingOption = findViewById(R.id.btn_matchingOption);
 
