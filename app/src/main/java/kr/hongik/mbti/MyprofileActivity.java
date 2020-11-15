@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,8 +44,11 @@ public class MyprofileActivity extends AppCompatActivity {
         TextView my_mbti = (TextView)findViewById(R.id.my_mbti);
         TextView my_address = (TextView)findViewById(R.id.my_address);
         TextView my_stateMessage = (TextView)findViewById(R.id.my_stateMessage);
-
+        ImageView my_profile = findViewById(R.id.my_profile);
         btn_update = findViewById(R.id.btn_update);
+
+        ProfileImage profileImage = new ProfileImage();
+        profileImage.getProfileImage(my_profile);
 
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override

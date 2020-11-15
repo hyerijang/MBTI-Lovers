@@ -122,7 +122,8 @@ public class JoinActivity extends AppCompatActivity {
         if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri profileImage = data.getData();
             imageview.setImageURI(profileImage);
-            uploadProfileImage(profileImage);
+            ProfileImage profile = new ProfileImage();
+            profile.updateProfileImage(profileImage);
         }
     }
 
@@ -135,23 +136,5 @@ public class JoinActivity extends AppCompatActivity {
         Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
     }
 
-    private void uploadProfileImage(Uri profileImage ){
 
-        StorageReference imageRef = mStorageRef.child("profileImages/"+FirebaseAuth.getInstance().getUid()+".jpg");
-
-        imageRef.putFile(profileImage)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                        // ...
-                    }
-                });
-    }
 }

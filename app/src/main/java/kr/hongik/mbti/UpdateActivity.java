@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -16,6 +17,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class UpdateActivity extends AppCompatActivity {
 
     private Button btn_updateButton, mbti_link;
+
+    final String TAG = UpdateActivity.class.getName();
+    private ImageView iv_profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,10 @@ public class UpdateActivity extends AppCompatActivity {
         });
 
         btn_updateButton = findViewById(R.id.btn_updateButton);
+
+        iv_profile = (ImageView)findViewById(R.id.ImageForUpdate);
+        ProfileImage profileImage = new ProfileImage();
+        profileImage.getProfileImage(iv_profile);
 
         btn_updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,5 +67,8 @@ public class UpdateActivity extends AppCompatActivity {
     private void myStartActivity(Class c) {
         Intent intent = new Intent(this, c);
         startActivityForResult(intent, 1);
+
     }
+
+
 }
