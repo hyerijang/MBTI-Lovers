@@ -123,7 +123,7 @@ public class JoinActivity extends AppCompatActivity {
             Uri profileImage = data.getData();
             imageview.setImageURI(profileImage);
             ProfileImage profile = new ProfileImage();
-            profile.updateProfileImage(profileImage);
+            profile.uploadProfileImage(profileImage);
         }
     }
 
