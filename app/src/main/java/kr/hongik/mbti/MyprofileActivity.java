@@ -54,6 +54,7 @@ public class MyprofileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 myStartActivity(UpdateActivity.class);
+                finish();
             }
         });
 

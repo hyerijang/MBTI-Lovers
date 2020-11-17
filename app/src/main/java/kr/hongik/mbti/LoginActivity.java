@@ -193,6 +193,7 @@ public class LoginActivity extends AppCompatActivity {
         if (user != null) {
             Toast.makeText(LoginActivity.this, mFirebaseAuth.getUid() + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
             myStartActivity(MainActivity.class);
+            finish();
         }
 
     }

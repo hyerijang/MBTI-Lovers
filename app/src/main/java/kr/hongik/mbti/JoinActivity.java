@@ -68,6 +68,7 @@ public class JoinActivity extends AppCompatActivity {
         public void onClick(View v) {
             profileUpdate();
             myStartActivity(MainActivity.class);
+            finish();
         }
 
 };
