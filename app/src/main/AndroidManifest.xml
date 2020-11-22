@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MBTI">
+        <activity android:name=".CompatibilityActivity"></activity>
         <activity android:name=".MyprofileActivity" />
         <activity android:name=".MatchingPersonActivity" />
         <activity android:name=".UpdateActivity" />
