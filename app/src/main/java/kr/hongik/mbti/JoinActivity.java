@@ -68,6 +68,7 @@ public class JoinActivity extends AppCompatActivity {
         public void onClick(View v) {
             profileUpdate();
             myStartActivity(MainActivity.class);
+            finish();
         }
 
 };
@@ -122,8 +123,8 @@ public class JoinActivity extends AppCompatActivity {
         if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri profileImage = data.getData();
             imageview.setImageURI(profileImage);
-            ProfileImage profile = new ProfileImage();
-            profile.updateProfileImage(profileImage);
+            ProfileImage profile = new ProfileImage(getCacheDir());
+            profile.uploadProfileImage(profileImage);
         }
     }
 
