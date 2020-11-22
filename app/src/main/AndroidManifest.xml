@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MBTI"
         android:requestLegacyExternalStorage="true">
+        <activity android:name=".CompatibilityActivity"></activity>
         <activity android:name=".MyprofileActivity" />
         <activity android:name=".MatchingPersonActivity" />
         <activity android:name=".UpdateActivity" />
