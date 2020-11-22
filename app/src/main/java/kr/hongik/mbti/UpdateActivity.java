@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -20,6 +21,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.File;
 
 public class UpdateActivity extends AppCompatActivity {
 
@@ -73,8 +76,9 @@ public class UpdateActivity extends AppCompatActivity {
 
         getCurrentProfile();
         iv_profile = (ImageView)findViewById(R.id.ImageForUpdate);
-        profileImage = new ProfileImage();
+        profileImage = new ProfileImage(getCacheDir());
         profileImage.showProfileImage(iv_profile);
+
 
         //iv_profile 클릭시 프로필이미지 재업로드 가능
         iv_profile.setOnClickListener(new View.OnClickListener() {
@@ -99,8 +103,12 @@ public class UpdateActivity extends AppCompatActivity {
                         "address",((EditText)findViewById(R.id.u_address)).getText().toString(),
                         "stateMessage",((EditText)findViewById(R.id.u_stateMessage)).getText().toString());
 
-        if(profileImageUri!=null)
+        if(profileImageUri!=null) {
             profileImage.uploadProfileImage(profileImageUri);
+            File localFile = new File(getRealPathFromURI(profileImageUri));
+            profileImage.makeCacheProfileImage(localFile);
+
+        }
     }
 
     private void myStartActivity(Class c) {
@@ -147,6 +155,24 @@ public class UpdateActivity extends AppCompatActivity {
                 });
 
     }
+
+    /**
+     * Uri을 File path를 리턴하는 함수입니다.
+     * @param contentUri
+     * @return File path
+     */
+    public String getRealPathFromURI(Uri contentUri) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+        cursor.moveToNext();
+        String path = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
+        Uri uri = Uri.fromFile(new File(path));
+        cursor.close();
+        return path;
+    }
+
+
+
 
 
 
