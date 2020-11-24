@@ -6,14 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class MatchingPersonActivity extends AppCompatActivity {
+public class SearchingPersonActivity extends AppCompatActivity {
 
     private TextView textView_memberinfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_matching_person);
+        setContentView(R.layout.activity_searching_person);
 
         Intent intent = getIntent();
         MemberInfo memberInfo = (MemberInfo)intent.getSerializableExtra("MemberInfo");
