@@ -1,106 +1,101 @@
 package kr.hongik.mbti;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.util.Log;
 import android.widget.ListView;
-import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FriendListActivity extends AppCompatActivity {
 
-    FirebaseUser user;
-    FirebaseFirestore db;
-    DocumentReference usersRef;
+    final String TAG = FriendListActivity.class.getName();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    DocumentReference docRef;
+    CollectionReference colRef;
 
-    ArrayList<String> userNum;
-    ArrayList<String> nicknames;
-    ArrayList<String> stateMessages;
+    public ArrayList<FriendVO> myFreindList = new ArrayList<FriendVO>();
+
+    FriendListAdapter adapter = new FriendListAdapter(this, 0, myFreindList);
 
     ListView lv_friends;
+
+    final Map<String, Object> emptyObject = new HashMap<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_list);
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        db = FirebaseFirestore.getInstance();
-        usersRef =  db.collection("users").document(user.getUid());
-
         lv_friends = (ListView) findViewById(R.id.user_friends);
-        
-        //데이터 가져옴
 
-//        ArrayList<MemberInfo> f = new ArrayList<>();
+        colRef = db.collection("friendList/"+user.getUid()+"/FriendUserNums");
 
-        userNum = new ArrayList<>();
-        nicknames = new ArrayList<>();
-        stateMessages = new ArrayList<>();
-        makeSampleData();
+        //친구추가
+        colRef.document("4MEeO638oeZqTzaQ545suXEOgF82").set(emptyObject);
+        colRef.document("YP6jS2oqzPc4gSaAGXBGJB5aWIf1").set(emptyObject);
+        colRef.document("iB6i0ojaQ8d8SWuGYNzo4gb87J92").set(emptyObject);
 
-        //data setting
-        CustomAdapter adapter = new CustomAdapter(this, 0, nicknames, stateMessages);
-        lv_friends.setAdapter(adapter);
-        
-    }
-
-
-    public void makeSampleData(){
-        userNum.add(user.getUid());
-        nicknames.add("나");
-        stateMessages.add("안녕");
-        // 샘플 데이터를 생성합니다.
-        int numOfFreinds = 30;
-        for(int i = 1; i <= numOfFreinds; i++) {
-            nicknames.add("user" + i);
-            stateMessages.add("hello user" + i);
-        }
-    }
-
-
-    private class CustomAdapter extends ArrayAdapter<String> {
-        private ArrayList<String> nicknames;
-        private ArrayList<String> stateMessages;
-
-        public CustomAdapter(Context context, int textViewResourceId, ArrayList<String> array1,ArrayList<String> array2) {
-            super(context, textViewResourceId, array1);
-            this.nicknames = array1;
-            this.stateMessages = array2;
-        }
-
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View v = convertView;
-            if (v == null) {
-                LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                v = vi.inflate(R.layout.user, null);
+        //친구목록 read
+        colRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String friendUserNum =document.getId();
+                        getFriendinfo(friendUserNum);
+                    }
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
             }
+        });
 
-            //프로필 이미지
-            ImageView iv_profileImage = (ImageView)v.findViewById(R.id.profileImage);
+        
+        lv_friends.setAdapter(adapter);
 
-            //이름
-            TextView tv_nickname = (TextView)v.findViewById(R.id.tv_nickname);
-            tv_nickname.setText(nicknames.get(position));
-
-            //상태메세지
-            TextView tv_state_message = (TextView) v.findViewById(R.id.tv_state_message);
-            tv_state_message.setText(stateMessages.get(position));
-            return v;
-        }
     }
+
+
+    /**
+     * 친구의 userNum으로 친구정보를 가져오는 함수
+     * @param userNum
+     */
+    public void getFriendinfo(String userNum){
+
+        docRef = db.document("users/"+userNum);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        myFreindList.add(new FriendVO(userNum, document.getString("nickname"), document.getString("stateMessage"), document.getString("mbti")));
+                        adapter.notifyDataSetChanged();
+                        Log.d(TAG, "current Friendlist size : "+ myFreindList.size());
+                    }
+                }
+            }
+        });
+    }
+
 
 
 }
