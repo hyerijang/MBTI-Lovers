@@ -21,7 +21,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 public class JoinActivity extends AppCompatActivity {
 
@@ -32,6 +31,8 @@ public class JoinActivity extends AppCompatActivity {
     FirebaseAuth mfirebaseAuth;
     FirebaseUser currentUser;
     private StorageReference mStorageRef;
+
+    private String myUid = currentUser.getUid();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class JoinActivity extends AppCompatActivity {
 
         JoinButton.setOnClickListener(mClickListener);
         mStorageRef = FirebaseStorage.getInstance().getReference();
+
     }
 
     Button.OnClickListener mClickListener = new View.OnClickListener() {
@@ -124,7 +126,7 @@ public class JoinActivity extends AppCompatActivity {
             Uri profileImage = data.getData();
             imageview.setImageURI(profileImage);
             ProfileImage profile = new ProfileImage(getCacheDir());
-            profile.uploadProfileImage(profileImage);
+            profile.uploadProfileImage(profileImage, myUid);
         }
     }
 

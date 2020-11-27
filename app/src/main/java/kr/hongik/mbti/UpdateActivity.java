@@ -37,6 +37,8 @@ public class UpdateActivity extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference usersRef = db.collection("users").document(user.getUid());
+    private String myUid = user.getUid();
+
     EditText u_nickname, u_age, u_mbti, u_address ,u_stateMessage;
 
     @Override
@@ -77,7 +79,7 @@ public class UpdateActivity extends AppCompatActivity {
         getCurrentProfile();
         iv_profile = (ImageView)findViewById(R.id.ImageForUpdate);
         profileImage = new ProfileImage(getCacheDir());
-        profileImage.showProfileImage(iv_profile);
+        profileImage.showProfileImage(iv_profile,myUid);
 
 
         //iv_profile 클릭시 프로필이미지 재업로드 가능
@@ -104,7 +106,7 @@ public class UpdateActivity extends AppCompatActivity {
                         "stateMessage",((EditText)findViewById(R.id.u_stateMessage)).getText().toString());
 
         if(profileImageUri!=null) {
-            profileImage.uploadProfileImage(profileImageUri);
+            profileImage.uploadProfileImage(profileImageUri,myUid);
             File localFile = new File(getRealPathFromURI(profileImageUri));
             profileImage.makeCacheProfileImage(localFile);
 

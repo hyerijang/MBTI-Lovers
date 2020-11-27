@@ -47,8 +47,9 @@ public class ProfileImage {
      *  cache가 있으면 cache 파일 사용
      *  cache가 없으면 firebase Strorage에서 다운로드
      * @param iv
+     * @param userNum 이 유저의 프로필을 가져옵니다.
      */
-    public void showProfileImage(ImageView iv)
+    public void showProfileImage(ImageView iv , String userNum)
     {
         if((cacheFile.exists()))
         {
@@ -56,7 +57,7 @@ public class ProfileImage {
         }
         else{
             Log.d(TAG, " showProfileImage: no Cache");
-            if(downloadProfileImage())
+            if(downloadProfileImage(userNum))
                 setProfileImageCache(iv);
         }
         Log.d(TAG, " showProfileImage: success");
@@ -65,10 +66,11 @@ public class ProfileImage {
     /**
      * firebase Storage에 profileImage를 업로드 합니다.
      * @param profileImageUri 이미지 URI
+     * @param userNum 이 유저의 프로필을 가져옵니다.
      */
-    public void uploadProfileImage(Uri profileImageUri){
+    public void uploadProfileImage(Uri profileImageUri, String userNum){
 
-        StorageReference imageRef = mStorageRef.child("profileImages/"+FirebaseAuth.getInstance().getUid()+".jpg");
+        StorageReference imageRef = mStorageRef.child("profileImages/"+userNum+".jpg");
         imageRef.putFile(profileImageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -89,11 +91,12 @@ public class ProfileImage {
 
     /**
      * firebase Storage에서 profileImage 다운로드 후 cache를 생성합니다.
+     * @param userNum 이 유저의 프로필을 가져옵니다.
      */
-    public boolean downloadProfileImage(){
+    public boolean downloadProfileImage(String userNum){
         try {
             File localFile = File.createTempFile("Temp", "");
-            StorageReference imageRef = mStorageRef.child("profileImages/" + FirebaseAuth.getInstance().getUid() + ".jpg");
+            StorageReference imageRef = mStorageRef.child("profileImages/" + userNum + ".jpg");
             imageRef.getFile(localFile)
                     .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
