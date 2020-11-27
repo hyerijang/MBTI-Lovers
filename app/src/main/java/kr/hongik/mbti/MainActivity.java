@@ -22,7 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class MainActivity extends AppCompatActivity {
 
     private TextView my_mbti;
-    private Button btn_logout2, btn_matching, btn_userdata;
+    private Button btn_logout2, btn_matching, btn_userdata, btn_friend_list;
     FirebaseAuth mfirebaseAuth;
     FirebaseUser currentUser;
     private static final String TAG = "MainActivity";
@@ -88,6 +88,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 myStartActivity(MyprofileActivity.class);
+            }
+        });
+
+        btn_friend_list=findViewById(R.id.btn_friend_list);
+        btn_friend_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(FriendListActivity.class);
             }
         });
 

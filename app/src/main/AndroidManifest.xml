@@ -2,21 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="kr.hongik.mbti">
     <!-- 인터넷 사용 권한 -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- 외부 저장소 사용 권한 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 외부 저장소 사용 권한 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MBTI"
-        android:requestLegacyExternalStorage="true">
-        <activity android:name=".CompatibilityActivity"></activity>
+        android:theme="@style/Theme.MBTI">
+        <activity android:name=".FriendListActivity"></activity>
+        <activity android:name=".CompatibilityActivity" />
         <activity android:name=".MyprofileActivity" />
         <activity android:name=".MatchingPersonActivity" />
         <activity android:name=".UpdateActivity" />
