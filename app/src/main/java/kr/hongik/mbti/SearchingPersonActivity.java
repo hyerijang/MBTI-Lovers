@@ -17,7 +17,7 @@ public class SearchingPersonActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         MemberInfo memberInfo = (MemberInfo)intent.getSerializableExtra("MemberInfo");
-            textView_memberinfo = (TextView)findViewById(R.id.mp_matchingPerson);
+            textView_memberinfo = (TextView)findViewById(R.id.sp_searchingPerson);
             textView_memberinfo.setText("닉네임 : " + memberInfo.getNickname() + "\n\n성별 : " + memberInfo.getGender() + "\n\n나이 : " + memberInfo.getAge() + "\n\nmbti : " + memberInfo.getMbti() + "\n\n주소 : " + memberInfo.getAddress() + "\n\n상태메시지 : " + memberInfo.getStateMessage());
     }
 }

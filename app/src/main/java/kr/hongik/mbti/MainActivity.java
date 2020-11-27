@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                                                    DocumentSnapshot document = task.getResult();
                                                    if (document.exists()) {
                                                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                                       my_mbti.setText("나의 mbti는 " + document.getString("mbti") + "입니다");
+                                                       my_mbti.setText("나의 MBTI는 " + document.getString("mbti") + "입니다");
 
                                                    } else {
                                                        Log.d(TAG, "No such document");
