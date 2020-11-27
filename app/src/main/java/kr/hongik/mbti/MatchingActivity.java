@@ -18,7 +18,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.pedro.library.AutoPermissions;
 import com.pedro.library.AutoPermissionsListener;
 
@@ -28,6 +30,7 @@ public class MatchingActivity extends AppCompatActivity implements AutoPermissio
 
     SupportMapFragment mapFragment;
     GoogleMap map;
+    MarkerOptions myLocationMarker;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
@@ -47,6 +50,9 @@ public class MatchingActivity extends AppCompatActivity implements AutoPermissio
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 map=googleMap;
+                try {
+                    map.setMyLocationEnabled(true);
+                } catch(SecurityException e) {e.printStackTrace();}
             }
         });
 
@@ -67,6 +73,26 @@ public class MatchingActivity extends AppCompatActivity implements AutoPermissio
         AutoPermissions.Companion.loadAllPermissions(this, 101);
     }
 
+    public void onResume(){
+        super.onResume();
+
+        if(map!=null) {
+            try {
+                map.setMyLocationEnabled(true);
+            } catch(SecurityException e) {e.printStackTrace();}
+        }
+    }
+
+    public void onPause(){
+        super.onPause();
+
+        if(map!=null){
+            try {
+                map.setMyLocationEnabled(false);
+            } catch(SecurityException e) {e.printStackTrace();}
+        }
+    }
+
     public void startLocationService(){//위치 관리자 객체 참조
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -84,6 +110,31 @@ public class MatchingActivity extends AppCompatActivity implements AutoPermissio
             manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, gpsListener);
         } catch (SecurityException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void showCurrentLocation(Location location){
+        LatLng curPoint = new LatLng(location.getLatitude(), location.getLongitude());
+
+        try {
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(curPoint, 15));
+
+            showMyLocationMarker(location);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showMyLocationMarker(Location location) {
+        if (myLocationMarker == null) {
+            myLocationMarker = new MarkerOptions();
+            myLocationMarker.position(new LatLng(location.getLatitude(), location.getLongitude()));
+            myLocationMarker.title("● 내 위치\n");
+            myLocationMarker.snippet("● GPS로 확인한 위치");
+            myLocationMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.mylocation));
+            map.addMarker(myLocationMarker);
+        } else {
+            myLocationMarker.position(new LatLng(location.getLatitude(), location.getLongitude()));
         }
     }
 
