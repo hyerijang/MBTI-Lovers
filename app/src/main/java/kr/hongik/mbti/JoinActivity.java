@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +33,7 @@ public class JoinActivity extends AppCompatActivity {
     FirebaseAuth mfirebaseAuth;
     FirebaseUser currentUser;
     private StorageReference mStorageRef;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
