@@ -1,16 +1,13 @@
 package kr.hongik.mbti;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -38,10 +35,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -63,13 +56,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        btn_login_google = findViewById(R.id.btn_google_login);
+        setLoginButton();
 
         checkPermission();
 
         // 파이어베이스 인증 객체 선언
         mFirebaseAuth= FirebaseAuth.getInstance();
-
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -91,7 +83,6 @@ public class LoginActivity extends AppCompatActivity {
 
         //facebook login
         mCallbackManager = CallbackManager.Factory.create();
-        btn_login_facebook = (LoginButton) findViewById(R.id.btn_facebook_login);
         btn_login_facebook.setReadPermissions("email", "public_profile");
         btn_login_facebook.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -118,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseUser currentUser  = mFirebaseAuth.getCurrentUser();
         checkUser(currentUser);
     }
+
 
 
     // google token
@@ -225,4 +217,15 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
+
+    private void setLoginButton(){
+        btn_login_google = findViewById(R.id.btn_google_login);
+        TextView textView = (TextView)btn_login_google.getChildAt(0);
+        textView.setText(getString(R.string.sing_in_google));
+
+        btn_login_facebook = (LoginButton) findViewById(R.id.btn_facebook_login);
+        btn_login_facebook.setLoginText(getString(R.string.sing_in_facebook));
+
+    }
 }

@@ -21,7 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tv_uid, my_mbti;
+    private TextView my_mbti;
     private Button btn_logout2, btn_matching, btn_userdata;
     FirebaseAuth mfirebaseAuth;
     FirebaseUser currentUser;
@@ -39,9 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         mfirebaseAuth = FirebaseAuth.getInstance();
         currentUser = mfirebaseAuth.getCurrentUser();
-        tv_uid = findViewById(R.id.tv_firebase_uid);
         String userNum = currentUser.getUid();
-        tv_uid.setText(userNum);
 
         my_mbti = findViewById(R.id.mymbti);
 
