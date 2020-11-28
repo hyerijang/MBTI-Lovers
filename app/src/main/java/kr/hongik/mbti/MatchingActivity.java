@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -31,6 +32,10 @@ public class MatchingActivity extends AppCompatActivity implements AutoPermissio
     SupportMapFragment mapFragment;
     GoogleMap map;
     MarkerOptions myLocationMarker;
+
+    MarkerOptions friendMarker1;
+    MarkerOptions friendMarker2;
+    private Drawable pictureDrawable;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
@@ -97,20 +102,77 @@ public class MatchingActivity extends AppCompatActivity implements AutoPermissio
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         try {
-            Location location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            /*Location location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if(location!=null){
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
             }
 
-            GPSListener gpsListener = new GPSListener();
+            GPSListener gpsListener = new GPSListener();*/
             long minTime = 10000;
             float minDistance=0;
 
-            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, gpsListener);
+            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, new LocationListener() {
+                        @Override
+                        public void onLocationChanged(Location location) {
+                            showCurrentLocation(location);
+                        }
+
+                        @Override
+                        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                        }
+
+                        @Override
+                        public void onProviderEnabled(String provider) {
+
+                        }
+
+                        @Override
+                        public void onProviderDisabled(String provider) {
+
+                        }
+                    }
+            );
+
+            Location lastLocation = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (lastLocation != null) {
+                showCurrentLocation(lastLocation);
+            }
+
+            manager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER,
+                    minTime,
+                    minDistance,
+                    new LocationListener() {
+                        @Override
+                        public void onLocationChanged(Location location) {
+                            showCurrentLocation(location);
+
+                            addPictures(location);
+                        }
+
+                        @Override
+                        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                        }
+
+                        @Override
+                        public void onProviderEnabled(String provider) {
+
+                        }
+
+                        @Override
+                        public void onProviderDisabled(String provider) {
+
+                        }
+                    }
+            );
         } catch (SecurityException e) {
             e.printStackTrace();
         }
+
+
     }
 
     private void showCurrentLocation(Location location){
@@ -138,7 +200,7 @@ public class MatchingActivity extends AppCompatActivity implements AutoPermissio
         }
     }
 
-    class GPSListener implements LocationListener {//위치 리스너 구현
+    /*class GPSListener implements LocationListener {//위치 리스너 구현
         public void onLocationChanged(Location location){
             Double latitude = location.getLatitude();
             Double longitude = location.getLongitude();
@@ -165,6 +227,35 @@ public class MatchingActivity extends AppCompatActivity implements AutoPermissio
         public void onStatusChanged(String provider, int status, Bundle extras) {
 
         }
+    }*/
+
+    private void addPictures(Location location) {
+        int pictureResId = R.drawable.friend03;
+
+        if (friendMarker1 == null) {
+            friendMarker1 = new MarkerOptions();
+            friendMarker1.position(new LatLng(location.getLatitude()+300, location.getLongitude()+300));
+            friendMarker1.title("● 친구 1\n");
+            friendMarker1.icon(BitmapDescriptorFactory.fromResource(pictureResId));
+            map.addMarker(friendMarker1);
+        } else {
+            friendMarker1.position(new LatLng(location.getLatitude()+300, location.getLongitude()+300));
+        }
+
+        pictureResId = R.drawable.friend04;
+
+
+
+        if (friendMarker2 == null) {
+            friendMarker2 = new MarkerOptions();
+            friendMarker2.position(new LatLng(location.getLatitude()+200, location.getLongitude()-100));
+            friendMarker2.title("● 친구 2\n");
+            friendMarker2.icon(BitmapDescriptorFactory.fromResource(pictureResId));
+            map.addMarker(friendMarker2);
+        } else {
+            friendMarker2.position(new LatLng(location.getLatitude()+200, location.getLongitude()-100));
+        }
+
     }
 
     @Override
