@@ -77,12 +77,12 @@ public class MyprofileActivity extends AppCompatActivity {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                my_nickname.setText("닉네임 : " + document.getString("nickname"));
-                                my_gender.setText("성별 : " + document.getString("gender"));
-                                my_age.setText("나이 : " + document.getString("age"));
-                                my_mbti.setText("mbti : " + document.getString("mbti"));
-                                my_address.setText("주소 : " + document.getString("address"));
-                                my_stateMessage.setText("상태메시지 : " + document.getString("stateMessage"));
+                                my_nickname.setText(document.getString("nickname"));
+                                my_gender.setText(document.getString("gender"));
+                                my_age.setText(document.getString("age"));
+                                my_mbti.setText(document.getString("mbti"));
+                                my_address.setText(document.getString("address"));
+                                my_stateMessage.setText(document.getString("stateMessage"));
 
                             } else {
                                 Log.d(TAG, "No such document");

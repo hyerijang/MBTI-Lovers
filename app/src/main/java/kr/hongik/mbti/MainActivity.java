@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,7 +23,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class MainActivity extends AppCompatActivity {
 
     private TextView my_mbti;
-    private Button btn_logout2, btn_matching, btn_userdata, btn_friend_list;
+    private Button btn_logout2, btn_searching, btn_matching, btn_userdata, btn_friend_list;
+
+
     FirebaseAuth mfirebaseAuth;
     FirebaseUser currentUser;
     private static final String TAG = "MainActivity";
@@ -30,6 +33,14 @@ public class MainActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference usersRef = db.collection("users").document(user.getUid());
     // 마지막으로 뒤로가기 버튼을 눌렀던 시간 저장
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            myStartActivity(MainActivity.class);
+        }
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                                                    DocumentSnapshot document = task.getResult();
                                                    if (document.exists()) {
                                                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                                       my_mbti.setText("나의 mbti는 " + document.getString("mbti") + "입니다");
+                                                       my_mbti.setText("나의 MBTI는 " + document.getString("mbti") + "입니다");
 
                                                    } else {
                                                        Log.d(TAG, "No such document");
@@ -79,6 +90,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 myStartActivity(MatchingActivity.class);
+            }
+        });
+
+        btn_searching = findViewById(R.id.btn_searching);
+
+        btn_searching.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(SearchingActivity.class);
+                finish();
             }
         });
 
