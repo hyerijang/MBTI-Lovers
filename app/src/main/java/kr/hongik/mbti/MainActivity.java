@@ -22,8 +22,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tv_uid, my_mbti;
-    private Button btn_logout2, btn_searching, btn_userdata, btn_matching;
+    private TextView my_mbti;
+    private Button btn_logout2, btn_searching, btn_matching, btn_userdata, btn_friend_list;
+
+
     FirebaseAuth mfirebaseAuth;
     FirebaseUser currentUser;
     private static final String TAG = "MainActivity";
@@ -48,9 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         mfirebaseAuth = FirebaseAuth.getInstance();
         currentUser = mfirebaseAuth.getCurrentUser();
-        tv_uid = findViewById(R.id.tv_firebase_uid);
         String userNum = currentUser.getUid();
-        tv_uid.setText(userNum);
 
         my_mbti = findViewById(R.id.mymbti);
 
@@ -109,6 +109,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 myStartActivity(MyprofileActivity.class);
+            }
+        });
+
+        btn_friend_list=findViewById(R.id.btn_friend_list);
+        btn_friend_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(FriendListActivity.class);
             }
         });
 

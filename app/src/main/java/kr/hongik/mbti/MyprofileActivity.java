@@ -34,6 +34,8 @@ public class MyprofileActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference usersRef = db.collection("users").document(user.getUid());
 
+    private String myUid = user.getUid();
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if(keyCode == KeyEvent.KEYCODE_BACK){
@@ -58,7 +60,7 @@ public class MyprofileActivity extends AppCompatActivity {
 
         //프로필 이미지
         ProfileImage profileImage = new ProfileImage(getCacheDir());
-        profileImage.showProfileImage(my_profile);
+        profileImage.showProfileImage(my_profile,myUid);
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

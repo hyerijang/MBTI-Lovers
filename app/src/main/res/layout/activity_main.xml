@@ -98,16 +98,26 @@
 
                         <Button
                             android:id="@+id/btn_searching"
-                            android:layout_width="200dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="3dp"
+                            android:layout_weight = "1"
                             android:text="검색하기" />
 
                         <Button
-                            android:id="@+id/btn_logout2"
-                            android:layout_width="match_parent"
+                            android:id="@+id/btn_friend_list"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="3dp"
+                            android:layout_weight = "1"
+                            android:text="친구목록" />
+
+                        <Button
+                            android:id="@+id/btn_logout2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="3dp"
+                            android:layout_weight = "1"
                             android:text="로그아웃"
                             app:layout_constraintTop_toBottomOf="@+id/btn_google_login"></Button>
 
@@ -117,6 +127,5 @@
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>
-
 
 </androidx.appcompat.widget.LinearLayoutCompat>
