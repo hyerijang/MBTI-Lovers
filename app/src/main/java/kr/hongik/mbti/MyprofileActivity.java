@@ -56,13 +56,14 @@ public class MyprofileActivity extends AppCompatActivity {
         ImageView my_profile = findViewById(R.id.my_profile);
         btn_update = findViewById(R.id.btn_update);
 
-        ProfileImage profileImage = new ProfileImage();
-        profileImage.getProfileImage(my_profile);
-
+        //프로필 이미지
+        ProfileImage profileImage = new ProfileImage(getCacheDir());
+        profileImage.showProfileImage(my_profile);
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 myStartActivity(UpdateActivity.class);
+                finish();
             }
         });
 

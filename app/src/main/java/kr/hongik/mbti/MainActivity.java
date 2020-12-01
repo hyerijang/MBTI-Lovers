@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference usersRef = db.collection("users").document(user.getUid());
+    // 마지막으로 뒤로가기 버튼을 눌렀던 시간 저장
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
@@ -89,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 myStartActivity(MatchingActivity.class);
-                finish();
             }
         });
 
@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 myStartActivity(MyprofileActivity.class);
-                finish();
             }
         });
 
@@ -163,6 +162,23 @@ public class MainActivity extends AppCompatActivity {
 
     private void startToast(String msg){
         Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
+    }
+
+
+    /**
+     *     뒤로가기 두번 누르면 앱 종료
+     */
+    private long backKeyPressedTime = 0;
+    @Override
+    public void onBackPressed() {
+        // 500 milliseconds = 0.5 seconds
+        if (System.currentTimeMillis() > backKeyPressedTime + 500) {
+            backKeyPressedTime = System.currentTimeMillis();
+            return;
+        }
+        if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            finish();
+        }
     }
 
 }
