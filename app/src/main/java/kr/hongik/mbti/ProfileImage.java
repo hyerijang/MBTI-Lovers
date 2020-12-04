@@ -35,11 +35,18 @@ public class ProfileImage {
     final String TAG = ProfileImage.class.getName();
     File cacheDir;
     File cacheFile;
+    String userNum;
 
-    public ProfileImage(File cacheDir){
+    /**
+     * 
+     * @param cacheDir
+     * @param userNum 이 이름으로 cache파일 생성됨
+     */
+    public ProfileImage(File cacheDir, String userNum){
         mStorageRef = FirebaseStorage.getInstance().getReference();
         cacheDir = cacheDir;
-        cacheFile = new File(cacheDir.getAbsolutePath(), FirebaseAuth.getInstance().getUid() + ".jpg");
+        this.userNum=userNum;
+        cacheFile = new File(cacheDir.getAbsolutePath(), userNum + ".jpg");
     }
 
     /**
@@ -47,9 +54,8 @@ public class ProfileImage {
      *  cache가 있으면 cache 파일 사용
      *  cache가 없으면 firebase Strorage에서 다운로드
      * @param iv
-     * @param userNum 이 유저의 프로필을 가져옵니다.
      */
-    public void showProfileImage(ImageView iv , String userNum)
+    public void showProfileImage(ImageView iv)
     {
         if((cacheFile.exists()))
         {
@@ -66,9 +72,8 @@ public class ProfileImage {
     /**
      * firebase Storage에 profileImage를 업로드 합니다.
      * @param profileImageUri 이미지 URI
-     * @param userNum 이 유저의 프로필을 가져옵니다.
      */
-    public void uploadProfileImage(Uri profileImageUri, String userNum){
+    public void uploadProfileImage(Uri profileImageUri){
 
         StorageReference imageRef = mStorageRef.child("profileImages/"+userNum+".jpg");
         imageRef.putFile(profileImageUri)
