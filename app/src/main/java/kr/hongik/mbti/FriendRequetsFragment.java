@@ -18,7 +18,7 @@ public class FriendRequetsFragment extends Fragment {
 
     final String TAG = FriendRequetsFragment.class.getName();
     FriendListAdapter adapter;
-    ListView lv_test;
+    ListView lv_friend_req;
 
     public FriendRequetsFragment() {
     }
@@ -36,7 +36,7 @@ public class FriendRequetsFragment extends Fragment {
 
 
         View v= inflater.inflate(R.layout.fragment_friending, container, false);
-        lv_test = (ListView) v.findViewById(R.id.lv_friending);
+        lv_friend_req = (ListView) v.findViewById(R.id.lv_friend_req);
 
         FriendList friendList = new FriendList();
         adapter = new FriendListAdapter(getActivity(),0, friendList.Friends);
@@ -44,7 +44,7 @@ public class FriendRequetsFragment extends Fragment {
         //친구요청 가져오기
         friendList.getFriendRequets(adapter);
 
-        lv_test.setAdapter(adapter);
+        lv_friend_req.setAdapter(adapter);
         return v;
     }
 }

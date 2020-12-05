@@ -19,7 +19,7 @@ public class FriendsFragment extends Fragment {
 
     final String TAG = FriendsFragment.class.getName();
     FriendListAdapter adapter;
-    ListView lv_test;
+    ListView lv_friends;
 
     public FriendsFragment() {
         // Required empty public constructor
@@ -36,7 +36,7 @@ public class FriendsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_friends, container, false);
-        lv_test = (ListView) v.findViewById(R.id.lv_friends);
+        lv_friends = (ListView) v.findViewById(R.id.lv_friends);
 
 
         FriendList friendList = new FriendList();
@@ -45,7 +45,7 @@ public class FriendsFragment extends Fragment {
         //친구목록 가져오기
         friendList.getFriends(adapter);
 
-        lv_test.setAdapter(adapter);
+        lv_friends.setAdapter(adapter);
         return v;
     }
 }

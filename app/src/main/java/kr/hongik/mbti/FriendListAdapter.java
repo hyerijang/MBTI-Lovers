@@ -1,7 +1,6 @@
 package kr.hongik.mbti;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +48,7 @@ public class FriendListAdapter extends BaseAdapter {
 
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = mInflater.inflate(R.layout.user, null);
+            convertView = mInflater.inflate(R.layout.simple_user_info, null);
             viewHolder = new ViewHolder();
             viewHolder.iv_profileImage = (ImageView) convertView.findViewById(R.id.profileImage);
             viewHolder.tv_nickname = (TextView) convertView.findViewById(R.id.tv_nickname);
