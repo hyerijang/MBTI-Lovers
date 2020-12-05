@@ -24,7 +24,9 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 
 /**
- * profileImage를 처리하기 위한 클래스
+ * profileImage를 처리하기 위한 클래스. (Model)
+ * 프로필 이미지는 프로필 뿐만 아니라 채팅 등 여러 뷰에서 사용되는 만큼 profile과 따로 분리하여 작성하였습니다.
+ * NOTE: 화면 업데이트는 Model에 있을 기능이 아님. 추후 수정할 것.
  * @author 장혜리
  **/
 
@@ -40,7 +42,7 @@ public class ProfileImage {
     /**
      * 
      * @param cacheDir
-     * @param userNum 이 이름으로 cache파일 생성됨
+     * @param userNum 이 이름으로 cache파일이 생성됩니다.
      */
     public ProfileImage(File cacheDir, String userNum){
         mStorageRef = FirebaseStorage.getInstance().getReference();
