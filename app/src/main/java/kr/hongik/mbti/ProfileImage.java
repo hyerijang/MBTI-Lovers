@@ -222,25 +222,5 @@ public class ProfileImage {
 
     }
 
-    /**
-     * 외부저장소 권한허가, 거부 시 프로필 이미지 이용에 문제 있을 수 있음
-     */
-    public static void checkPermission()    {
-        if (Build .VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                    || checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if(shouldShowRequestPermissionRationale(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    //Toast.makeText(this, "외부 저장소 사용을 위한 읽기/쓰기 권한을 요청합니다", Toast.LENGTH_SHORT).show();
-                }
-
-                requestPermissions(new String[]
-                                {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
-                        2);
-
-            }
-        }
-    }
-
-
 
 }
