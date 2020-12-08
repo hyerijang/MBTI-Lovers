@@ -44,7 +44,7 @@ public class FriendListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
 
-        ProfileImage profileImage = new ProfileImage(context.getCacheDir(), Data.get(position).getUserNum());
+        ProfileImage profileImage = new ProfileImage(context, Data.get(position).getUserNum());
 
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
