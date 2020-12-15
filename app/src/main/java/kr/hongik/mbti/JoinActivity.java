@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +21,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 public class JoinActivity extends AppCompatActivity {
 
@@ -68,7 +66,8 @@ public class JoinActivity extends AppCompatActivity {
 
         JoinButton.setOnClickListener(mClickListener);
 
-
+        //데모 시연용 데이터
+        setSampleDataForDemo();
     }
 
     Button.OnClickListener mClickListener = new View.OnClickListener() {
@@ -142,5 +141,16 @@ public class JoinActivity extends AppCompatActivity {
         Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
     }
 
+
+    private  void setSampleDataForDemo()
+    {
+         ((EditText)findViewById(R.id.nickname)).setText("김홍익");
+         ((EditText)findViewById(R.id.gender)).setText("24");
+         ((EditText)findViewById(R.id.age)).setText("남자");
+         ((EditText)findViewById(R.id.mbti)).setText("enfp");
+         ((EditText)findViewById(R.id.address)).setText("서울특별시 마포구");
+         ((EditText)findViewById(R.id.stateMessage)).setText("홍익대학교");
+
+    }
 
 }
