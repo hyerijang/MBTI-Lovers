@@ -2,7 +2,6 @@ package kr.hongik.mbti;
 
 import androidx.annotation.NonNull;
 
-import android.Manifest;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
