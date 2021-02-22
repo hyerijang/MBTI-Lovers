@@ -1,0 +1,2 @@
+kr/hogink/mbti/MBTILovers/web/MbtiLoversWebApplication.java
+ kr.hogink.mbti.MBTILovers.web.MbtiLoversWebApplication
