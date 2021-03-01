@@ -1,8 +1,17 @@
 package kr.hogink.mbti.MBTILovers.web.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Member {
-//    private static final long serialVersionUID = 1L;
+    //    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
+
     private String name;
     private String gender;
     private String age;

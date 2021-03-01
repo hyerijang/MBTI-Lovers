@@ -2,10 +2,12 @@ package kr.hogink.mbti.MBTILovers.web.service;
 
 import kr.hogink.mbti.MBTILovers.web.domain.Member;
 import kr.hogink.mbti.MBTILovers.web.repository.MemberRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -18,6 +20,7 @@ public class MemberService {
     /**
      * 회원가입
      */
+
     public String join(Member member) {
         //같은 이름이 있는 중복 회원x
         validateDuplicateMember(member);
