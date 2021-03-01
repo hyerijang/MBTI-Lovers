@@ -18,8 +18,9 @@ public class MemoryMemberRepository implements MemberRepository{
         return member;
     }
 
+
     @Override
-    public Optional<Member> findByID(String id) {
+    public Optional<Member> findById(String id) {
         return Optional.of(store.get(id));
     }
 

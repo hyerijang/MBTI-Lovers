@@ -2,12 +2,10 @@ package kr.hogink.mbti.MBTILovers.web.service;
 
 import kr.hogink.mbti.MBTILovers.web.domain.Member;
 import kr.hogink.mbti.MBTILovers.web.repository.MemberRepository;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -42,7 +40,7 @@ public class MemberService {
     }
 
     public Optional<Member> findOne(String memberID) {
-        return memberRepository.findByID(memberID);
+        return memberRepository.findById(memberID);
     }
 
 }
