@@ -21,7 +21,7 @@ public class MemberService {
      * 회원가입
      */
 
-    public String join(Member member) {
+    public Long join(Member member) {
         //같은 이름이 있는 중복 회원x
         validateDuplicateMember(member);
         memberRepository.save(member);
@@ -42,7 +42,7 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public Optional<Member> findOne(String memberID) {
+    public Optional<Member> findOne(Long memberID) {
         return memberRepository.findById(memberID);
     }
 

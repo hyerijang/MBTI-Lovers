@@ -26,7 +26,7 @@ public class MemberServiceIntegrationTest {
         Member member = new Member();
         member.setName("spring");
         //when
-        String saveId = memberService.join(member);
+        Long saveId = memberService.join(member);
         //then
         //assertj의 assertions
         Member findMember = memberService.findOne(saveId).get();

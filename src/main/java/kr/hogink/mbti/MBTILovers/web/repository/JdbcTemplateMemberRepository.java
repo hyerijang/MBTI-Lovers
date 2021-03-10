@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class JdbcTemplateMemberRepository  implements  MemberRepository{
+public class JdbcTemplateMemberRepository  implements MemberRepository{
     private final JdbcTemplate jdbcTemplate;
     public JdbcTemplateMemberRepository(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
@@ -25,11 +25,11 @@ public class JdbcTemplateMemberRepository  implements  MemberRepository{
         parameters.put("name", member.getName());
         Number key = jdbcInsert.executeAndReturnKey(new
                 MapSqlParameterSource(parameters));
-        member.setId(key.toString());
+        member.setId(key.longValue());
         return member;
     }
     @Override
-    public Optional<Member> findById(String id) {
+    public Optional<Member> findById(Long id) {
         List<Member> result = jdbcTemplate.query("select * from member where id = ?", memberRowMapper(), id);
         return result.stream().findAny();
     }
@@ -45,7 +45,7 @@ public class JdbcTemplateMemberRepository  implements  MemberRepository{
     private RowMapper<Member> memberRowMapper() {
         return (rs, rowNum) -> {
             Member member = new Member();
-            member.setId(rs.getString("id"));
+            member.setId(rs.getLong("id"));
             member.setName(rs.getString("name"));
             return member;
         };
