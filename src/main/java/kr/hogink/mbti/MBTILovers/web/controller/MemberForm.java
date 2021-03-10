@@ -5,16 +5,17 @@ public class MemberForm {
     private String name;
     private String gender;
     private String age;
-    private String address;
     private String mbti;
+    private String uid;
     private String stateMessage;
 
-    public String getAddress() {
-        return address;
+
+    public String getUid() {
+        return uid;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getMbti() {

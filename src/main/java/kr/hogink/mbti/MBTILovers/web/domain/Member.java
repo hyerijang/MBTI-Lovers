@@ -15,9 +15,17 @@ public class Member {
     private String name;
     private String gender;
     private String age;
-    private String address;
     private String mbti;
     private String stateMessage;
+
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     public Long getId() {
         return id;
@@ -51,13 +59,6 @@ public class Member {
         this.age = age;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 
     public String getMbti() {
         return mbti;

@@ -31,7 +31,7 @@ public class MemberController {
         member.setName(form.getName());
         member.setGender(form.getGender());
         member.setAge(form.getAge());
-        member.setAddress(form.getAddress());
+        member.setUid(form.getUid());
         member.setMbti(form.getMbti());
         member.setStateMessage(form.getStateMessage());
 

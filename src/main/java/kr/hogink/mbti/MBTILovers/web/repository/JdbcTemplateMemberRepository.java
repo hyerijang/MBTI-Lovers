@@ -23,6 +23,11 @@ public class JdbcTemplateMemberRepository  implements MemberRepository{
         jdbcInsert.withTableName("member").usingGeneratedKeyColumns("id");
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", member.getName());
+        parameters.put("uid", member.getUid());
+        parameters.put("age", member.getAge());
+        parameters.put("gender", member.getGender());
+        parameters.put("mbti", member.getMbti());
+        parameters.put("stateMessage", member.getStateMessage());
         Number key = jdbcInsert.executeAndReturnKey(new
                 MapSqlParameterSource(parameters));
         member.setId(key.longValue());
@@ -47,6 +52,11 @@ public class JdbcTemplateMemberRepository  implements MemberRepository{
             Member member = new Member();
             member.setId(rs.getLong("id"));
             member.setName(rs.getString("name"));
+            member.setUid(rs.getString("uid"));
+            member.setAge(rs.getString("age"));
+            member.setGender(rs.getString("gender"));
+            member.setMbti(rs.getString("mbti"));
+            member.setStateMessage(rs.getString("stateMessage"));
             return member;
         };
     }

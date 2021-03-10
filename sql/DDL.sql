@@ -5,7 +5,7 @@ create table member (
                         name varchar(255),
                         age TINYINT UNSIGNED,
                         gender VARCHAR(4),
-                        address VARCHAR(255),
                         mbti VARCHAR(4),
+                        stateMessage varchar(255),
                         primary key (id)
 );
