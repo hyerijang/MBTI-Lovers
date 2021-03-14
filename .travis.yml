@@ -12,10 +12,13 @@ cache:
     - '$HOME/.m2/repository'
     - '$HOME/.gradle'
 
-script: "sudo chmod 777 ./gradlew sudo ./gradlew build -x test"
+script: "sudo ./gradlew build -x test"
 
 # CI 실행 완료시 메일로 알람
 notifications:
   email:
     recipients:
       - hyeri3316@g.hongik.ac.kr
+
+before_install:
+  - sudo chmod 777 ./gradlew 
