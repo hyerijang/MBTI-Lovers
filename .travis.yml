@@ -22,3 +22,17 @@ notifications:
 
 before_install:
   - sudo chmod 777 ./gradlew 
+
+deploy:
+- provider: s3
+  access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
+  secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
+  bucket: mbti-webservice-deploy # 6-3-3에서 생성한 S3 버킷
+  region: ap-northeast-2
+  skip_cleanup: true
+  acl: public_read
+  wait-until-deployed: true
+  on:
+    repo: hyerijang/MBTI-Lovers-web
+ #Github 주소
+    branch: master
