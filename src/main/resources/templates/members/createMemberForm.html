@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+    <form action="/members/new" method="post">
+        <div class="form-group">
+            <label for="name">이름</label>
+            <input type="text" id="name" name="name" placeholder="이름">
+            <input type="text" id="age" name="age" placeholder="나이">
+            <input type="text" id="gender" name="gender" placeholder="성별">
+            <input type="text" id="uid" name="uid" placeholder="UID">
+            <input type="text" id="mbti" name="mbti" placeholder="mbti">
+            <input type="text" id="stateMessage" name="stateMessage" placeholder="stateMessage">
+        </div>
+        <button type="submit">등록</button>
+    </form>
+</div> <!-- /container -->
+</body>
+</html>
