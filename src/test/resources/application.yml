@@ -6,7 +6,16 @@ spring:
 # local 환경
 ---
 spring:
-  jpa:
-    show-sql: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: ss49594959
+    url: jdbc:mysql://mbti.cym6loxoess8.ap-northeast-2.rds.amazonaws.com:3306/mbti
+    username: admin
+  devtools:
+    remote:
+      restart:
+        enabled: true
+  thymeleaf:
+    cache: false
   profiles:
     include: local
