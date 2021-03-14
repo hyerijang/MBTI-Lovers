@@ -1,9 +1,9 @@
-kr/hogink/mbti/MBTILovers/web/repository/JdbcMemberRepository.java
- kr.hogink.mbti.MBTILovers.web.repository.JdbcMemberRepository
+kr/hogink/mbti/MBTILovers/web/repository/JdbcTemplateMemberRepository.java
+ kr.hogink.mbti.MBTILovers.web.repository.JdbcTemplateMemberRepository
 kr/hogink/mbti/MBTILovers/web/service/MemberService.java
  kr.hogink.mbti.MBTILovers.web.service.MemberService
-kr/hogink/mbti/MBTILovers/web/MbtiLoversWebApplication.java
- kr.hogink.mbti.MBTILovers.web.MbtiLoversWebApplication
+kr/hogink/mbti/MBTILovers/web/SpringConfig.java
+ kr.hogink.mbti.MBTILovers.web.SpringConfig
 kr/hogink/mbti/MBTILovers/web/controller/MemberForm.java
  kr.hogink.mbti.MBTILovers.web.controller.MemberForm
 kr/hogink/mbti/MBTILovers/web/controller/MemberController.java
@@ -19,5 +19,7 @@ kr/hogink/mbti/MBTILovers/web/repository/MemberRepository.java
  kr.hogink.mbti.MBTILovers.web.repository.MemberRepository
 kr/hogink/mbti/MBTILovers/web/domain/Member.java
  kr.hogink.mbti.MBTILovers.web.domain.Member
-kr/hogink/mbti/MBTILovers/web/SpringConfig.java
- kr.hogink.mbti.MBTILovers.web.SpringConfig
+kr/hogink/mbti/MBTILovers/web/MbtiLoversWebApplication.java
+ kr.hogink.mbti.MBTILovers.web.MbtiLoversWebApplication
+kr/hogink/mbti/MBTILovers/web/aop/TimeTraceAop.java
+ kr.hogink.mbti.MBTILovers.web.aop.TimeTraceAop
