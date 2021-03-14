@@ -30,6 +30,8 @@ test {
     useJUnitPlatform()
 }
 
-bootWar {
-    archiveName("demo.war")
+bootJar{
+    archivesBaseName = 'MBTI-Lovers-web'
+    archiveFileName = 'MBTI-Lovers-web.jar'
+    archiveVersion = "0.0.0"
 }
