@@ -1,16 +1,12 @@
 package kr.hogink.mbti.MBTILovers.web.repository;
 
-import kr.hogink.mbti.MBTILovers.web.domain.ChatRoom;
-import kr.hogink.mbti.MBTILovers.web.domain.Member;
+import kr.hogink.mbti.MBTILovers.web.chatRoom.ChatRoom;
+import kr.hogink.mbti.MBTILovers.web.member.Member;
+import kr.hogink.mbti.MBTILovers.web.chatRoom.MemoryChatRoomRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class MemoryChatRoomRepositoryTest {
 

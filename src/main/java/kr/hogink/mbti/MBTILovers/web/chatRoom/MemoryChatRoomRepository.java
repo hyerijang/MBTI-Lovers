@@ -1,7 +1,6 @@
-package kr.hogink.mbti.MBTILovers.web.repository;
+package kr.hogink.mbti.MBTILovers.web.chatRoom;
 
-import kr.hogink.mbti.MBTILovers.web.domain.ChatRoom;
-import kr.hogink.mbti.MBTILovers.web.domain.Member;
+import kr.hogink.mbti.MBTILovers.web.member.Member;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;

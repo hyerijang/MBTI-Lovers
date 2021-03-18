@@ -1,6 +1,5 @@
-package kr.hogink.mbti.MBTILovers.web.controller;
+package kr.hogink.mbti.MBTILovers.web.chat;
 
-import kr.hogink.mbti.MBTILovers.web.domain.ChatMessage;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;

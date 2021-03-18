@@ -1,6 +1,5 @@
-package kr.hogink.mbti.MBTILovers.web.event.handler;
+package kr.hogink.mbti.MBTILovers.web.chat;
 
-import kr.hogink.mbti.MBTILovers.web.domain.ChatMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

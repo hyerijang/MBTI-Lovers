@@ -1,4 +1,4 @@
-package kr.hogink.mbti.MBTILovers.web.controller;
+package kr.hogink.mbti.MBTILovers.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

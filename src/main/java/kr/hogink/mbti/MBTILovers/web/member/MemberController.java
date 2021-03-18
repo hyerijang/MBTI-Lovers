@@ -1,7 +1,5 @@
-package kr.hogink.mbti.MBTILovers.web.controller;
+package kr.hogink.mbti.MBTILovers.web.member;
 
-import kr.hogink.mbti.MBTILovers.web.domain.Member;
-import kr.hogink.mbti.MBTILovers.web.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

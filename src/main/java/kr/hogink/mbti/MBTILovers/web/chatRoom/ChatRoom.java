@@ -1,4 +1,6 @@
-package kr.hogink.mbti.MBTILovers.web.domain;
+package kr.hogink.mbti.MBTILovers.web.chatRoom;
+
+import kr.hogink.mbti.MBTILovers.web.member.Member;
 
 public class ChatRoom {
 

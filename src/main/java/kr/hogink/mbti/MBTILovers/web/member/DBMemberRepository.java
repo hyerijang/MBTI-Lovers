@@ -1,6 +1,7 @@
-package kr.hogink.mbti.MBTILovers.web.repository;
+package kr.hogink.mbti.MBTILovers.web.member;
 
-import kr.hogink.mbti.MBTILovers.web.domain.Member;
+import kr.hogink.mbti.MBTILovers.web.member.Member;
+import kr.hogink.mbti.MBTILovers.web.member.MemberRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -12,9 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class JdbcTemplateMemberRepository  implements MemberRepository{
+public class DBMemberRepository implements MemberRepository {
     private final JdbcTemplate jdbcTemplate;
-    public JdbcTemplateMemberRepository(DataSource dataSource) {
+    public DBMemberRepository(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
     @Override

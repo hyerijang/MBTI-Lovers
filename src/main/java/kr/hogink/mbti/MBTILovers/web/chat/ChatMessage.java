@@ -1,4 +1,4 @@
-package kr.hogink.mbti.MBTILovers.web.domain;
+package kr.hogink.mbti.MBTILovers.web.chat;
 
 public class ChatMessage {
 

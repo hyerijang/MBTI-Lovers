@@ -1,7 +1,7 @@
-package kr.hogink.mbti.MBTILovers.web.service;
+package kr.hogink.mbti.MBTILovers.web.member;
 
-import kr.hogink.mbti.MBTILovers.web.domain.Member;
-import kr.hogink.mbti.MBTILovers.web.repository.MemberRepository;
+import kr.hogink.mbti.MBTILovers.web.member.Member;
+import kr.hogink.mbti.MBTILovers.web.member.MemberRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package kr.hogink.mbti.MBTILovers.web.controller;
+package kr.hogink.mbti.MBTILovers.web.member;
 
 public class MemberForm {
 

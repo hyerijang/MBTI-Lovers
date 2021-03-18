@@ -1,8 +1,4 @@
-package kr.hogink.mbti.MBTILovers.web.service;
-
-import kr.hogink.mbti.MBTILovers.web.domain.ChatRoom;
-import kr.hogink.mbti.MBTILovers.web.domain.Member;
-import kr.hogink.mbti.MBTILovers.web.repository.ChatRoomRepository;
+package kr.hogink.mbti.MBTILovers.web.chatRoom;
 
 import java.util.List;
 

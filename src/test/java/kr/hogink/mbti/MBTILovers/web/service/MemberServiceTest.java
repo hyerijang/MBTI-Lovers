@@ -1,8 +1,9 @@
 package kr.hogink.mbti.MBTILovers.web.service;
 
 
-import kr.hogink.mbti.MBTILovers.web.domain.Member;
-import kr.hogink.mbti.MBTILovers.web.repository.MemoryMemberRepository;
+import kr.hogink.mbti.MBTILovers.web.member.Member;
+import kr.hogink.mbti.MBTILovers.web.member.MemberService;
+import kr.hogink.mbti.MBTILovers.web.member.MemoryMemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
