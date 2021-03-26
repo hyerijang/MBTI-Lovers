@@ -1,11 +1,13 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
+import kr.hogink.mbti.MBTILovers.web.member.MBTI.EnumMbti;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -42,6 +44,13 @@ public class MemberController {
         List<Member> members = memberService.findMembers();
         model.addAttribute("members", members);
         return "members/memberList";
+    }
+
+
+    public void getMbtiList() {
+        System.out.println("MBTI 목록");
+        List<EnumMbti> enumValues = Arrays.asList(EnumMbti.values());
+        System.out.println(enumValues);
     }
 
 }
