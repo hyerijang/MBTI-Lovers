@@ -1,8 +1,7 @@
 #!/bin/bash
 
-REPOSITORY=/home/ubuntu/app/git
+REPOSITORY=/home/ubuntu/app/git/MBTI-Lovers-web
 
-cd $REPOSITORY/MBTI-Lovers-web/
 
 echo "> Git Pull"
 
@@ -11,7 +10,18 @@ git pull
 echo "> 프로젝트 Build 시작"
 
 sudo chmod 777 ./gradlew
-sudo ./gradlew build -x test
+
+#echo "> 시간제한 100초"
+#timeout -s 9 --foreground 60s sudo  ./gradlew build -x test
+sudo ./gradlew clean build -x test
+
+#value="$(echo $?)"
+#0이면 정상 종료
+#if [ ${value} -ne 0 ] ;
+#then
+#	echo "> Build timeout: ${value}"
+#	exit ${value}
+#fi	
 
 echo "> Build 파일 복사"
 
