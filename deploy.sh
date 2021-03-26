@@ -1,8 +1,7 @@
 #!/bin/bash
 
-REPOSITORY=/home/ubuntu/app/git
+REPOSITORY=/home/ubuntu/app/git/MBTI-Lovers-web
 
-cd $REPOSITORY/MBTI-Lovers-web/
 
 echo "> Git Pull"
 
@@ -14,7 +13,7 @@ sudo chmod 777 ./gradlew
 
 #echo "> 시간제한 100초"
 #timeout -s 9 --foreground 60s sudo  ./gradlew build -x test
-sudo ./gradlew build -x test
+sudo ./gradlew clean build -x test
 
 #value="$(echo $?)"
 #0이면 정상 종료

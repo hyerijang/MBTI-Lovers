@@ -35,3 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+###build 결과물 무시
+nohup.out
+*.war
+/.gradle/
