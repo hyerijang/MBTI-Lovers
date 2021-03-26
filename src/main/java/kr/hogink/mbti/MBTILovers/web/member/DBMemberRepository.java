@@ -21,14 +21,9 @@ public class DBMemberRepository implements MemberRepository {
 
     public DBMemberRepository(DataSource dataSource) {
         FirebaseInitializer firebaseInitializer = new FirebaseInitializer();
-
-//        System.out.println("fb 세팅 시작");
         fbAuth = firebaseInitializer.initFirebase();
-//        System.out.println("fb 세팅 끝");
         fbAuth.setUserRecord("1laInCxF3bMY2dHqx7eap8aOSo22");//임시
-//        System.out.println("유저네임 1laInCxF3bMY2dHqx7eap8aOSo22");
         userRecord = fbAuth.getUserRecord();
-//        System.out.println("유저의 레코드를 가져왔습니다.");
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 

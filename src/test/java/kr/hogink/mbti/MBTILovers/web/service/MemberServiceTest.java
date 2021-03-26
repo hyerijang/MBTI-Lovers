@@ -3,6 +3,7 @@ package kr.hogink.mbti.MBTILovers.web.service;
 
 import kr.hogink.mbti.MBTILovers.web.member.Member;
 import kr.hogink.mbti.MBTILovers.web.member.MemberService;
+import kr.hogink.mbti.MBTILovers.web.member.MemberServiceImpl;
 import kr.hogink.mbti.MBTILovers.web.member.MemoryMemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +20,7 @@ class MemberServiceTest {
     @BeforeEach
     public void beforeEach() {
         memberRepository = new MemoryMemberRepository();
-        memberService =  new MemberService(memberRepository);
+        memberService =  new MemberServiceImpl(memberRepository);
     }
     @AfterEach
     public void afterEach() {
