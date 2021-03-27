@@ -20,6 +20,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import kr.hongik.mbti.FriendList.FriendListActivity;
+import kr.hongik.mbti.Member.MyprofileActivity;
+import kr.hongik.mbti.Search.SearchingActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     private TextView my_mbti;

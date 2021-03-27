@@ -1,4 +1,4 @@
-package kr.hongik.mbti;
+package kr.hongik.mbti.FriendList;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +22,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import kr.hongik.mbti.Member.MemberInfo;
+import kr.hongik.mbti.Member.ProfileImage;
+import kr.hongik.mbti.R;
+import kr.hongik.mbti.Search.SearchingPersonActivity;
 
 /**
  * FriendList를 위한 Adapter class

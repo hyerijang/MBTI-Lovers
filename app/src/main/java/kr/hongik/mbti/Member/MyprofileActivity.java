@@ -1,4 +1,4 @@
-package kr.hongik.mbti;
+package kr.hongik.mbti.Member;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +20,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import kr.hongik.mbti.MainActivity;
+import kr.hongik.mbti.R;
 
 public class MyprofileActivity extends AppCompatActivity {
 

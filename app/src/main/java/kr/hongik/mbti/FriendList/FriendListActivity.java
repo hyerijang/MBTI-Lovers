@@ -1,4 +1,4 @@
-package kr.hongik.mbti;
+package kr.hongik.mbti.FriendList;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -11,6 +11,8 @@ import android.widget.Button;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import kr.hongik.mbti.R;
 
 /**
  * FriendListActivity는 FriendsFragment,FriendRequetsFragment, 총두개의 Fragment로 구성됩니다.

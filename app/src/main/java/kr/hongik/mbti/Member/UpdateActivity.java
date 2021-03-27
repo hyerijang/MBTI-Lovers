@@ -1,4 +1,4 @@
-package kr.hongik.mbti;
+package kr.hongik.mbti.Member;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +23,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
+
+import kr.hongik.mbti.R;
 
 public class UpdateActivity extends AppCompatActivity {
 

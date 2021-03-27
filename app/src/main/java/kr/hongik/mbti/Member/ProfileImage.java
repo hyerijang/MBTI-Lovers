@@ -1,4 +1,4 @@
-package kr.hongik.mbti;
+package kr.hongik.mbti.Member;
 
 import androidx.annotation.NonNull;
 

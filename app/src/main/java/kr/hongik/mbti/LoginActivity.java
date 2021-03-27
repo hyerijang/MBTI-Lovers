@@ -1,8 +1,11 @@
 package kr.hongik.mbti;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,22 +38,38 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
+
 /**
  * class LoginActivity
+ *
  * @author 장혜리
  */
 
 public class LoginActivity extends AppCompatActivity {
 
+    //result 상수
+    private static final int RC_SIGN_IN = 900;
     final String TAG = LoginActivity.class.getName();
-
     // 버튼
     private SignInButton btn_login_google;
     private LoginButton btn_login_facebook;
-
-    //result 상수
-    private static final int RC_SIGN_IN = 900;
-
     private FirebaseAuth mFirebaseAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private CallbackManager mCallbackManager;
@@ -65,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         checkPermission();
 
         //1.파이어베이스 인증 객체 선언
-        mFirebaseAuth= FirebaseAuth.getInstance();
+        mFirebaseAuth = FirebaseAuth.getInstance();
 
         //2.Google Sign In 설정
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -83,7 +102,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
-
 
 
         //3.facebook login 설정
@@ -111,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseUser currentUser  = mFirebaseAuth.getCurrentUser();
+        FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
         checkUser(currentUser);
     }
 
@@ -140,6 +158,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * google Token으로 firebase 로그인
      * 공식 문서를 바탕으로 변형하였습니다. 자세한 사항은 공식 문서를 참조바랍니다.
+     *
      * @param acct
      */
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
@@ -169,6 +188,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * facebook Token으로 firebase 로그인
      * 공식 문서를 바탕으로 변형하였습니다. 자세한 사항은 공식 문서를 참조바랍니다.
+     *
      * @param token
      */
     private void handleFacebookAccessToken(AccessToken token) {
@@ -193,16 +213,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
     /**
      * firebae 유저 확인 및 화면 전환
+     *
      * @param user
      */
     public void checkUser(FirebaseUser user) {
         if (user != null) {
             Toast.makeText(LoginActivity.this, mFirebaseAuth.getUid() + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
-            myStartActivity(MainActivity.class);
-            finish();
+            loginCheck(mFirebaseAuth.getUid(),"123");
+//            myStartActivity(MainActivity.class);
+//            finish();
         }
 
     }
@@ -217,34 +238,115 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * 외부저장소 권한허가, 거부 시 프로필 이미지 이용에 문제 있을 수 있음
      */
-    private void checkPermission()    {
+    private void checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                     || checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     //Toast.makeText(this, "외부 저장소 사용을 위한 읽기/쓰기 권한을 요청합니다", Toast.LENGTH_SHORT).show();
                 }
 
                 requestPermissions(new String[]
-                                {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},
+                                {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
                         2);
 
-            } 
+            }
         }
     }
 
 
     /**
-     *  로그인 버튼 text 변경
+     * 로그인 버튼 text 변경
      */
-    private void setLoginButton(){
+    private void setLoginButton() {
 
         btn_login_google = findViewById(R.id.btn_google_login);
-        TextView textView = (TextView)btn_login_google.getChildAt(0);
+        TextView textView = (TextView) btn_login_google.getChildAt(0);
         textView.setText(getString(R.string.sing_in_google));
 
         btn_login_facebook = (LoginButton) findViewById(R.id.btn_facebook_login);
         btn_login_facebook.setLoginText(getString(R.string.sing_in_facebook));
 
     }
+
+
+    private void loginCheck(final String userName, final String passWord) {
+        class LoginAsync extends AsyncTask<String, Void, String> {
+            private Dialog loadingDialog;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                Log.d(TAG, "로그인 인증 1. onPreExcute");
+                loadingDialog = ProgressDialog.show(LoginActivity.this, "Please wait", "Loading...");
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+                Log.d(TAG, "로그인 인증 2. doInBackground");
+                InputStream is = null;
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+                nameValuePairs.add(new BasicNameValuePair("username", params[0]));
+                nameValuePairs.add(new BasicNameValuePair("password", params[1]));
+
+
+                String result = null;
+
+                try {
+                    HttpClient httpClient = SessionControl.getHttpclient();
+                    HttpPost httpPost = new HttpPost("http://52.78.50.239:8080/auth");
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                    HttpResponse response = httpClient.execute(httpPost);
+                    HttpEntity entity = response.getEntity();
+
+                    is = entity.getContent();
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"), 8);
+                    StringBuilder sb = new StringBuilder();
+                    String line = null;
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+                    result = sb.toString();
+
+
+                } catch (ClientProtocolException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                Log.d(TAG, "로그인 인증 3.  onPostExecute");
+                String s = result.trim();
+                Log.d(TAG, "로그인 인증 onPostExecute -  String s ");
+                loadingDialog.dismiss();
+                Log.d(TAG, "로그인 인증 onPostExecute - dismiss");
+                if (s.equalsIgnoreCase("OK")) {
+                    Log.d(TAG, "로그인 인증 성공");
+                    Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_LONG).show();
+                    SessionControl.cookies = SessionControl.httpclient.getCookieStore().getCookies();
+                    if (!SessionControl.cookies.isEmpty()) {
+                        Intent i = new Intent(getApplicationContext(), webViewActivity.class);
+                        i.putExtra("myurl", "http://52.78.50.239:8080");
+                        startActivity(i);
+                    }
+
+                } else {
+                    Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "로그인 인증 실패");
+                }
+            }
+        }
+
+        new LoginAsync().execute(userName, passWord);
+
+    }
+
+
 }

@@ -32,6 +32,7 @@ import com.pedro.library.AutoPermissionsListener;
 
 import org.jetbrains.annotations.NotNull;
 
+
 public class MatchingActivity extends AppCompatActivity implements AutoPermissionsListener {
 
     SupportMapFragment mapFragment;

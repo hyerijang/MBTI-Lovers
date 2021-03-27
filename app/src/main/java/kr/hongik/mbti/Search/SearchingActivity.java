@@ -1,4 +1,4 @@
-package kr.hongik.mbti;
+package kr.hongik.mbti.Search;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +22,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import kr.hongik.mbti.MainActivity;
+import kr.hongik.mbti.Member.MemberInfo;
+import kr.hongik.mbti.R;
 
 public class SearchingActivity extends AppCompatActivity {
 

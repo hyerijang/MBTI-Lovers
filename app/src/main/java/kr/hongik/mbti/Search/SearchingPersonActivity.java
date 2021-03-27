@@ -1,4 +1,4 @@
-package kr.hongik.mbti;
+package kr.hongik.mbti.Search;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import kr.hongik.mbti.FriendList.FriendList;
+import kr.hongik.mbti.Member.MemberInfo;
+import kr.hongik.mbti.R;
 
 public class SearchingPersonActivity extends AppCompatActivity {
 
