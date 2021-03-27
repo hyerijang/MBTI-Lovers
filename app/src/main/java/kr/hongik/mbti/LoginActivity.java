@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,6 +53,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,7 +132,8 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
-        checkUser(currentUser);
+        if(currentUser!= null)
+            checkUser(currentUser);
     }
 
     @Override
@@ -220,8 +223,8 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void checkUser(FirebaseUser user) {
         if (user != null) {
-            Toast.makeText(LoginActivity.this, mFirebaseAuth.getUid() + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
-            loginCheck(mFirebaseAuth.getUid(),"123");
+//            Toast.makeText(LoginActivity.this, mFirebaseAuth.getUid() + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
+            loginCheck(mFirebaseAuth.getUid());
 //            myStartActivity(MainActivity.class);
 //            finish();
         }
@@ -270,31 +273,32 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void loginCheck(final String userName, final String passWord) {
+    private void loginCheck(final String uid) {
         class LoginAsync extends AsyncTask<String, Void, String> {
             private Dialog loadingDialog;
 
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                Log.d(TAG, "로그인 인증 1. onPreExcute");
-                loadingDialog = ProgressDialog.show(LoginActivity.this, "Please wait", "Loading...");
+                //loadingDialog = ProgressDialog.show(LoginActivity.this, "Please wait", "Loading...");
             }
 
             @Override
             protected String doInBackground(String... params) {
-                Log.d(TAG, "로그인 인증 2. doInBackground");
+                Log.d(TAG, "로그인 인증 1. 로그인 가능한 uid인지 확인");
                 InputStream is = null;
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-                nameValuePairs.add(new BasicNameValuePair("username", params[0]));
-                nameValuePairs.add(new BasicNameValuePair("password", params[1]));
-
+                nameValuePairs.add(new BasicNameValuePair("uid", params[0]));
 
                 String result = null;
 
+                //HttpClient에 Post 방식으로 Uid 전송
                 try {
+                    Log.d(TAG, "로그인 인증 uid : " +uid);
                     HttpClient httpClient = SessionControl.getHttpclient();
-                    HttpPost httpPost = new HttpPost("http://52.78.50.239:8080/auth");
+
+                    String str = "http://52.78.50.239:8080/login/auth/"+uid;
+                    HttpPost httpPost = new HttpPost(str);
                     httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
                     HttpResponse response = httpClient.execute(httpPost);
                     HttpEntity entity = response.getEntity();
@@ -322,20 +326,19 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(String result) {
-                Log.d(TAG, "로그인 인증 3.  onPostExecute");
                 String s = result.trim();
-                Log.d(TAG, "로그인 인증 onPostExecute -  String s ");
-                loadingDialog.dismiss();
-                Log.d(TAG, "로그인 인증 onPostExecute - dismiss");
-                if (s.equalsIgnoreCase("OK")) {
-                    Log.d(TAG, "로그인 인증 성공");
+                Log.d(TAG, "Current User = " + s);
+//                loadingDialog.dismiss();
+                Log.d(TAG, "로그인 결과 확인");
+                if (s.contains(uid)) {
                     Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "로그인 인증 성공, 쿠키를 생성합니다.");
                     SessionControl.cookies = SessionControl.httpclient.getCookieStore().getCookies();
-                    if (!SessionControl.cookies.isEmpty()) {
+//                    if (!SessionControl.cookies.isEmpty()) {
                         Intent i = new Intent(getApplicationContext(), webViewActivity.class);
                         i.putExtra("myurl", "http://52.78.50.239:8080");
                         startActivity(i);
-                    }
+//                    }
 
                 } else {
                     Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
@@ -344,7 +347,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
 
-        new LoginAsync().execute(userName, passWord);
+        new LoginAsync().execute(uid);
 
     }
 
