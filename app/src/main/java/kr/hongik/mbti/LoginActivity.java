@@ -2,10 +2,8 @@ package kr.hongik.mbti;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -53,7 +51,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -133,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
         if(currentUser!= null)
-            checkUser(currentUser);
+            startWebViewActivity(currentUser.getUid());
     }
 
     @Override
@@ -231,6 +228,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
     private void myStartActivity(Class c) {
         Intent intent = new Intent(this, c);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -285,7 +283,6 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             protected String doInBackground(String... params) {
-                Log.d(TAG, "로그인 인증 1. 로그인 가능한 uid인지 확인");
                 InputStream is = null;
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
                 nameValuePairs.add(new BasicNameValuePair("uid", params[0]));
@@ -329,20 +326,17 @@ public class LoginActivity extends AppCompatActivity {
                 String s = result.trim();
                 Log.d(TAG, "Current User = " + s);
 //                loadingDialog.dismiss();
-                Log.d(TAG, "로그인 결과 확인");
                 if (s.contains(uid)) {
                     Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_LONG).show();
-                    Log.d(TAG, "로그인 인증 성공, 쿠키를 생성합니다.");
-                    SessionControl.cookies = SessionControl.httpclient.getCookieStore().getCookies();
+//                    Log.d(TAG, "로그인 인증 성공, 쿠키를 생성합니다.");
+//                    SessionControl.cookies = SessionControl.httpclient.getCookieStore().getCookies();
 //                    if (!SessionControl.cookies.isEmpty()) {
-                        Intent i = new Intent(getApplicationContext(), webViewActivity.class);
-                        i.putExtra("myurl", "http://52.78.50.239:8080");
-                        startActivity(i);
+                     startWebViewActivity(uid);
 //                    }
 
                 } else {
                     Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
-                    Log.d(TAG, "로그인 인증 실패");
+
                 }
             }
         }
@@ -352,4 +346,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    public void startWebViewActivity(String uid) {
+        if (uid != null) {
+            Toast.makeText(LoginActivity.this, uid + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(getApplicationContext(), webViewActivity.class);
+            i.putExtra("myurl", "http://52.78.50.239:8080");
+            startActivity(i);
+            finish();
+        }
+    }
 }
