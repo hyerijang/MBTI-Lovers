@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -34,7 +35,7 @@ public class MemberController {
         member.setUid(form.getUid());
         member.setMbti(form.getMbti());
         member.setStateMessage(form.getStateMessage());
-
+        member.setProfileImage(form.getProfileImage());
         memberService.join(member);
         return "redirect:/";
     }
@@ -52,5 +53,27 @@ public class MemberController {
         List<EnumMbti> enumValues = Arrays.asList(EnumMbti.values());
         System.out.println(enumValues);
     }
+
+
+    @GetMapping(value = "/members/edit")
+    public String editFrom() {
+        return "members/editMemberForm";
+    }
+
+
+    @PostMapping("/members/edit")
+    public String edit(MemberForm form) {
+        Member member = memberService.findOneById((long)1).get();//임시
+        member.setName(form.getName());
+        member.setGender(form.getGender());
+        member.setAge(form.getAge());
+        member.setUid(form.getUid());
+        member.setMbti(form.getMbti());
+        member.setStateMessage(form.getStateMessage());
+        member.setProfileImage(form.getProfileImage());
+        memberService.modifyUser(member);
+        return "redirect:/";
+    }
+
 
 }

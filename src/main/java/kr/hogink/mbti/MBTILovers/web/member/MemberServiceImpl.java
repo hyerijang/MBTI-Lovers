@@ -1,8 +1,19 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
+import kr.hogink.mbti.MBTILovers.web.login.LoginDTO;
+import org.apache.juli.logging.Log;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Transactional
@@ -21,6 +32,10 @@ public class MemberServiceImpl implements MemberService {
     public Long join(Member member) {
         //같은 이름이 있는 중복 회원x
         validateDuplicateMember(member);
+        //프로필 이미지로 기본이미지 세팅
+        setDefaultProfileImage(member);
+        //현재시각 저장
+        setLastConnectTime(member);
         memberRepository.save(member);
         return member.getId();
     }
@@ -32,6 +47,18 @@ public class MemberServiceImpl implements MemberService {
                 });
     }
 
+
+    private void setDefaultProfileImage(Member member) {
+
+        String defaultFileName = "defaultProfileImage.png";
+        member.setProfileImage(defaultFileName);
+
+    }
+
+    private void setLastConnectTime(Member member) {
+        member.setLastConnectTime(new Date(System.currentTimeMillis()));
+    }
+
     /**
      * 전체 회원 조회
      */
@@ -41,8 +68,35 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Optional<Member> findOne(Long memberID) {
+    public Optional<Member> findOneById(Long memberID) {
         return memberRepository.findById(memberID);
     }
+
+    @Override
+    public Optional<Member> findOneByUid(String memberUid) {
+        return memberRepository.findByUid(memberUid);
+    }
+
+    @Override
+    public void modifyUser(Member member) {
+        memberRepository.updateUser(member);
+    }
+
+    @Override
+    public Member login(LoginDTO loginDTO) {
+        return findOneByUid(loginDTO.getUid()).get();
+    }
+
+    @Override
+    public Optional<Member> checkLoginBefore(String value) throws Exception {
+        return checkUserWithSessionKey(value);
+    }
+
+    @Override
+    public Optional<Member> checkUserWithSessionKey(String value) throws Exception {
+        return findOneByUid("1laInCxF3bMY2dHqx7eap8aOSo22"); //임시
+    }
+
+
 
 }

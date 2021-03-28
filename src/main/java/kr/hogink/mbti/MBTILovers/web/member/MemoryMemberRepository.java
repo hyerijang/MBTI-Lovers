@@ -22,6 +22,26 @@ public class MemoryMemberRepository implements MemberRepository{
     public Optional<Member> findById(Long id) {
         return Optional.of(store.get(id));
     }
+    @Override
+    public Optional<Member> findByUid(String uid) {
+        return Optional.of(store.get(uid));
+    }
+
+    @Override
+    public void updateUser(Member member) {
+
+    }
+
+    @Override
+    public void keepLogin(String uid, String sessionId, Date next) throws Exception {
+
+    }
+
+    @Override
+    public Member checkUserWithSessionKey(String value) throws Exception {
+        return null;
+    }
+
 
     @Override
     public Optional<Member> findByName(String name) {

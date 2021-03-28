@@ -8,31 +8,32 @@ import java.util.*;
 @Repository
 public class MemoryChatRoomRepository implements ChatRoomRepository {
 
-    private static Map<Long, ChatRoom> store = new HashMap<>();
+    private static Map<Long, ChatRoom> chatRoomMap = new LinkedHashMap<>();
     private static long Sequence = 0L;
 
 
     @Override
-    public ChatRoom save(ChatRoom chatRoom) {
+    public ChatRoom createChatRoom(ChatRoom chatRoom) {
         chatRoom.setRoomId(Sequence++);
-        store.put(chatRoom.getRoomId(),chatRoom);
+        chatRoomMap.put(chatRoom.getRoomId(),chatRoom);
         return chatRoom;
     }
 
+
     @Override
-    public List<ChatRoom> findAll() {
-        return new ArrayList<>(store.values());
+    public List<ChatRoom> findAllRoom() {
+        return new ArrayList<>(chatRoomMap.values());
     }
 
     @Override
-    public Optional<ChatRoom> findByMembers(Member member1, Member member2) {
+    public Optional<ChatRoom> findById(Member member1, Member member2) {
         //해당 멤버 두명이 모두 포함된 채팅방 있으면 리턴
-        return store.values().stream().filter(chatRoom -> chatRoom.getMember1().equals(member1)).filter(chatRoom -> chatRoom.getMember2().equals(member2))
+        return chatRoomMap.values().stream().filter(chatRoom -> chatRoom.getMember1().equals(member1)).filter(chatRoom -> chatRoom.getMember2().equals(member2))
                 .findAny();
     }
 
     public void clearStore() {
-        store.clear();
+        chatRoomMap.clear();
     }
 
 }

@@ -6,7 +6,7 @@ import org.springframework.web.socket.WebSocketSession;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ChatRoom {
+public class ChatRoomForm {
 
     private long roomId;
     private Member member1;
@@ -36,5 +36,12 @@ public class ChatRoom {
     public void setMember2(Member member2) {
         this.member2 = member2;
     }
-}
 
+    public Set<WebSocketSession> getSessions() {
+        return sessions;
+    }
+
+    public void setSessions(Set<WebSocketSession> sessions) {
+        this.sessions = sessions;
+    }
+}

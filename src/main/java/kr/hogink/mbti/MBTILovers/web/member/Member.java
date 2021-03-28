@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Entity
 public class Member {
@@ -11,12 +12,14 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String uid;
+    private String uid; //firebase uid
     private String name;
     private String gender;
-    private String age;
+    private int age;
     private String mbti;
     private String stateMessage;
+    private String profileImage;
+    private Date lastConnectTime;
 
 
     public String getUid() {
@@ -51,14 +54,13 @@ public class Member {
         this.gender = gender;
     }
 
-    public String getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(int age) {
         this.age = age;
     }
-
 
     public String getMbti() {
         return mbti;
@@ -74,5 +76,21 @@ public class Member {
 
     public void setStateMessage(String stateMessage) {
         this.stateMessage = stateMessage;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
+    public Date getLastConnectTime() {
+        return lastConnectTime;
+    }
+
+    public void setLastConnectTime(Date lastConnectTime) {
+        this.lastConnectTime = lastConnectTime;
     }
 }

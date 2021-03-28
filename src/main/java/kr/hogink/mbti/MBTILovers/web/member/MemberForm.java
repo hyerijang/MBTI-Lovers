@@ -4,10 +4,11 @@ public class MemberForm {
 
     private String name;
     private String gender;
-    private String age;
+    private int age;
     private String mbti;
     private String uid;
     private String stateMessage;
+    private String profileImage;
 
 
     public String getUid() {
@@ -42,11 +43,11 @@ public class MemberForm {
         this.gender = gender;
     }
 
-    public String getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(int age) {
         this.age = age;
     }
 
@@ -57,4 +58,12 @@ public class MemberForm {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
 }

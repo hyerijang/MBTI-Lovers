@@ -26,11 +26,11 @@ class MemoryChatRoomRepositoryTest {
         member2.setName("김철수");
         chatRoom.setMember1(member1);
         chatRoom.setMember2(member2);
-        chatRoomRepository.save(chatRoom);
+        chatRoomRepository.createChatRoom(chatRoom);
 
 //        Member member3 = new Member();
 //        member3.setName("김철수");
-        ChatRoom result = chatRoomRepository.findByMembers(member1, member2).get();
+        ChatRoom result = chatRoomRepository.findById(member1, member2).get();
         assertThat(chatRoom).isEqualTo(result);
     }
 

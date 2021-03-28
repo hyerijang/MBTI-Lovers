@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="overflow:hidden;">
 <head>
     <meta
             name="viewport"
@@ -30,82 +30,74 @@
 </head>
 <body>
 
-<div class="page-content page-container" id="page-content">
-    <div class="padding">
-        <div class="row container d-flex justify-content-center">
-            <div class="col-md-6">
 
-                <div class="card card-bordered" id="username-page">
-                    <!--              임시 입력-->
-                    <form id="usernameForm" name="usernameForm">
-                        <div class="card-header">
+<div class="page card card-bordered" id="username-page">
+    <!--              임시 입력-->
+    <form id="usernameForm" name="usernameForm">
+        <div class="card-header">
 
+            <input
+                    class="form-control publisher-input"
+                    type="text"
+                    id="name"
+                    placeholder="Username을 입력하세요"
+                    autocomplete="off"
+                    style="width:100%; "
+            />
 
-                                <input
-                                        class="form-control publisher-input"
-                                        type="text"
-                                        id="name"
-                                        placeholder="Username을 입력하세요"
-                                        autocomplete="off"
-                                        style= "width:100%; "
-                                />
-
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-xs btn-secondary">
-                                    채팅 시작하기
-                                </button>
-                            </div>
-
-                        </div>
-                    </form>
-                    <!--              임시 입력 끝-->
-                    <div class="card-header">
-                        <h4 class="card-title"><strong>Chat</strong></h4>
-                        <a class="btn btn-xs btn-secondary" href="#" data-abc="true"
-                        >Let's Chat App</a
-                        >
-                    </div>
-
-                    <!--채팅화면 -->
-                    <div id="chat-page">
-                        <div
-                                class="ps-container ps-theme-default ps-active-y"
-                                id="messageArea"
-                                style="
-                    overflow-y: scroll !important;
-                    height: 400px !important;
-                  "
-                        >
-
-                        </div>
-                    </div>
-
-                    <!-- 채팅 입력 레이아웃 -->
-                    <form id="messageForm" name="messageForm">
-                        <div class="publisher bt-1 border-light">
-                            <img
-                                    class="avatar avatar-xs"
-                                    src="https://img.icons8.com/color/36/000000/administrator-male.png"
-                                    alt="..."
-                            />
-
-                            <input
-                                    class="form-control publisher-input"
-                                    type="text"
-                                    id="message"
-                                    placeholder="Write something"
-                                    autocomplete="off"
-                            />
-
-                            <button type="submit" class="publisher-btn text-info" href="#" data-abc="true"
-                            ><i class="fa fa-paper-plane"></i
-                            ></button>
-                        </div>
-                    </form>
-                </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-xs btn-secondary">
+                    채팅 시작하기
+                </button>
             </div>
+
+        </div>
+    </form>
+    <!--              임시 입력 끝-->
+    <div class="card-header">
+        <h4 class="card-title"><strong>Chat</strong></h4>
+        <a class="btn btn-xs btn-secondary" href="#" data-abc="true"
+        >Let's Chat App</a
+        >
+    </div>
+
+    <!--채팅화면 -->
+    <div id="chat-page">
+        <div
+                class="ps-container ps-theme-default ps-active-y"
+                id="messageArea"
+                style="
+                    overflow-y: scroll !important;
+                    height : calc(100vh - 190px) !important;
+                  "
+        >
+
         </div>
     </div>
+
+    <!-- 채팅 입력 레이아웃 -->
+    <form id="messageForm" name="messageForm">
+        <div class="publisher bt-1 border-light">
+            <img
+                    class="avatar avatar-xs"
+                    src="https://img.icons8.com/color/36/000000/administrator-male.png"
+                    alt="..."
+            />
+
+            <input
+                    class="form-control publisher-input"
+                    type="text"
+                    id="message"
+                    placeholder="Write something"
+                    autocomplete="off"
+            />
+
+            <button type="submit" class="publisher-btn text-info" href="#" data-abc="true"
+            ><i class="fa fa-paper-plane"></i
+            ></button>
+        </div>
+    </form>
+
 </div>
 
 <!--  부트스트랩 js 사용 -->

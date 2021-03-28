@@ -29,7 +29,7 @@ public class MemberServiceIntegrationTest {
         Long saveId = memberService.join(member);
         //then
         //assertj의 assertions
-        Member findMember = memberService.findOne(saveId).get();
+        Member findMember = memberService.findOneById(saveId).get();
         assertThat(member.getName()).isEqualTo(findMember.getName());
     }
 
