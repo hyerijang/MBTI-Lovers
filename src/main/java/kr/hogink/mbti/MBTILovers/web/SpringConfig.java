@@ -6,6 +6,8 @@ import kr.hogink.mbti.MBTILovers.web.chatRoom.ChatRoomService;
 import kr.hogink.mbti.MBTILovers.web.chatRoom.MemoryChatRoomRepository;
 import kr.hogink.mbti.MBTILovers.web.login.AuthInterceptor;
 import kr.hogink.mbti.MBTILovers.web.login.LoginInterceptor;
+import kr.hogink.mbti.MBTILovers.web.login.LoginService;
+import kr.hogink.mbti.MBTILovers.web.login.LoginServiceImpl;
 import kr.hogink.mbti.MBTILovers.web.member.MemberRepositoryImpl;
 import kr.hogink.mbti.MBTILovers.web.member.MemberRepository;
 import kr.hogink.mbti.MBTILovers.web.member.MemberService;
@@ -56,13 +58,15 @@ public class SpringConfig extends WebMvcConfigurationSupport {
 
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
-        //인증 인터셉터
+        // 인증 인터셉터
+        // 로그인된 유저인지 검증
         // 경로는 "/경로" 여야함
-        registry.addInterceptor(new AuthInterceptor(memberService()))
+        registry.addInterceptor(new AuthInterceptor())
                 .addPathPatterns("/chat/**")
-                .excludePathPatterns("/admin/myPage");
+                .addPathPatterns("/members");
 
         //로그인 인터셉터
+        //로그인을 처리함
         registry.addInterceptor(new LoginInterceptor())
                 .addPathPatterns("/user/loginPost");
 
@@ -74,4 +78,9 @@ public class SpringConfig extends WebMvcConfigurationSupport {
             "classpath:/static/", "classpath:/public/"
     };
 
+
+    @Bean
+    public LoginService loginService() {
+        return new LoginServiceImpl(memberService());
+    }
 }

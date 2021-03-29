@@ -2,7 +2,7 @@ package kr.hogink.mbti.MBTILovers.web.repository;
 
 //import org.assertj.core.api.Assertions;
 import kr.hogink.mbti.MBTILovers.web.member.Member;
-import kr.hogink.mbti.MBTILovers.web.member.MemoryMemberRepository;
+import kr.hogink.mbti.MBTILovers.web.member.MemberRepositoryMem;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,9 +10,9 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
-class MemoryMemberRepositoryTest {
+class MemberRepositoryMemTest {
 
-    MemoryMemberRepository repository = new MemoryMemberRepository();
+    MemberRepositoryMem repository = new MemberRepositoryMem();
 
     @AfterEach
     public void afterEach() {

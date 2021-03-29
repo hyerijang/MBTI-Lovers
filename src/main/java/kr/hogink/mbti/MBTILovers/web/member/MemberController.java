@@ -1,6 +1,5 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
-import kr.hogink.mbti.MBTILovers.web.member.MBTI.EnumMbti;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,13 +47,6 @@ public class MemberController {
     }
 
 
-    public void getMbtiList() {
-        System.out.println("MBTI 목록");
-        List<EnumMbti> enumValues = Arrays.asList(EnumMbti.values());
-        System.out.println(enumValues);
-    }
-
-
     @GetMapping(value = "/members/edit")
     public String editFrom() {
         return "members/editMemberForm";
@@ -63,7 +55,7 @@ public class MemberController {
 
     @PostMapping("/members/edit")
     public String edit(MemberForm form) {
-        Member member = memberService.findOneById((long)1).get();//임시
+        Member member = memberService.findOneById((long) 1).get();//임시
         member.setName(form.getName());
         member.setGender(form.getGender());
         member.setAge(form.getAge());
@@ -71,7 +63,7 @@ public class MemberController {
         member.setMbti(form.getMbti());
         member.setStateMessage(form.getStateMessage());
         member.setProfileImage(form.getProfileImage());
-        memberService.modifyUser(member);
+//        memberService.modifyUser(member);
         return "redirect:/";
     }
 

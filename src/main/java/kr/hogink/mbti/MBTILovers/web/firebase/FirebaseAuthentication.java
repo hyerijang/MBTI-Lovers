@@ -1,9 +1,8 @@
-package kr.hogink.mbti.MBTILovers.web.firestore;
+package kr.hogink.mbti.MBTILovers.web.firebase;
 
 
 
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;

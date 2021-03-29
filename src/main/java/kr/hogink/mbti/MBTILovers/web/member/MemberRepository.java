@@ -15,15 +15,5 @@ public interface MemberRepository {
     List<Member> findAll();
     Optional<Member> findByUid(String uid);
 
-//userDAO
-
-    // 회원정보 수정처리
-    void updateUser(Member member);
-
-    // 로그인 유지
-    void keepLogin(String uid, String sessionId, Date next) throws Exception;
-
-    // sessionKey 확인
-    Member checkUserWithSessionKey(String value) throws Exception;
 
 }

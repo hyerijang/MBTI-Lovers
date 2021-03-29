@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public class MemoryMemberRepository implements MemberRepository{
+public class MemberRepositoryMem implements MemberRepository{
 
     private static Map<Long, Member> store = new HashMap<>();
     private static long sequence = 0L;
@@ -27,20 +27,6 @@ public class MemoryMemberRepository implements MemberRepository{
         return Optional.of(store.get(uid));
     }
 
-    @Override
-    public void updateUser(Member member) {
-
-    }
-
-    @Override
-    public void keepLogin(String uid, String sessionId, Date next) throws Exception {
-
-    }
-
-    @Override
-    public Member checkUserWithSessionKey(String value) throws Exception {
-        return null;
-    }
 
 
     @Override

@@ -1,19 +1,10 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
-import kr.hogink.mbti.MBTILovers.web.login.LoginDTO;
-import org.apache.juli.logging.Log;
+import kr.hogink.mbti.MBTILovers.web.login.LoginVO;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Transactional
@@ -75,26 +66,6 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Optional<Member> findOneByUid(String memberUid) {
         return memberRepository.findByUid(memberUid);
-    }
-
-    @Override
-    public void modifyUser(Member member) {
-        memberRepository.updateUser(member);
-    }
-
-    @Override
-    public Member login(LoginDTO loginDTO) {
-        return findOneByUid(loginDTO.getUid()).get();
-    }
-
-    @Override
-    public Optional<Member> checkLoginBefore(String value) throws Exception {
-        return checkUserWithSessionKey(value);
-    }
-
-    @Override
-    public Optional<Member> checkUserWithSessionKey(String value) throws Exception {
-        return findOneByUid("1laInCxF3bMY2dHqx7eap8aOSo22"); //임시
     }
 
 

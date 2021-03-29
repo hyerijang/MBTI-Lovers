@@ -1,21 +1,15 @@
 package kr.hogink.mbti.MBTILovers.web.service;
 
 
-import com.google.api.client.util.Value;
 import kr.hogink.mbti.MBTILovers.web.member.Member;
 import kr.hogink.mbti.MBTILovers.web.member.MemberService;
 import kr.hogink.mbti.MBTILovers.web.member.MemberServiceImpl;
-import kr.hogink.mbti.MBTILovers.web.member.MemoryMemberRepository;
+import kr.hogink.mbti.MBTILovers.web.member.MemberRepositoryMem;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
-import javax.servlet.ServletContext;
 import java.io.File;
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -26,11 +20,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class MemberServiceTest {
 
     MemberService memberService;
-    MemoryMemberRepository memberRepository;
+    MemberRepositoryMem memberRepository;
 
     @BeforeEach
     public void beforeEach() {
-        memberRepository = new MemoryMemberRepository();
+        memberRepository = new MemberRepositoryMem();
         memberService =  new MemberServiceImpl(memberRepository);
     }
     @AfterEach

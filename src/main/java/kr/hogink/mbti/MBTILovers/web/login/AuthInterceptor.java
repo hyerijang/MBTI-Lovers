@@ -17,33 +17,22 @@ import javax.servlet.http.HttpSession;
 public class AuthInterceptor extends HandlerInterceptorAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
-    private final MemberService memberService;
+//    private final MemberService memberService;
+//
+//    public AuthInterceptor(MemberService memberService) {
+//        this.memberService = memberService;
+//    }
 
-    public AuthInterceptor(MemberService memberService) {
-        this.memberService = memberService;
-    }
 
-
-
+    private static final String LOGIN = "login";
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response,
                              Object handler) throws Exception {
         HttpSession session = request.getSession();
-        if (session.getAttribute("login") == null) {
-            logger.info("current user is not logged");
-            // 기존의 페이지
+        if (session.getAttribute(LOGIN ) == null) {
+            // 현재 페이지 저장
             saveDestination(request);
-            // 쿠키 값
-            Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
-            if (loginCookie != null) {
-                Member member = memberService.checkLoginBefore(loginCookie.getValue()).get();
-                logger.info("member : " + member);
-                if (member != null) {
-                    session.setAttribute("login", member);
-                    return true;
-                }
-            }
             response.sendRedirect("user/login");
             return false;
         }
@@ -51,7 +40,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
-    // 로그인 페이지 이동 전 페이지 저장
+    // 로그인 페이지 이동 전 현재 페이지를 저장합니다.
     private void saveDestination(HttpServletRequest request) {
         String uri = request.getRequestURI();   // 현재 페이지
         String query = request.getQueryString(); // 쿼리
