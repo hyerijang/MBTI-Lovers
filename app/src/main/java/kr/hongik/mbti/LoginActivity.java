@@ -291,7 +291,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 //HttpClient에 Post 방식으로 Uid 전송
                 try {
-                    Log.d(TAG, "로그인 인증 uid : " +uid);
+                    Log.d(TAG, "해당 uid가 DB에 있는지 검증");
                     HttpClient httpClient = SessionControl.getHttpclient();
 
                     String str = "http://52.78.50.239:8080/login/auth/"+uid;
@@ -325,15 +325,9 @@ public class LoginActivity extends AppCompatActivity {
             protected void onPostExecute(String result) {
                 String s = result.trim();
                 Log.d(TAG, "Current User = " + s);
-//                loadingDialog.dismiss();
                 if (s.contains(uid)) {
                     Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_LONG).show();
-//                    Log.d(TAG, "로그인 인증 성공, 쿠키를 생성합니다.");
-//                    SessionControl.cookies = SessionControl.httpclient.getCookieStore().getCookies();
-//                    if (!SessionControl.cookies.isEmpty()) {
                      startWebViewActivity(uid);
-//                    }
-
                 } else {
                     Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
 
@@ -350,7 +344,7 @@ public class LoginActivity extends AppCompatActivity {
         if (uid != null) {
             Toast.makeText(LoginActivity.this, uid + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
             Intent i = new Intent(getApplicationContext(), webViewActivity.class);
-            i.putExtra("myurl", "http://52.78.50.239:8080");
+            i.putExtra("myurl", "http://52.78.50.239:8080/user/loginPost?uid="+uid);
             startActivity(i);
             finish();
         }
