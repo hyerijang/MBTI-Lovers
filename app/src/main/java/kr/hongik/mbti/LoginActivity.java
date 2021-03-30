@@ -270,6 +270,8 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+//    private static String homeUrl = "http://52.78.50.239:8080"; //webServer
+    private static String homeUrl = "http://192.168.35.8:8080"; //Test용 로컬 경로
 
     private void loginCheck(final String uid) {
         class LoginAsync extends AsyncTask<String, Void, String> {
@@ -294,7 +296,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "해당 uid가 DB에 있는지 검증");
                     HttpClient httpClient = SessionControl.getHttpclient();
 
-                    String str = "http://52.78.50.239:8080/login/auth/"+uid;
+                    String str = homeUrl + "/login/auth/"+uid;
                     HttpPost httpPost = new HttpPost(str);
                     httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
                     HttpResponse response = httpClient.execute(httpPost);
@@ -339,12 +341,11 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-
     public void startWebViewActivity(String uid) {
         if (uid != null) {
             Toast.makeText(LoginActivity.this, uid + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
             Intent i = new Intent(getApplicationContext(), webViewActivity.class);
-            i.putExtra("myurl", "http://52.78.50.239:8080/user/loginPost?uid="+uid);
+            i.putExtra("myurl", homeUrl + "/user/loginPost?uid="+uid);
             startActivity(i);
             finish();
         }
