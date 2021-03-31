@@ -5,6 +5,15 @@ public class ChatMessage {
     private MessageType type;
     private String content;
     private String sender;
+    private String roomId;
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
 
     public MessageType getType() {
         return type;

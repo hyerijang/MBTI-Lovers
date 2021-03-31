@@ -14,19 +14,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * A simple Quick start application demonstrating how to connect to Firestore
- * and add and query documents.
- */
+
 public class FirebaseAuthentication {
 
     private final FirebaseAuth mFirebaseAuth;
     private UserRecord userRecord;
     /**
-     * Initialize Firestore using default project ID.
+     * 파이어베이스 인증 초기화
+     * crruentDirFile : 프로젝트 절대 경로,경로 구분 시 File.separator 사용 할 것
      */
 
-    //프로젝트 절대 경로 (윈도우와 리눅스 서로 다름 주의)
     File currentDirFile = new File(".");
     String helper = currentDirFile.getAbsolutePath();
     String path =  helper + File.separator+ "firebase" + File.separator + "mbti-lovers-4b1ae-firebase-adminsdk-zvjex-c80f3735b9.json";
@@ -44,18 +41,18 @@ public class FirebaseAuthentication {
 
         mFirebaseAuth = FirebaseAuth.getInstance();
     }
-
-    public UserRecord setUserRecord(String uid){
-        try {
-            this.userRecord = mFirebaseAuth.getUser(uid);
-            return this.userRecord ;
-        } catch (FirebaseAuthException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public UserRecord getUserRecord() {
-        return userRecord;
-    }
+//
+//    public UserRecord setUserRecord(String uid){
+//        try {
+//            this.userRecord = mFirebaseAuth.getUser(uid);
+//            return this.userRecord ;
+//        } catch (FirebaseAuthException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//
+//    public UserRecord getUserRecord() {
+//        return userRecord;
+//    }
 }

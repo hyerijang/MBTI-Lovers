@@ -1,6 +1,7 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
 import kr.hogink.mbti.MBTILovers.web.login.LoginVO;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Transactional
+@Service
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;

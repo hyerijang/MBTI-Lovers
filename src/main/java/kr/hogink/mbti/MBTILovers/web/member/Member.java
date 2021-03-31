@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
 
+
 @Entity
 public class Member {
     //    private static final long serialVersionUID = 1L;

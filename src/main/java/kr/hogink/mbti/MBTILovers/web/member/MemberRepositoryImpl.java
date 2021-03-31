@@ -14,10 +14,8 @@ import java.util.*;
 public class MemberRepositoryImpl implements MemberRepository {
     private final JdbcTemplate jdbcTemplate;
 
-
     public MemberRepositoryImpl(DataSource dataSource) {
         FirebaseInitializer firebaseInitializer = new FirebaseInitializer();
-
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
