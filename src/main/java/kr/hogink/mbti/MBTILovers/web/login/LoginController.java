@@ -22,7 +22,7 @@ public class LoginController {
 
     public LoginController(LoginService loginService) {
         this.loginService = loginService;
-        System.out.println("유저 로그인 컨트롤러 입니다.");
+//        System.out.println("유저 로그인 컨트롤러 입니다.");
     }
 
 

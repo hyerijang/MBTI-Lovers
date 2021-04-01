@@ -34,6 +34,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             logger.info("new login success");
             // session에 로그인한 사용자의 uid를 저장
             session.setAttribute(LOGIN, memberUid);
+//            logger.info((String)session.getAttribute(LOGIN));
             //response.sendRedirect("/");
             // 로그인 페이지 접근 전의 페이지
             Object destination = session.getAttribute("destination");
@@ -51,6 +52,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         HttpSession session = request.getSession();
         // 기존 session login 값이 존재하면
         if (session.getAttribute(LOGIN) != null) {
+
             logger.info("clear login data before");
             // 삭제
             session.removeAttribute(LOGIN);
