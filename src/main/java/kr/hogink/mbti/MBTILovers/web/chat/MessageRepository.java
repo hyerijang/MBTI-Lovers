@@ -3,7 +3,7 @@ package kr.hogink.mbti.MBTILovers.web.chat;
 import javax.annotation.PostConstruct;
 import java.util.*;
 
-public class ChatRepository {
+public class MessageRepository {
 
     private Map<String, ChatRoom> chatRecord; //메모리에 저장
     @PostConstruct
@@ -11,7 +11,7 @@ public class ChatRepository {
         chatRecord = new LinkedHashMap<>();
     }
 
-    public List<ChatMessage> findAllChat(){
+    public List<Message> findAllChat(){
 
         List chatMessageList = new ArrayList(chatRecord.values());
         Collections.reverse(chatMessageList);
