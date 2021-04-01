@@ -8,6 +8,7 @@ var messageInput = document.querySelector("#message");
 var messageArea = document.querySelector("#messageArea");
 // var connectingElement = document.querySelector(".connecting"); //연결상태 표시
 
+
 var stompClient = null;
 var username = null;
 
@@ -24,7 +25,9 @@ var colors = [
     "#39bbb0",
 ];
 
-function connect(event) {
+//채팅방 입장시 소켓 서버와 연결
+window.onload = connect();
+function connect() {
     username = document.querySelector("#sender").value.trim();
 
     if (username) {
@@ -36,7 +39,7 @@ function connect(event) {
 
         stompClient.connect({}, onConnected, onError);
     }
-    event.preventDefault();
+    // event.preventDefault();
 }
 
 function onConnected() {
@@ -128,5 +131,5 @@ function getAvatarColor(messageSender) {
     return colors[index];
 }
 
-usernameForm.addEventListener("submit", connect, true);
+// usernameForm.addEventListener("submit", connect, true);
 messageForm.addEventListener("submit", sendMessage, true);

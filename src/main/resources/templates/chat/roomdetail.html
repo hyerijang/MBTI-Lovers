@@ -31,10 +31,11 @@
 <body>
 
 <p th:text = "${roomId}" id="roomId" style=" font-weight : bold"/>
+<!--<p th:text = "${sender}" id="sender" style=" font-weight : bold"/>-->
 
 <div class="page card card-bordered" id="username-page">
     <!--              임시 입력-->
-    <form id="usernameForm" name="usernameForm">
+    <form id="usernameForm" name="usernameForm" class = "addUserForm">
         <div class="card-header">
 
             <input
@@ -44,6 +45,7 @@
                     placeholder="sender uid을 입력하세요"
                     autocomplete="off"
                     style="width:100%; "
+                    value ="default_sender"
             />
 
             <div class="form-group">
