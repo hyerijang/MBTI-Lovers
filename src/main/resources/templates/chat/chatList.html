@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+    <div>
+        <a href="/">뒤로가기</a>
+        <table border="1">
+            <thead>
+            <tr>
+                <th>roomid</th>
+                <th>name</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="chatRoom : ${chatRooms}">
+                <td th:text="${chatRoom.roomId}"></td>
+                <td th:text="${chatRoom.name}"></td>
+                <td><a th:href="@{/chat/enter/{roomId} (roomId = ${chatRoom.roomId})}">입장</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div> <!-- /container -->
+</body>
+</html>

@@ -9,13 +9,11 @@ import java.util.*;
 @Repository
 public class ChatRoomRepository {
 
-    private Map<String, ChatRoom> chatRoomMap; //메모리에 저장
+    private static Map<String, ChatRoom>  chatRoomMap; //메모리에 저장
 
-    @PostConstruct
-    private void init() {
+    ChatRoomRepository(){
         chatRoomMap = new LinkedHashMap<>();
     }
-
     public List<ChatRoom> findAllRoom() {
         // 채팅방 생성순서 최근 순으로 반환
         List chatRooms = new ArrayList(chatRoomMap.values());

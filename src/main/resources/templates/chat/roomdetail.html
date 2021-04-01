@@ -30,6 +30,8 @@
 </head>
 <body>
 
+<p th:text = "${roomId}" id="roomId" style=" font-weight : bold"/>
+
 <div class="page card card-bordered" id="username-page">
     <!--              임시 입력-->
     <form id="usernameForm" name="usernameForm">
@@ -38,8 +40,8 @@
             <input
                     class="form-control publisher-input"
                     type="text"
-                    id="name"
-                    placeholder="Username을 입력하세요"
+                    id="sender"
+                    placeholder="sender uid을 입력하세요"
                     autocomplete="off"
                     style="width:100%; "
             />
@@ -56,7 +58,7 @@
     <!--              임시 입력 끝-->
     <div class="card-header">
         <h4 class="card-title">
-            <p th:text = "${roomId}" id="roomId" style=" font-weight : bold"/></h4>
+            <p th:text = "${name}" id="name" style=" font-weight : bold"/></h4>
         <a class="btn btn-xs btn-secondary" href="#" data-abc="true"
         >Let's Chat App</a
         >
