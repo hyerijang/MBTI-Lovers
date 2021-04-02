@@ -10,5 +10,5 @@ public interface MemberService {
 
     List<Member> findMembers();
     Optional<Member> findOneByUid(String memberUid);
-
+    void editLastConnectTime(Member member);
 }

@@ -1,6 +1,5 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
-import kr.hogink.mbti.MBTILovers.web.login.LoginVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,8 +51,12 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
-    private void setLastConnectTime(Member member) {
+    public void setLastConnectTime(Member member){
         member.setLastConnectTime(new Date(System.currentTimeMillis()));
+    }
+    public void editLastConnectTime(Member member) {
+        setLastConnectTime(member);
+        memberRepository.save(member);
     }
 
     /**

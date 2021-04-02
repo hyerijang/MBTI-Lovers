@@ -18,12 +18,13 @@ import javax.servlet.http.HttpSession;
 @RequestMapping( "/user")
 public class LoginController {
 
+    private final MemberService memberService;
     private final LoginService loginService;
     public static final String USER = "user";
 
-    public LoginController(LoginService loginService) {
+    public LoginController(MemberService memberService, LoginService loginService) {
+        this.memberService = memberService;
         this.loginService = loginService;
-//        System.out.println("유저 로그인 컨트롤러 입니다.");
     }
 
 
@@ -38,7 +39,7 @@ public class LoginController {
     public void loginPost(LoginVO loginVO, HttpSession httpSession, Model model) {
         //uid를 통해 select한 회원 정보를 member에 담는다.
         Member member = loginService.login(loginVO);
-
+        memberService.editLastConnectTime(member);
         if(member ==null)
         {
             return;
@@ -47,4 +48,7 @@ public class LoginController {
         //model에 멤버 객체를 currentUser라는 이름의 변수에 저장
         model.addAttribute("currentUser", member);
     }
+
+
+
 }
