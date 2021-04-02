@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -37,13 +39,21 @@ public class ChatRoomController {
     }
 
 
+    private final String LOGIN = "login";
+    
     //채팅방 입장화면 {roomid}를 통해 입장
     @GetMapping(value = "/chat/enter/{roomId}")
-    public String createFrom(Model model, @PathVariable String roomId) {
+    public String createFrom(HttpServletRequest request, Model model, @PathVariable String roomId) {
+        //세션 정보로 sender 설정
+        HttpSession session = request.getSession();
+        String senderUid = (String)session.getAttribute(LOGIN);
+        model.addAttribute("sender",senderUid);
+
+        //ChatRoom 정보로 roomId, name 설정
         ChatRoom room = chatRoomRepository.findRoomById(roomId);
         model.addAttribute("roomId",room.getRoomId());
         model.addAttribute("name",room.getName());
-        System.out.println("room id :"+  roomId);
+        //채팅방 입장
         return "chat/roomdetail";
     }
 
