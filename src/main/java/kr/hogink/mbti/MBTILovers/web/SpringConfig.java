@@ -1,6 +1,9 @@
 package kr.hogink.mbti.MBTILovers.web;
 
 
+import kr.hogink.mbti.MBTILovers.web.friend.FriendRepository;
+import kr.hogink.mbti.MBTILovers.web.friend.FriendService;
+import kr.hogink.mbti.MBTILovers.web.friend.FriendServiceImpl;
 import kr.hogink.mbti.MBTILovers.web.login.AuthInterceptor;
 import kr.hogink.mbti.MBTILovers.web.login.LoginInterceptor;
 import kr.hogink.mbti.MBTILovers.web.login.LoginService;
@@ -15,10 +18,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 @Configuration
 public class SpringConfig extends WebMvcConfigurationSupport {
     private final MemberRepository memberRepository;
+    private final FriendRepository friendRepository;
 
-
-    public SpringConfig(MemberRepository memberRepository) {
+    public SpringConfig(MemberRepository memberRepository, FriendRepository friendRepository) {
         this.memberRepository = memberRepository;
+        this.friendRepository = friendRepository;
     }
 
     @Bean
@@ -26,6 +30,10 @@ public class SpringConfig extends WebMvcConfigurationSupport {
         return new MemberServiceImpl(memberRepository);
     }
 
+    @Bean
+    public FriendService friendService() {
+        return new FriendServiceImpl(friendRepository);
+    }
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**")
