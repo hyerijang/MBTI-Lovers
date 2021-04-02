@@ -5,7 +5,7 @@ import java.util.*;
 
 public class MessageRepository {
 
-    private Map<String, ChatRoom> chatRecord; //메모리에 저장
+    private Map<String, Room> chatRecord; //메모리에 저장
     @PostConstruct
     private void init() {
         chatRecord = new LinkedHashMap<>();

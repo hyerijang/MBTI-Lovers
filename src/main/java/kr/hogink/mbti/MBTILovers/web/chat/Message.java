@@ -5,14 +5,14 @@ public class Message {
     private MessageType type;
     private String content;
     private String sender;
-    private String roomId;
+    private String rid;
 
-    public String getRoomId() {
-        return roomId;
+    public String getrid() {
+        return rid;
     }
 
-    public void setRoomId(String roomId) {
-        this.roomId = roomId;
+    public void setrid(String rid) {
+        this.rid = rid;
     }
 
     public MessageType getType() {

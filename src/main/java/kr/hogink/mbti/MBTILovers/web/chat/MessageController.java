@@ -15,8 +15,8 @@ public class MessageController {
 
     @MessageMapping("/sub/chat/room") //기존 request mapping 역할
     public Message sendMessage(@Payload Message chatMessage){
-        chatMessage.setRoomId("roomid"); //임시
-        messagingTemplate.convertAndSend("/sub/chat/room/" +chatMessage.getRoomId(), chatMessage);
+        chatMessage.setrid("rid"); //임시
+        messagingTemplate.convertAndSend("/sub/chat/room/" +chatMessage.getrid(), chatMessage);
         return chatMessage;
     }
 

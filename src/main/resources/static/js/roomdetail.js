@@ -12,7 +12,7 @@ var messageArea = document.querySelector("#messageArea");
 var stompClient = null;
 var username = null;
 
-var roomId = document.getElementById('roomId').innerText;
+var rid = document.getElementById('rid').innerText;
 
 var colors = [
     "#2196F3",
@@ -44,11 +44,11 @@ function connect() {
 
 function onConnected() {
     // room 개설
-    stompClient.subscribe("/sub/chat/room/" +roomId, onMessageReceived);
+    stompClient.subscribe("/sub/chat/room/" +rid, onMessageReceived);
 
     // Tell your username to the server
     stompClient.send(
-        "/sub/chat/room/"+roomId,
+        "/sub/chat/room/"+rid,
         {},
         JSON.stringify({sender: username, type: "JOIN"})
     );
@@ -69,7 +69,7 @@ function sendMessage(event) {
             content: messageInput.value,
             type: "CHAT",
         };
-        stompClient.send("/sub/chat/room/" +roomId, {}, JSON.stringify(chatMessage));
+        stompClient.send("/sub/chat/room/" +rid, {}, JSON.stringify(chatMessage));
         messageInput.value = "";
     }
     event.preventDefault();

@@ -11,9 +11,9 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
-public class ChatRoomController {
+public class RoomController {
 
-    final static ChatRoomRepository chatRoomRepository = new ChatRoomRepository();
+    final static RoomRepository ROOM_REPOSITORY = new RoomRepository();
 
     //채팅홈
     @GetMapping(value = "/chatHome")
@@ -25,10 +25,10 @@ public class ChatRoomController {
     // 모든 채팅방 목록 반환
     @GetMapping(value = "/chatList")
     public String list(Model model) {
-        chatRoomRepository.createChatRoom("방1"); //임시
-        chatRoomRepository.createChatRoom("방2"); //임시
-        List<ChatRoom> chatRooms = chatRoomRepository.findAllRoom();
-        model.addAttribute("chatRooms", chatRooms);
+        createRoom("room1");
+        createRoom("room2");
+        List<Room> rooms = ROOM_REPOSITORY.findAllRoom();
+        model.addAttribute("rooms", rooms);
         return "chat/chatList";
     }
 
@@ -36,23 +36,25 @@ public class ChatRoomController {
     // 채팅방 생성
     @PostMapping("/room")
     @ResponseBody
-    public ChatRoom createRoom(@RequestParam String name) {
-        return chatRoomRepository.createChatRoom(name);
+    public Room createRoom(@RequestParam String name) {
+        Room room = new Room();
+        room.setName(name);
+        return ROOM_REPOSITORY.createChatRoom(room);
     }
 
     
-    //채팅방 입장화면 {roomid}를 통해 입장
-    @GetMapping(value = "/chat/enter/{roomId}")
-    public String createFrom(HttpServletRequest request, Model model, @PathVariable String roomId) {
+    //채팅방 입장화면 {rid}를 통해 입장
+    @GetMapping(value = "/chat/enter/{rid}")
+    public String createFrom(HttpServletRequest request, Model model, @PathVariable String rid) {
         //세션 정보로 sender 설정
         HttpSession session = request.getSession();
         Member user = (Member)session.getAttribute(LoginController.USER);
         String sender =  user.getName();
         model.addAttribute("sender",sender);
 
-        //ChatRoom 정보로 roomId, name 설정
-        ChatRoom room = chatRoomRepository.findRoomById(roomId);
-        model.addAttribute("roomId",room.getRoomId());
+        //Room 정보로 rid, name 설정
+        Room room = ROOM_REPOSITORY.findRoomByRid(rid);
+        model.addAttribute("rid",room.getRid().trim());
         model.addAttribute("name",room.getName());
         //채팅방 입장
         return "chat/roomdetail";

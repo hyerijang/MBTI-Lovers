@@ -7,16 +7,16 @@
         <table border="1">
             <thead>
             <tr>
-                <th>roomid</th>
+                <th>rid</th>
                 <th>name</th>
 
             </tr>
             </thead>
             <tbody>
-            <tr th:each="chatRoom : ${chatRooms}">
-                <td th:text="${chatRoom.roomId}"></td>
-                <td th:text="${chatRoom.name}"></td>
-                <td><a th:href="@{/chat/enter/{roomId} (roomId = ${chatRoom.roomId})}">입장</a></td>
+            <tr th:each="room : ${rooms}">
+                <td th:text="${room.rid}"></td>
+                <td th:text="${room.name}"></td>
+                <td><a th:href="@{/chat/enter/{rid} (rid = ${room.rid})}">입장</a></td>
             </tr>
             </tbody>
         </table>
