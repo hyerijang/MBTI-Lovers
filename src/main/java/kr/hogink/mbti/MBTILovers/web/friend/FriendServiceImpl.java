@@ -25,13 +25,9 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public String addFriend(String uid, String fid) {
-
-        Friend friend = new Friend();
-        friend.setUid(uid);
-        friend.setFid(fid);
+    public String addFriend(Friend friend) {
         friendRepository.save(friend);
-        return uid;
+        return friend.relation;
     }
 
 

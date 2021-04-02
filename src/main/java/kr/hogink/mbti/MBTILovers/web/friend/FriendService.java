@@ -9,6 +9,6 @@ public interface FriendService {
 
     List<Friend> findAllByUid(String uid);
     Optional<Friend> findOneByFid();
-    String addFriend(String uid, String fid);
+    String addFriend(Friend friend);
 
 }

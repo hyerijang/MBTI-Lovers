@@ -9,7 +9,7 @@ public class Friend {
     @Id
     String uid;
     String fid; //friend's uid
-    String rid;
+    String relation;
 
     public String getUid() {
         return uid;
@@ -27,11 +27,11 @@ public class Friend {
         this.fid = fid;
     }
 
-    public String getRid() {
-        return rid;
+    public String getRelation() {
+        return relation;
     }
 
-    public void setRid(String rid) {
-        this.rid = rid;
+    public void setRelation(String rid) {
+        this.relation = rid;
     }
 }
