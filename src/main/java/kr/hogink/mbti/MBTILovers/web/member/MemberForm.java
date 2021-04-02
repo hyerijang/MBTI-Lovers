@@ -6,18 +6,9 @@ public class MemberForm {
     private String gender;
     private int age;
     private String mbti;
-    private String uid;
     private String stateMessage;
     private String profileImage;
 
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
 
     public String getMbti() {
         return mbti;

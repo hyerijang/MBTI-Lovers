@@ -6,21 +6,17 @@ import java.util.*;
 
 public class MemberRepositoryMem implements MemberRepository{
 
-    private static Map<Long, Member> store = new HashMap<>();
+    private static Map<String, Member> store = new HashMap<>();
     private static long sequence = 0L;
 
     @Override
     public Member save(Member member) {
-        member.setId(++sequence);
-        store.put(member.getId(),member);
+        member.setUid("UID"+(++sequence));
+        store.put(member.getUid(),member);
         return member;
     }
 
 
-    @Override
-    public Optional<Member> findById(Long id) {
-        return Optional.of(store.get(id));
-    }
     @Override
     public Optional<Member> findByUid(String uid) {
         return Optional.of(store.get(uid));

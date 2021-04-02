@@ -11,8 +11,6 @@ import java.util.Date;
 public class Member {
     //    private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private String uid; //firebase uid
     private String name;
     private String gender;
@@ -31,13 +29,6 @@ public class Member {
         this.uid = uid;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

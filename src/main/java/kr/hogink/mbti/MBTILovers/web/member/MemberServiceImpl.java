@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Transactional
 @Service
@@ -22,7 +23,10 @@ public class MemberServiceImpl implements MemberService {
      * 회원가입
      */
     @Override
-    public Long join(Member member) {
+    public String join(Member member) {
+        //uid가 비어있으면 임시 uid 발급
+        if(member.getUid() == null)
+            member.setUid(UUID.randomUUID().toString());
         //같은 이름이 있는 중복 회원x
         validateDuplicateMember(member);
         //프로필 이미지로 기본이미지 세팅
@@ -30,7 +34,7 @@ public class MemberServiceImpl implements MemberService {
         //현재시각 저장
         setLastConnectTime(member);
         memberRepository.save(member);
-        return member.getId();
+        return member.getUid();
     }
 
     private void validateDuplicateMember(Member member) {
@@ -60,16 +64,11 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findAll();
     }
 
-    @Override
-    public Optional<Member> findOneById(Long memberID) {
-        return memberRepository.findById(memberID);
-    }
 
     @Override
     public Optional<Member> findOneByUid(String memberUid) {
         return memberRepository.findByUid(memberUid);
     }
-
 
 
 }

@@ -6,12 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MemberService {
-    Long join(Member member);
+    String join(Member member);
 
     List<Member> findMembers();
-
-    Optional<Member> findOneById(Long memberID);
-
     Optional<Member> findOneByUid(String memberUid);
 
 }

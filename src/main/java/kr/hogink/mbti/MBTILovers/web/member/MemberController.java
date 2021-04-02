@@ -31,7 +31,6 @@ public class MemberController {
         member.setName(form.getName());
         member.setGender(form.getGender());
         member.setAge(form.getAge());
-        member.setUid(form.getUid());
         member.setMbti(form.getMbti());
         member.setStateMessage(form.getStateMessage());
         member.setProfileImage(form.getProfileImage());
@@ -55,15 +54,14 @@ public class MemberController {
 
     @PostMapping("/members/edit")
     public String edit(MemberForm form) {
-        Member member = memberService.findOneById((long) 1).get();//임시
-        member.setName(form.getName());
-        member.setGender(form.getGender());
-        member.setAge(form.getAge());
-        member.setUid(form.getUid());
-        member.setMbti(form.getMbti());
-        member.setStateMessage(form.getStateMessage());
-        member.setProfileImage(form.getProfileImage());
-//        memberService.modifyUser(member);
+//        Member member = memberService.findOneByUid((long) 1).get();//임시
+//        member.setName(form.getName());
+//        member.setGender(form.getGender());
+//        member.setAge(form.getAge());
+//        member.setMbti(form.getMbti());
+//        member.setStateMessage(form.getStateMessage());
+//        member.setProfileImage(form.getProfileImage());
+////        memberService.modifyUser(member);
         return "redirect:/";
     }
 
