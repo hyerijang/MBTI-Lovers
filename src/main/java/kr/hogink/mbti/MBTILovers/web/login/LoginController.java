@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
 
     private final LoginService loginService;
+    public static final String USER = "user";
 
     public LoginController(LoginService loginService) {
         this.loginService = loginService;
@@ -43,7 +44,7 @@ public class LoginController {
             return;
         }
 
-        //model에 맴버 객체를 member라는 이름의 변수에 저장
-        model.addAttribute("memberUid", member.getUid());
+        //model에 멤버 객체를 currentUser라는 이름의 변수에 저장
+        model.addAttribute("currentUser", member);
     }
 }

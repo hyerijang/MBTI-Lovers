@@ -6,7 +6,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,7 +13,7 @@ import javax.servlet.http.HttpSession;
 //HttpSession 관련 작업 처리
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 
-    private static final String LOGIN = "login";
+
 
     private static final Logger logger = LoggerFactory.getLogger(LoggerFactory.class);
 
@@ -28,13 +27,12 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         HttpSession session = request.getSession();
         // model에 저장된 값을 member에 저장
         ModelMap modelMap = modelAndView.getModelMap();
-        Object memberUid = modelMap.get("memberUid");
-        System.out.println(memberUid+"님이 로그인 하셨습니다");
-        if (memberUid != null) {
+        Object member = modelMap.get("currentUser");
+        // System.out.println(member+"님이 로그인 하셨습니다");
+        if (member != null) {
             logger.info("new login success");
             // session에 로그인한 사용자의 uid를 저장
-            session.setAttribute(LOGIN, memberUid);
-//            logger.info((String)session.getAttribute(LOGIN));
+            session.setAttribute(LoginController.USER, member);
             //response.sendRedirect("/");
             // 로그인 페이지 접근 전의 페이지
             Object destination = session.getAttribute("destination");
@@ -51,11 +49,11 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         // session 값
         HttpSession session = request.getSession();
         // 기존 session login 값이 존재하면
-        if (session.getAttribute(LOGIN) != null) {
+        if (session.getAttribute(LoginController.USER) != null) {
 
             logger.info("clear login data before");
             // 삭제
-            session.removeAttribute(LOGIN);
+            session.removeAttribute(LoginController.USER);
         }
         return true;
     }

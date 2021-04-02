@@ -1,5 +1,7 @@
 package kr.hogink.mbti.MBTILovers.web.chat;
 
+import kr.hogink.mbti.MBTILovers.web.login.LoginController;
+import kr.hogink.mbti.MBTILovers.web.member.Member;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,16 +40,15 @@ public class ChatRoomController {
         return chatRoomRepository.createChatRoom(name);
     }
 
-
-    private final String LOGIN = "login";
     
     //채팅방 입장화면 {roomid}를 통해 입장
     @GetMapping(value = "/chat/enter/{roomId}")
     public String createFrom(HttpServletRequest request, Model model, @PathVariable String roomId) {
         //세션 정보로 sender 설정
         HttpSession session = request.getSession();
-        String senderUid = (String)session.getAttribute(LOGIN);
-        model.addAttribute("sender",senderUid);
+        Member user = (Member)session.getAttribute(LoginController.USER);
+        String sender =  user.getName();
+        model.addAttribute("sender",sender);
 
         //ChatRoom 정보로 roomId, name 설정
         ChatRoom room = chatRoomRepository.findRoomById(roomId);

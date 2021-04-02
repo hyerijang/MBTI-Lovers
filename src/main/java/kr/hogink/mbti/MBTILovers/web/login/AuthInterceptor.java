@@ -24,13 +24,12 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 //    }
 
 
-    private static final String LOGIN = "login";
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response,
                              Object handler) throws Exception {
         HttpSession session = request.getSession();
-        if (session.getAttribute(LOGIN ) == null) {
+        if (session.getAttribute(LoginController.USER) == null) {
             // 현재 페이지 저장
             saveDestination(request);
             response.sendRedirect("user/login");
