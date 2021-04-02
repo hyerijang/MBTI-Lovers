@@ -33,7 +33,7 @@ public class LoginController {
     }
 
     //로그인 처리
-    @RequestMapping(value = "/loginPost", method = RequestMethod.GET)
+    @RequestMapping(value = "/loginPost", method = RequestMethod.POST)
     public void loginPost(LoginVO loginVO, HttpSession httpSession, Model model) {
         //uid를 통해 select한 회원 정보를 member에 담는다.
         Member member = loginService.login(loginVO);
