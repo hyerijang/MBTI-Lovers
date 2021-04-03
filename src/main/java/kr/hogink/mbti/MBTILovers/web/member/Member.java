@@ -1,10 +1,8 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -18,7 +16,7 @@ public class Member {
     private String mbti;
     private String stateMessage;
     private String profileImage;
-    private Date lastConnectTime;
+    private LocalDateTime connectedTimeAt;
 
 
     public String getUid() {
@@ -28,7 +26,6 @@ public class Member {
     public void setUid(String uid) {
         this.uid = uid;
     }
-
 
     public String getName() {
         return name;
@@ -78,11 +75,11 @@ public class Member {
         this.profileImage = profileImage;
     }
 
-    public Date getLastConnectTime() {
-        return lastConnectTime;
+    public LocalDateTime getConnectedTimeAt() {
+        return connectedTimeAt;
     }
 
-    public void setLastConnectTime(Date lastConnectTime) {
-        this.lastConnectTime = lastConnectTime;
+    public void setConnectedTimeAt(LocalDateTime lastConnectTime) {
+        this.connectedTimeAt = lastConnectTime;
     }
 }

@@ -3,7 +3,7 @@ package kr.hogink.mbti.MBTILovers.web.member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -52,8 +52,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     public void setLastConnectTime(Member member){
-        member.setLastConnectTime(new Date(System.currentTimeMillis()));
+        member.setConnectedTimeAt(LocalDateTime.now());
     }
+
     public void editLastConnectTime(Member member) {
         setLastConnectTime(member);
         memberRepository.save(member);
