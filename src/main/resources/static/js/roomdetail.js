@@ -7,14 +7,7 @@ var messageForm = document.querySelector("#messageForm");
 var messageInput = document.querySelector("#message");
 var messageArea = document.querySelector("#messageArea");
 // var connectingElement = document.querySelector(".connecting"); //연결상태 표시
-
-var output = localStorage.getItem("key");
-var messageList ;
-
 var stompClient = null;
-var username = null;
-
-var rid = document.getElementById('rid').innerText;
 
 var colors = [
     "#2196F3",
@@ -27,13 +20,23 @@ var colors = [
     "#39bbb0",
 ];
 
+var output = localStorage.getItem("key");
+var messageList ;
+
+//메세지 정보
+var rid = null;
+var sender = null;
+var senderUid =null;
+var currentTime = null;
+
 //채팅방 입장시 소켓 서버와 연결
 window.onload = connect();
 function connect() {
-
-    username = document.querySelector("#sender").value.trim();
-
-    if (username) {
+    rid =  document.querySelector("#rid").value.trim();
+    sender = document.querySelector("#sender").value.trim();
+    senderUid = document.querySelector("#senderUid").value.trim();
+    setCurrnetTime();
+    if (sender) {
         usernamePage.classList.add("hidden");
         chatPage.classList.remove("hidden");
 
@@ -46,22 +49,21 @@ function connect() {
 }
 
 function onConnected() {
-    // room 개설
-    stompClient.subscribe("/sub/chat/room/"+rid, onMessageReceived);
 
     //지난 메세지 불러오기
     if(output != null)
         messageList = JSON.parse(output);
     else
         messageList = new Array(); //기록이 없으면 새 어레이 생성
-    // Tell your username to the server
+
+    // room 개설
+    stompClient.subscribe("/sub/chat/room/"+rid, onMessageReceived);
     stompClient.send(
         "/pub/chat.sendMessage",
         {},
-        JSON.stringify({ rid: rid, sender: username, type: "JOIN"})
+        JSON.stringify({ rid: rid, sender: sender, type: "JOIN"})
+        // JSON.stringify({sender: sender, type: "JOIN"})
     );
-
-    // connectingElement.classList.add("hidden");
 }
 
 function onError(error) {
@@ -72,11 +74,13 @@ function onError(error) {
 function sendMessage(event) {
     var messageContent = messageInput.value.trim();
     if (messageContent && stompClient) {
+        setCurrnetTime();
         var chatMessage = {
             rid: rid,
-            sender: username,
-            content: messageInput.value,
             type: "CHAT",
+            content: messageInput.value,
+            sender: sender,
+            sentTimeAt: currentTime,
         };
         stompClient.send("/pub/chat.sendMessage", {}, JSON.stringify(chatMessage));
         messageInput.value = "";
@@ -85,7 +89,8 @@ function sendMessage(event) {
 }
 
 function onMessageReceived(payload) {
-    //메세지를 json형태로 배열에 저장
+    //메세지 출력
+    //받은 메세지를 json형태로 배열에 저장
     var message = JSON.parse(payload.body);
     messageList.push(message);
     localStorage.setItem("key", JSON.stringify(messageList));
@@ -102,7 +107,7 @@ function onMessageReceived(payload) {
     } else if (message.type === "LEAVE") {
         messageElement.classList.add("media", "media-meta-day"); // 임시 적용 css
         message.content = message.sender + "님이 나갔습니다.";
-    } else if (username == message.sender) {
+    } else if (sender == message.sender) {
         //메세지를 보낸 사람이 나인 경우
         messageElement.classList.add("media", "media-chat", "media-chat-reverse");
     } else {
@@ -144,6 +149,8 @@ function getAvatarColor(messageSender) {
     return colors[index];
 }
 
-// usernameForm.addEventListener("submit", connect, true);
 messageForm.addEventListener("submit", sendMessage, true);
 
+function setCurrnetTime(){
+    currentTime = Math.floor(+ new Date() / 1000);
+}

@@ -1,17 +1,16 @@
 package kr.hogink.mbti.MBTILovers.web.chat;
 
-import javax.persistence.Id;
 import java.time.LocalDateTime;
 
+//firebase에 저장
 public class Message {
 
-    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long msgid; //messag id
     private Long rid; //외래키
     private MessageType type;
     private String content;
     private String sender;
+    private String senderUid;
     private LocalDateTime sentTimeAt;
 
 
@@ -63,7 +62,21 @@ public class Message {
         this.msgid = msgid;
     }
 
+    public Long getMsgid() {
+        return msgid;
+    }
 
+    public void setMsgid(Long msgid) {
+        this.msgid = msgid;
+    }
+
+    public String getSenderUid() {
+        return senderUid;
+    }
+
+    public void setSenderUid(String senderUid) {
+        this.senderUid = senderUid;
+    }
     public enum MessageType {
         CHAT,
         JOIN,

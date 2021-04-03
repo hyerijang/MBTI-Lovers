@@ -29,9 +29,10 @@
     <link rel="stylesheet" href="/css/roomdetail.css" />
   </head>
   <body>
-    <!--전송-->
-    <p th:text="${rid}" id="rid" style="font-weight: bold" />
+    <!--메세지 기본 정보-->
+    <input type="hidden" id="rid" th:value="${rid}" />
     <input type="hidden" id="sender" th:value="${sender}" />
+    <input type="hidden" id="senderUid" th:value="${senderUid}" />
 
     <div class="page card card-bordered" id="username-page">
       <div class="card-header">
@@ -83,7 +84,6 @@
         </div>
       </form>
     </div>
-
 
     <!--  부트스트랩 js 사용 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

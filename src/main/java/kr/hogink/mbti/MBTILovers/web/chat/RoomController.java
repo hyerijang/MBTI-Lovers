@@ -49,13 +49,13 @@ public class RoomController {
         //세션 정보로 sender 설정
         HttpSession session = request.getSession();
         Member user = (Member)session.getAttribute(LoginController.USER);
-        String sender =  user.getName();
-        model.addAttribute("sender",sender);
-
-        //Room 정보로 rid, name 설정
         Room room = ROOM_REPOSITORY.findRoomByRid(rid);
+
+        //room 정보
         model.addAttribute("rid",room.getRid());
         model.addAttribute("name",room.getName());
+        model.addAttribute("sender",user.getName());
+        model.addAttribute("senderUid",user.getUid());
         //채팅방 입장
         return "chat/roomdetail";
     }
