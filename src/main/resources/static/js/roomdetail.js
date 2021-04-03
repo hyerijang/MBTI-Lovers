@@ -76,6 +76,7 @@ function sendMessage(event) {
 }
 
 function onMessageReceived(payload) {
+    //메세지를 json형태로 가저요기
     var message = JSON.parse(payload.body);
 
     var messageElement = document.createElement("div");
@@ -133,3 +134,4 @@ function getAvatarColor(messageSender) {
 
 // usernameForm.addEventListener("submit", connect, true);
 messageForm.addEventListener("submit", sendMessage, true);
+

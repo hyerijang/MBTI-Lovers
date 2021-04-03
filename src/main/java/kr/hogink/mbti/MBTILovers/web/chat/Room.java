@@ -1,22 +1,24 @@
 package kr.hogink.mbti.MBTILovers.web.chat;
 
-import java.util.UUID;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
 public class Room {
 
-    private String rid;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long rid;
     private String name;
 
-    Room() {
-        this.rid = UUID.randomUUID().toString();
-    }
 
-
-    public String getRid() {
+    public Long getRid() {
         return rid;
     }
 
-    public void setRid(String rid) {
+    public void setRid(Long rid) {
         this.rid = rid;
     }
 

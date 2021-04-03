@@ -45,7 +45,7 @@ public class RoomController {
     
     //채팅방 입장화면 {rid}를 통해 입장
     @GetMapping(value = "/chat/enter/{rid}")
-    public String createFrom(HttpServletRequest request, Model model, @PathVariable String rid) {
+    public String createFrom(HttpServletRequest request, Model model, @PathVariable Long rid) {
         //세션 정보로 sender 설정
         HttpSession session = request.getSession();
         Member user = (Member)session.getAttribute(LoginController.USER);
@@ -54,7 +54,7 @@ public class RoomController {
 
         //Room 정보로 rid, name 설정
         Room room = ROOM_REPOSITORY.findRoomByRid(rid);
-        model.addAttribute("rid",room.getRid().trim());
+        model.addAttribute("rid",room.getRid());
         model.addAttribute("name",room.getName());
         //채팅방 입장
         return "chat/roomdetail";

@@ -8,7 +8,8 @@ import java.util.*;
 @Repository
 public class RoomRepository {
 
-    private static Map<String, Room> chatRoomMap; //메모리에 저장
+    private static Map<Long, Room> chatRoomMap; //메모리에 저장
+    private static Long sequence = 0L;
 
     RoomRepository() {
         chatRoomMap = new LinkedHashMap<>();
@@ -27,11 +28,12 @@ public class RoomRepository {
         return rooms;
     }
 
-    public Room findRoomByRid(String rid) {
+    public Room findRoomByRid(Long rid) {
         return chatRoomMap.get(rid);
     }
 
     public Room createChatRoom(Room room) {
+        room.setRid(sequence++);
         chatRoomMap.put(room.getRid(), room);
         return room;
     }
