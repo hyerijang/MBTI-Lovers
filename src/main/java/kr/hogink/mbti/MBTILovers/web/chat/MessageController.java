@@ -29,7 +29,7 @@ public class MessageController {
     @MessageMapping("/chat.sendMessage") //기존 request mapping 역할
     public void sendMessage(@Payload Message chatMessage){
         System.out.println("현재 방 : " + chatMessage.getRid());
-        messagingTemplate.convertAndSend("/sub/chat/room/0",chatMessage);
+        messagingTemplate.convertAndSend("/sub/chat/room/".trim()+chatMessage.getRid(),chatMessage);
     }
 
     
