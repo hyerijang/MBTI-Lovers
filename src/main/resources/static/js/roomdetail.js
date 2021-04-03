@@ -30,6 +30,7 @@ var colors = [
 //채팅방 입장시 소켓 서버와 연결
 window.onload = connect();
 function connect() {
+
     username = document.querySelector("#sender").value.trim();
 
     if (username) {
@@ -49,8 +50,9 @@ function onConnected() {
     stompClient.subscribe("/sub/chat/room/"+rid, onMessageReceived);
 
     //지난 메세지 불러오기
-    messageList = JSON.parse(output);
-    if (messageList === null)
+    if(output != null)
+        messageList = JSON.parse(output);
+    else
         messageList = new Array(); //기록이 없으면 새 어레이 생성
     // Tell your username to the server
     stompClient.send(
