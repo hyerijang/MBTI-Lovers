@@ -46,7 +46,7 @@ function connect() {
 
 function onConnected() {
     // room 개설
-    stompClient.subscribe("/sub/chat/room/" +rid, onMessageReceived);
+    stompClient.subscribe("/sub/chat/room/"+rid, onMessageReceived);
 
     //지난 메세지 불러오기
     messageList = JSON.parse(output);
@@ -54,9 +54,9 @@ function onConnected() {
         messageList = new Array(); //기록이 없으면 새 어레이 생성
     // Tell your username to the server
     stompClient.send(
-        "/sub/chat/room/"+rid,
+        "/pub/chat.sendMessage",
         {},
-        JSON.stringify({sender: username, type: "JOIN"})
+        JSON.stringify({ rid: rid, sender: username, type: "JOIN"})
     );
 
     // connectingElement.classList.add("hidden");
@@ -71,11 +71,12 @@ function sendMessage(event) {
     var messageContent = messageInput.value.trim();
     if (messageContent && stompClient) {
         var chatMessage = {
+            rid: rid,
             sender: username,
             content: messageInput.value,
             type: "CHAT",
         };
-        stompClient.send("/sub/chat/room/" +rid, {}, JSON.stringify(chatMessage));
+        stompClient.send("/pub/chat.sendMessage", {}, JSON.stringify(chatMessage));
         messageInput.value = "";
     }
     event.preventDefault();
