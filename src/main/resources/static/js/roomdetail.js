@@ -8,6 +8,8 @@ var messageInput = document.querySelector("#message");
 var messageArea = document.querySelector("#messageArea");
 // var connectingElement = document.querySelector(".connecting"); //연결상태 표시
 
+var output = localStorage.getItem("key");
+var messageList ;
 
 var stompClient = null;
 var username = null;
@@ -46,6 +48,10 @@ function onConnected() {
     // room 개설
     stompClient.subscribe("/sub/chat/room/" +rid, onMessageReceived);
 
+    //지난 메세지 불러오기
+    messageList = JSON.parse(output);
+    if (messageList === null)
+        messageList = new Array(); //기록이 없으면 새 어레이 생성
     // Tell your username to the server
     stompClient.send(
         "/sub/chat/room/"+rid,
@@ -76,8 +82,11 @@ function sendMessage(event) {
 }
 
 function onMessageReceived(payload) {
-    //메세지를 json형태로 가저요기
+    //메세지를 json형태로 배열에 저장
     var message = JSON.parse(payload.body);
+    messageList.push(message);
+    localStorage.setItem("key", JSON.stringify(messageList));
+    console.log(messageList);
 
     var messageElement = document.createElement("div");
 
