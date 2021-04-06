@@ -21,18 +21,19 @@ var colors = [
 ];
 
 var output = localStorage.getItem("key");
-var messageList ;
+var messageList;
 
 //메세지 정보
 var rid = null;
 var sender = null;
-var senderUid =null;
+var senderUid = null;
 var currentTime = null;
 
 //채팅방 입장시 소켓 서버와 연결
 window.onload = connect();
+
 function connect() {
-    rid =  document.querySelector("#rid").value.trim();
+    rid = document.querySelector("#rid").value.trim();
     sender = document.querySelector("#sender").value.trim();
     senderUid = document.querySelector("#senderUid").value.trim();
     setCurrnetTime();
@@ -51,22 +52,26 @@ function connect() {
 function onConnected() {
 
     //지난 메세지 불러오기
-    if(output != null)
+    if (output != null)
         messageList = JSON.parse(output);
     else
         messageList = new Array(); //기록이 없으면 새 어레이 생성
 
+    //파이어베이스에서 불러오기
+    LoadFromFirebase();
+
     // room 개설
-    stompClient.subscribe("/sub/chat/room/"+rid, onMessageReceived);
+    stompClient.subscribe("/sub/chat/room/" + rid, onMessageReceived);
     stompClient.send(
         "/pub/chat.sendMessage",
         {},
         JSON.stringify({
             rid: rid,
-            type: "JOIN" ,
+            type: "JOIN",
             sender: sender,
             senderUid: senderUid,
-            sentTimeAt: currentTime})
+            sentTimeAt: currentTime
+        })
     );
 }
 
@@ -94,7 +99,6 @@ function sendMessage(event) {
     SaveToFirebase(chatMessage);
     event.preventDefault();
 
-
 }
 
 function onMessageReceived(payload) {
@@ -104,6 +108,11 @@ function onMessageReceived(payload) {
     messageList.push(message);
     localStorage.setItem("key", JSON.stringify(messageList));
     console.log(messageList);
+
+    printMessage(message);
+}
+
+function printMessage(message){
 
     var messageElement = document.createElement("div");
 
@@ -147,6 +156,7 @@ function onMessageReceived(payload) {
 
     messageArea.appendChild(messageElement);
     messageArea.scrollTop = messageArea.scrollHeight;
+
 }
 
 function getAvatarColor(messageSender) {
@@ -160,13 +170,27 @@ function getAvatarColor(messageSender) {
 
 messageForm.addEventListener("submit", sendMessage, true);
 
-function setCurrnetTime(){
+function setCurrnetTime() {
     // currentTime = Math.floor(+ new Date() / 1000);
 }
 
+var messageRef = firebase.database().ref('Room/' + rid);
+
+
 function SaveToFirebase(chatMessage) {
-    var messageRef = firebase.database().ref('Room/'+rid);
+
     var messageRefKey = messageRef.push().key; // 메세지 키값 구하기
-    firebase.database().ref('Room/'+rid+'/'+messageRefKey).set(chatMessage);
+    firebase.database().ref('Room/' + rid + '/' + messageRefKey).set(chatMessage);
+
+}
+
+function LoadFromFirebase() {
+    if (rid) {
+        if (messageRef)
+            messageRef.off();//이전 메세지 ref 이벤트 제거
+
+        messageRef =  firebase.database().ref('Room/' + rid);
+        
+    }
 
 }
