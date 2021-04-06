@@ -91,7 +91,7 @@ function sendMessage(event) {
         messageInput.value = "";
     }
 
-    firebase_test(chatMessage);
+    SaveToFirebase(chatMessage);
     event.preventDefault();
 
 
@@ -164,8 +164,9 @@ function setCurrnetTime(){
     // currentTime = Math.floor(+ new Date() / 1000);
 }
 
-function firebase_test(chatMessage) {
-    //firebase에 쓰기
-    firebase.database().ref('Demo').set(chatMessage);
+function SaveToFirebase(chatMessage) {
+    var messageRef = firebase.database().ref('Room/'+rid);
+    var messageRefKey = messageRef.push().key; // 메세지 키값 구하기
+    firebase.database().ref('Room/'+rid+'/'+messageRefKey).set(chatMessage);
 
 }
