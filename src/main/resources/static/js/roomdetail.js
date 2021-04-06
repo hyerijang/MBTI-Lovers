@@ -80,7 +80,8 @@ function sendMessage(event) {
             type: "CHAT",
             content: messageInput.value,
             sender: sender,
-            sentTimeAt: currentTime,
+            senderUid: senderUid,
+            sentTimeAt: currentTime
         };
         stompClient.send("/pub/chat.sendMessage", {}, JSON.stringify(chatMessage));
         messageInput.value = "";
@@ -152,5 +153,5 @@ function getAvatarColor(messageSender) {
 messageForm.addEventListener("submit", sendMessage, true);
 
 function setCurrnetTime(){
-    currentTime = Math.floor(+ new Date() / 1000);
+    // currentTime = Math.floor(+ new Date() / 1000);
 }
