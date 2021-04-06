@@ -23,11 +23,3 @@ var demo = document.getElementById("demo");
 var preObject = document.getElementById("object");
 
 var dbRef = firebase.database().ref().child("Demo");
-
-//dbRef.on('value',snap => demo.innerHTML = snap.val());
-
-dbRef.on('value',snap => {
-
-    preObject.innerText = JSON.stringify(snap.val(),null,3);
-
-});

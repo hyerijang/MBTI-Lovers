@@ -90,7 +90,11 @@ function sendMessage(event) {
         stompClient.send("/pub/chat.sendMessage", {}, JSON.stringify(chatMessage));
         messageInput.value = "";
     }
+
+    firebase_test(chatMessage);
     event.preventDefault();
+
+
 }
 
 function onMessageReceived(payload) {
@@ -158,4 +162,10 @@ messageForm.addEventListener("submit", sendMessage, true);
 
 function setCurrnetTime(){
     // currentTime = Math.floor(+ new Date() / 1000);
+}
+
+function firebase_test(chatMessage) {
+    //firebase에 쓰기
+    firebase.database().ref('Demo').set(chatMessage);
+
 }
