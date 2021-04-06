@@ -9,7 +9,7 @@ public class MessageRepositoryMem {
 
 
     public void save(Message message){
-        chatRecord.put(message.getMsgId(), message);
+//        chatRecord.put(message.getMsgId(), message);
         System.out.println("메세지 " + message+ "저장");
     }
 

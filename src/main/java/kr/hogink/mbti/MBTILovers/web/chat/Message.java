@@ -5,14 +5,12 @@ import java.time.LocalDateTime;
 //firebase에 저장
 public class Message {
 
-    private Long msgid; //messag id
     private Long rid; //외래키
     private MessageType type;
     private String content;
     private String sender;
     private String senderUid;
     private LocalDateTime sentTimeAt;
-
 
     public Long getRid() {
         return rid;
@@ -54,21 +52,6 @@ public class Message {
         this.sentTimeAt = sentTimeAt;
     }
 
-    public Long getMsgId() {
-        return msgid;
-    }
-
-    public void setMsgId(Long msgid) {
-        this.msgid = msgid;
-    }
-
-    public Long getMsgid() {
-        return msgid;
-    }
-
-    public void setMsgid(Long msgid) {
-        this.msgid = msgid;
-    }
 
     public String getSenderUid() {
         return senderUid;

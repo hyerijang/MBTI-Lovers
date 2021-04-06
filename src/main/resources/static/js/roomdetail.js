@@ -61,8 +61,12 @@ function onConnected() {
     stompClient.send(
         "/pub/chat.sendMessage",
         {},
-        JSON.stringify({ rid: rid, sender: sender, type: "JOIN"})
-        // JSON.stringify({sender: sender, type: "JOIN"})
+        JSON.stringify({
+            rid: rid,
+            type: "JOIN" ,
+            sender: sender,
+            senderUid: senderUid,
+            sentTimeAt: currentTime})
     );
 }
 
