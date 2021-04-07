@@ -18,10 +18,10 @@ public class HomeController {
         HttpSession session = request.getSession();
 
         if (session.getAttribute(LoginController.USER_SESSION) != null) {
-            Optional<Member> member = (Optional<Member>) session.getAttribute(LoginController.USER_SESSION);
+            Member member = (Member) session.getAttribute(LoginController.USER_SESSION);
 
-            if (member.isPresent())
-                model.addAttribute("uid", member.get().getUid());
+            if (member!= null)
+                model.addAttribute("uid", member.getUid());
         }
         return "home";
     }

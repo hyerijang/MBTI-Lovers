@@ -36,7 +36,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
             Optional<Member> member = memberService.findOneByUid(newUserUid);
 
             if (member.isPresent())
-                session.setAttribute(LoginController.USER_SESSION, member);
+                session.setAttribute(LoginController.USER_SESSION, member.get());
             else
                 logger.info("신규유저 가입 실패");
             session.removeAttribute(LoginController.NewUserUid);
