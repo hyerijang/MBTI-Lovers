@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Controller
 public class HomeController {
@@ -15,9 +16,13 @@ public class HomeController {
     public String home(HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
-        Member member = (Member) session.getAttribute(LoginController.USER_SESSION);
-        if (member != null)
-            model.addAttribute("uid", member.getUid());
+
+        if (session.getAttribute(LoginController.USER_SESSION) != null) {
+            Optional<Member> member = (Optional<Member>) session.getAttribute(LoginController.USER_SESSION);
+
+            if (member.isPresent())
+                model.addAttribute("uid", member.get().getUid());
+        }
         return "home";
     }
 }

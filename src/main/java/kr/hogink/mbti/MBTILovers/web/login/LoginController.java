@@ -20,7 +20,7 @@ import java.util.Optional;
 
 
 @Controller
-@RequestMapping( "/user")
+@RequestMapping("/user")
 public class LoginController {
 
     private final MemberService memberService;
@@ -44,16 +44,19 @@ public class LoginController {
     //로그인 처리
     @RequestMapping(value = "/loginPost", method = RequestMethod.POST)
     public void loginPost(LoginVO loginVO, HttpSession session, Model model) {
-        //uid를 통해 select한 회원 정보를 member에 담는다.
+        //신규 유저인 경우 loginVO에 신규유저 uid 넣음
+        String newUseruid = (String) session.getAttribute(NewUserUid);
+        if (newUseruid != null)
+            loginVO.setUid(newUseruid);
+
         Optional<Member> member = loginService.login(loginVO);
-        if(member.isPresent())
-        {
+
+        if (member.isPresent()) {
             //기존 유저면 접속시간 갱신
             memberService.editLastConnectTime(member.get());
             //model에 멤버 객체를 currentUser라는 이름의 변수에 저장
             model.addAttribute("currentUser", member.get());
-        }
-        else{
+        } else {
             //신규 가입
             session.setAttribute(NewUserUid, loginVO.getUid());
         }

@@ -68,6 +68,11 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         // session 값
         HttpSession session = request.getSession();
         // 기존 session login 값이 존재하면
+        if(session.getAttribute(LoginController.NewUserUid) != null)
+        {
+            logger.info("신규가입 성공");
+
+        }
         if (session.getAttribute(LoginController.USER_SESSION) != null) {
 
             logger.info("clear login data before");

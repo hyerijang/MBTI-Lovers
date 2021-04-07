@@ -12,6 +12,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Controller
 public class AuthInterceptor extends HandlerInterceptorAdapter {
@@ -29,6 +30,18 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                              HttpServletResponse response,
                              Object handler) throws Exception {
         HttpSession session = request.getSession();
+
+        String newUserUid = (String) session.getAttribute(LoginController.NewUserUid);
+        if (newUserUid != null) {
+            Optional<Member> member = memberService.findOneByUid(newUserUid);
+
+            if (member.isPresent())
+                session.setAttribute(LoginController.USER_SESSION, member);
+            else
+                logger.info("신규유저 가입 실패");
+            session.removeAttribute(LoginController.NewUserUid);
+        }
+
         if (session.getAttribute(LoginController.USER_SESSION) == null) {
             // 현재 페이지 저장
             saveDestination(request);
@@ -46,6 +59,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
             response.sendRedirect("/user/login");
             return false;
         }
+
 
         return true;
     }
