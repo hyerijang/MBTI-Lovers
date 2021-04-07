@@ -6,7 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.util.WebUtils;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 //linux 서버에서 500 오류 안나려면
@@ -20,7 +24,8 @@ public class LoginController {
 
     private final MemberService memberService;
     private final LoginService loginService;
-    public static final String USER = "user";
+    public static final String USER_SESSION = "currentUser";
+    public static final String USER_COOKIE = "currentUserUid";
 
     public LoginController(MemberService memberService, LoginService loginService) {
         this.memberService = memberService;
@@ -50,5 +55,31 @@ public class LoginController {
     }
 
 
+    // 로그아웃 처리
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response,
+                         HttpSession session) throws Exception {
+        // session에 저장된 login 값
+        Object object = session.getAttribute(USER_SESSION);
+        if (object != null) {
+            Member userVO = (Member) object;
+            // session 정보 삭제
+            session.removeAttribute(USER_SESSION);
+            // session 초기화
+            session.invalidate();
+            // 로그인 쿠키값
+            Cookie loginCookie = WebUtils.getCookie(request, USER_COOKIE);
+            if (loginCookie != null) {
+                loginCookie.setPath("/");
+                // 쿠키 유효기간 0
+                loginCookie.setMaxAge(0);
+                // 쿠키 저장
+                response.addCookie(loginCookie);
+            }
+        }
+
+        return "redirect:/";
+    }
 
 }

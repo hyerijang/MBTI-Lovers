@@ -48,7 +48,7 @@ public class RoomController {
     public String createFrom(HttpServletRequest request, Model model, @PathVariable Long rid) {
         //세션 정보로 sender 설정
         HttpSession session = request.getSession();
-        Member user = (Member)session.getAttribute(LoginController.USER);
+        Member user = (Member)session.getAttribute(LoginController.USER_SESSION);
         Room room = ROOM_REPOSITORY.findRoomByRid(rid);
 
         //room 정보

@@ -15,7 +15,7 @@ public class HomeController {
     public String home(HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
-        Member member = (Member) session.getAttribute(LoginController.USER);
+        Member member = (Member) session.getAttribute(LoginController.USER_SESSION);
         if (member != null)
             model.addAttribute("uid", member.getUid());
         return "home";

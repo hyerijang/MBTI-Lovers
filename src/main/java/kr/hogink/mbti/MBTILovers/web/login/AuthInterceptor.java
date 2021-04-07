@@ -29,21 +29,21 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                              HttpServletResponse response,
                              Object handler) throws Exception {
         HttpSession session = request.getSession();
-        if (session.getAttribute(LoginController.USER) == null) {
+        if (session.getAttribute(LoginController.USER_SESSION) == null) {
             // 현재 페이지 저장
             saveDestination(request);
 
             // 쿠키 유무 확인
-            Cookie loginCookie = WebUtils.getCookie(request, "currentUserUid");
+            Cookie loginCookie = WebUtils.getCookie(request, LoginController.USER_COOKIE);
             if (loginCookie != null) {
                 Member member = memberService.findOneByUid(loginCookie.getValue()).get();
                 if (member != null)
-                    session.setAttribute(LoginController.USER, member);
+                    session.setAttribute(LoginController.USER_SESSION, member);
                 return true;
 
             }
 
-            response.sendRedirect("user/login");
+            response.sendRedirect("/user/login");
             return false;
         }
 

@@ -35,7 +35,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         if (member != null) {
             logger.info("new login success");
             // session에 로그인한 사용자의 멤버 객체를 저장
-            session.setAttribute(LoginController.USER, member);
+            session.setAttribute(LoginController.USER_SESSION, member);
             //쿠키 생성
             if (true) {
                 logger.info("make loginCookie");
@@ -63,11 +63,11 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         // session 값
         HttpSession session = request.getSession();
         // 기존 session login 값이 존재하면
-        if (session.getAttribute(LoginController.USER) != null) {
+        if (session.getAttribute(LoginController.USER_SESSION) != null) {
 
             logger.info("clear login data before");
             // 삭제
-            session.removeAttribute(LoginController.USER);
+            session.removeAttribute(LoginController.USER_SESSION);
         }
         return true;
     }
