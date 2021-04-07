@@ -20,13 +20,14 @@ public class webViewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
         Intent intent = getIntent();
-        setWebView();
-
         String myUrlAddress = intent.getStringExtra("myurl");
-        wv = findViewById(R.id.wv);
         String postData = "uid=" + intent.getStringExtra("uid");
-        
+
+        wv = findViewById(R.id.wv);
+        wv.setWebViewClient(new WebViewClient());
+        wv.setWebChromeClient(new WebChromeClient()); //콜백 허용
         wv.postUrl(myUrlAddress, EncodingUtils.getBytes(postData, "BASE64"));
+        setWebView();
     }
 
     public void onResume() {
@@ -40,10 +41,6 @@ public class webViewActivity extends Activity {
     }
 
     public void setWebView() {
-
-        wv.setWebViewClient(new WebViewClient());
-        wv.setWebChromeClient(new WebChromeClient()); //콜백 허용
-
         settings = wv.getSettings(); //세부 세팅 등록
         settings.setJavaScriptEnabled(true); // 웹페이지 자바스크립트 허용 여부
         settings.setDomStorageEnabled(true); // 로컬저장소 허용 여부
