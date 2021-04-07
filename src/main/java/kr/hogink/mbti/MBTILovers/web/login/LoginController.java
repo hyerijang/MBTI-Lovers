@@ -27,6 +27,7 @@ public class LoginController {
     private final LoginService loginService;
     public static final String USER_SESSION = "currentUser";
     public static final String USER_COOKIE = "currentUserUid";
+    public static final String NewUserUid = "newUser";
 
     public LoginController(MemberService memberService, LoginService loginService) {
         this.memberService = memberService;
@@ -42,7 +43,7 @@ public class LoginController {
 
     //로그인 처리
     @RequestMapping(value = "/loginPost", method = RequestMethod.POST)
-    public void loginPost(LoginVO loginVO, HttpSession httpSession, Model model) {
+    public void loginPost(LoginVO loginVO, HttpSession session, Model model) {
         //uid를 통해 select한 회원 정보를 member에 담는다.
         Optional<Member> member = loginService.login(loginVO);
         if(member.isPresent())
@@ -54,6 +55,7 @@ public class LoginController {
         }
         else{
             //신규 가입
+            session.setAttribute(NewUserUid, loginVO.getUid());
         }
 
     }

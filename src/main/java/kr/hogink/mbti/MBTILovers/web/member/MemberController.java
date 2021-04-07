@@ -1,11 +1,13 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
+import kr.hogink.mbti.MBTILovers.web.login.LoginController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -20,22 +22,25 @@ public class MemberController {
     }
 
     @GetMapping(value = "/members/new")
-    public String createFrom() {
+    public String createFrom(HttpSession session) {
         return "members/createMemberForm";
     }
 
 
     @PostMapping("/members/new")
-    public String create(MemberForm form) {
+    public String create(MemberForm form, HttpSession session) {
+        String newUserUid = (String) session.getAttribute(LoginController.NewUserUid);
+
         Member member = new Member();
-        System.out.println("유아이디"+form.getUid());
-        member.setUid(form.getUid());
+        member.setUid(newUserUid);
         member.setName(form.getName());
         member.setGender(form.getGender());
         member.setAge(form.getAge());
         member.setMbti(form.getMbti());
         member.setStateMessage(form.getStateMessage());
         member.setProfileImage(form.getProfileImage());
+
+        System.out.println("유아이디"+form.getUid());
         memberService.join(member);
         return "redirect:/";
     }
