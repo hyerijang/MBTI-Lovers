@@ -33,7 +33,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
         // System.out.println(member+"님이 로그인 하셨습니다");
         if (member != null) {
-            logger.info("new login success");
+            logger.info("login success");
             // session에 로그인한 사용자의 멤버 객체를 저장
             session.setAttribute(LoginController.USER_SESSION, member);
             //쿠키 생성
@@ -52,6 +52,11 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             Object destination = session.getAttribute("destination");
             // 삼항 연산자로 이전페이지가 존재하지 않으면 메인페이지로 이동
             response.sendRedirect(destination != null ? (String) destination : "/");
+        }
+        else {
+            //신규유저 가입하러 이동
+            logger.info("신규유저가입 페이지로 이동");
+            response.sendRedirect("/members/new");
         }
     }
 
