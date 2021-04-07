@@ -12,6 +12,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 //linux 서버에서 500 오류 안나려면
 //@RequestMapping 리턴시  "user/login" 로 해야함
@@ -43,15 +44,19 @@ public class LoginController {
     @RequestMapping(value = "/loginPost", method = RequestMethod.POST)
     public void loginPost(LoginVO loginVO, HttpSession httpSession, Model model) {
         //uid를 통해 select한 회원 정보를 member에 담는다.
-        Member member = loginService.login(loginVO);
-        memberService.editLastConnectTime(member);
-        if(member ==null)
+        Optional<Member> member = loginService.login(loginVO);
+        if(member.isPresent())
         {
-            return;
+            //기존 유저면 접속시간 갱신
+            memberService.editLastConnectTime(member.get());
+        }
+        else{
+            //신규 가입
+            
         }
 
         //model에 멤버 객체를 currentUser라는 이름의 변수에 저장
-        model.addAttribute("currentUser", member);
+        model.addAttribute("currentUser", member.get());
     }
 
 
