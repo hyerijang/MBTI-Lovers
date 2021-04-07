@@ -17,11 +17,11 @@ import javax.servlet.http.HttpSession;
 public class AuthInterceptor extends HandlerInterceptorAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
-//    private final MemberService memberService;
-//
-//    public AuthInterceptor(MemberService memberService) {
-//        this.memberService = memberService;
-//    }
+    private final MemberService memberService;
+
+    public AuthInterceptor(MemberService memberService) {
+        this.memberService = memberService;
+    }
 
 
     @Override
@@ -32,6 +32,17 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         if (session.getAttribute(LoginController.USER) == null) {
             // 현재 페이지 저장
             saveDestination(request);
+
+            // 쿠키 유무 확인
+            Cookie loginCookie = WebUtils.getCookie(request, "currentUserUid");
+            if (loginCookie != null) {
+                Member member = memberService.findOneByUid(loginCookie.getValue()).get();
+                if (member != null)
+                    session.setAttribute(LoginController.USER, member);
+                return true;
+
+            }
+
             response.sendRedirect("user/login");
             return false;
         }
@@ -44,7 +55,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         String uri = request.getRequestURI();   // 현재 페이지
         String query = request.getQueryString(); // 쿼리
         if (query == null || query.equals("null")) {
-            query =  "";
+            query = "";
         } else {
             query = "?" + query;
         }

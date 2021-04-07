@@ -46,7 +46,7 @@ public class SpringConfig extends WebMvcConfigurationSupport {
         // 인증 인터셉터
         // 로그인된 유저인지 검증
         // 경로는 "/경로" 여야함
-        registry.addInterceptor(new AuthInterceptor())
+        registry.addInterceptor(new AuthInterceptor(memberService()))
                 .addPathPatterns("/*");
 
         //로그인 인터셉터
