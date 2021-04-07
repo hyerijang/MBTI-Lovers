@@ -28,6 +28,8 @@ public class MemberController {
     @PostMapping("/members/new")
     public String create(MemberForm form) {
         Member member = new Member();
+        System.out.println("유아이디"+form.getUid());
+        member.setUid(form.getUid());
         member.setName(form.getName());
         member.setGender(form.getGender());
         member.setAge(form.getAge());

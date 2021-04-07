@@ -78,11 +78,13 @@
 <body>
 
 
+
 <div class="flex_container">
     <div class="card-header">
         <h4 class="card-title"><strong>Join</strong></h4>
     </div>
     <form action="/members/new" method="post">
+        <input  id="uid" type="text" th:value="${uid}" name = "uid" />
         <div>
             <label class="field_label" for="name">이름</label>
             <input class="flex_input" type="text" id="name" name="name" placeholder="이름">

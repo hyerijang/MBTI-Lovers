@@ -2,6 +2,7 @@ package kr.hogink.mbti.MBTILovers.web.member;
 
 public class MemberForm {
 
+    private String uid;
     private String name;
     private String gender;
     private int age;
@@ -9,6 +10,14 @@ public class MemberForm {
     private String stateMessage;
     private String profileImage;
 
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     public String getMbti() {
         return mbti;
@@ -56,5 +65,7 @@ public class MemberForm {
     public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
     }
+
+
 
 }
