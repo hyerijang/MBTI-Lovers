@@ -30,7 +30,6 @@ public class MemberController {
     @PostMapping("/members/new")
     public String create(MemberForm form, HttpSession session) {
         String newUserUid = (String) session.getAttribute(LoginController.NewUserUid);
-
         Member member = new Member();
         member.setUid(newUserUid);
         member.setName(form.getName());

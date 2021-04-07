@@ -35,11 +35,11 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         if (newUserUid != null) {
             Optional<Member> member = memberService.findOneByUid(newUserUid);
 
-            if (member.isPresent())
+            if (member.isPresent()) {
                 session.setAttribute(LoginController.USER_SESSION, member.get());
-            else
-                logger.info("신규유저 가입 실패");
-            session.removeAttribute(LoginController.NewUserUid);
+                session.removeAttribute(LoginController.NewUserUid);
+            }
+
         }
 
         if (session.getAttribute(LoginController.USER_SESSION) == null) {
