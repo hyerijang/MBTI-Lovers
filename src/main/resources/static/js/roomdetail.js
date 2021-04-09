@@ -20,23 +20,26 @@ var colors = [
     "#39bbb0",
 ];
 
-var output = localStorage.getItem("key");
-var messageList;
+
 
 //메세지 정보
-var rid = null;
-var sender = null;
-var senderUid = null;
+var rid = document.querySelector("#rid").value.trim();
+var sender = document.querySelector("#sender").value.trim();
+var senderUid = document.querySelector("#senderUid").value.trim();
 var currentTime = null;
 
+
+//방 정보
+var output = localStorage.getItem("room" + rid);
+var messageArray;
 //채팅방 입장시 소켓 서버와 연결
 window.onload = connect();
 
+
 function connect() {
-    rid = document.querySelector("#rid").value.trim();
-    sender = document.querySelector("#sender").value.trim();
-    senderUid = document.querySelector("#senderUid").value.trim();
-    setCurrnetTime();
+    // setCurrnetTime();
+    loadMessage();
+
     if (sender) {
         usernamePage.classList.add("hidden");
         chatPage.classList.remove("hidden");
@@ -51,28 +54,19 @@ function connect() {
 
 function onConnected() {
 
-    //지난 메세지 불러오기
-    if (output != null)
-        messageList = JSON.parse(output);
-    else
-        messageList = new Array(); //기록이 없으면 새 어레이 생성
-
-    //파이어베이스에서 불러오기
-    LoadFromFirebase();
-
     // room 개설
     stompClient.subscribe("/sub/chat/room/" + rid, onMessageReceived);
-    stompClient.send(
-        "/pub/chat.sendMessage",
-        {},
-        JSON.stringify({
-            rid: rid,
-            type: "JOIN",
-            sender: sender,
-            senderUid: senderUid,
-            sentTimeAt: currentTime
-        })
-    );
+    // stompClient.send(
+    //     "/pub/chat.sendMessage",
+    //     {},
+    //     JSON.stringify({
+    //         rid: rid,
+    //         type: "JOIN",
+    //         sender: sender,
+    //         senderUid: senderUid,
+    //         sentTimeAt: currentTime
+    //     })
+    // );
 }
 
 function onError(error) {
@@ -83,7 +77,7 @@ function onError(error) {
 function sendMessage(event) {
     var messageContent = messageInput.value.trim();
     if (messageContent && stompClient) {
-        setCurrnetTime();
+        // setCurrnetTime();
         var chatMessage = {
             rid: rid,
             type: "CHAT",
@@ -96,7 +90,7 @@ function sendMessage(event) {
         messageInput.value = "";
     }
 
-    SaveToFirebase(chatMessage);
+    // SaveToFirebase(chatMessage);
     event.preventDefault();
 
 }
@@ -105,10 +99,9 @@ function onMessageReceived(payload) {
     //메세지 출력
     //받은 메세지를 json형태로 배열에 저장
     var message = JSON.parse(payload.body);
-    messageList.push(message);
-    localStorage.setItem("key", JSON.stringify(messageList));
-    console.log(messageList);
-
+    messageArray.push(message);
+    localStorage.setItem("room" + rid, JSON.stringify(messageArray));
+    console.log(messageArray);
     printMessage(message);
 }
 
@@ -193,4 +186,16 @@ function LoadFromFirebase() {
         
     }
 
+}
+
+function loadMessage(){
+    //지난 메세지 불러오기
+    if (output != null)
+        messageArray = JSON.parse(output);
+    else
+        messageArray = new Array(); //기록이 없으면 새 어레이 생성
+
+    for (const message of messageArray) {
+        printMessage(message);
+    }
 }
