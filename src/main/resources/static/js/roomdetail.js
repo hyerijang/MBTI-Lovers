@@ -30,20 +30,20 @@ var currentTime = new Date().getTime();
 
 
 //방 정보
-var output = localStorage.getItem("room" + rid);
+var output = null;
 var messageArray;
 //채팅방 입장시 소켓 서버와 연결
 window.onload = connect();
 
 
-function clear(){
+function clearChatData(){
     //로컬스토리지 삭제
     localStorage.clear();
     console.log("로컬스토리지 삭제")
 }
 function connect() {
 
-    // clear();
+    // clearChatData();
     loadMessage();
 
     if (sender) {
@@ -110,7 +110,7 @@ function onMessageReceived(payload) {
     var message = JSON.parse(payload.body);
     messageArray.push(message);
     localStorage.setItem("room" + rid, JSON.stringify(messageArray));
-    console.log(messageArray);
+    // console.log(messageArray);
     printMessage(message);
 }
 
@@ -197,6 +197,7 @@ messageForm.addEventListener("submit", sendMessage, true);
 
 function loadMessage(){
     //지난 메세지 불러오기
+    output = localStorage.getItem("room" + rid);
     if (output != null)
         messageArray = JSON.parse(output);
     else
