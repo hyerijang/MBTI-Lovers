@@ -26,7 +26,7 @@ var colors = [
 var rid = document.querySelector("#rid").value.trim();
 var sender = document.querySelector("#sender").value.trim();
 var senderUid = document.querySelector("#senderUid").value.trim();
-var currentTime = null;
+var currentTime = new Date().getTime();
 
 
 //방 정보
@@ -36,8 +36,14 @@ var messageArray;
 window.onload = connect();
 
 
+function clear(){
+    //로컬스토리지 삭제
+    localStorage.clear();
+    console.log("로컬스토리지 삭제")
+}
 function connect() {
 
+    // clear();
     loadMessage();
 
     if (sender) {
@@ -56,6 +62,7 @@ function onConnected() {
 
     // room 개설
     stompClient.subscribe("/sub/chat/room/" + rid, onMessageReceived);
+    setCurrentTime();
     // stompClient.send(
     //     "/pub/chat.sendMessage",
     //     {},
@@ -74,7 +81,9 @@ function onError(error) {
     // connectingElement.style.color = "red";
 }
 
+//메세지 전송
 function sendMessage(event) {
+    setCurrentTime();
     var messageContent = messageInput.value.trim();
     if (messageContent && stompClient) {
         var chatMessage = {
@@ -94,6 +103,7 @@ function sendMessage(event) {
 
 }
 
+//메세지 수신
 function onMessageReceived(payload) {
     //메세지 출력
     //받은 메세지를 json형태로 배열에 저장
@@ -195,4 +205,9 @@ function loadMessage(){
     for (const message of messageArray) {
         printMessage(message);
     }
+}
+
+function  setCurrentTime(){
+    currentTime = new Date().getTime();
+
 }

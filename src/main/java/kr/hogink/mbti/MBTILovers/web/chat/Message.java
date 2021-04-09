@@ -1,6 +1,6 @@
 package kr.hogink.mbti.MBTILovers.web.chat;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 //firebase에 저장
 public class Message {
@@ -10,7 +10,7 @@ public class Message {
     private String content;
     private String sender;
     private String senderUid;
-    private LocalDateTime sentTimeAt;
+    private Timestamp sentTimeAt;
 
     public Long getRid() {
         return rid;
@@ -44,11 +44,11 @@ public class Message {
         this.sender = sender;
     }
 
-    public LocalDateTime getSentTimeAt() {
+    public Timestamp getSentTimeAt() {
         return sentTimeAt;
     }
 
-    public void setSentTimeAt(LocalDateTime sentTimeAt) {
+    public void setSentTimeAt(Timestamp sentTimeAt) {
         this.sentTimeAt = sentTimeAt;
     }
 
