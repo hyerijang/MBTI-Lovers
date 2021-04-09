@@ -37,7 +37,7 @@ window.onload = connect();
 
 
 function connect() {
-    // setCurrnetTime();
+
     loadMessage();
 
     if (sender) {
@@ -77,7 +77,6 @@ function onError(error) {
 function sendMessage(event) {
     var messageContent = messageInput.value.trim();
     if (messageContent && stompClient) {
-        // setCurrnetTime();
         var chatMessage = {
             rid: rid,
             type: "CHAT",
@@ -163,30 +162,28 @@ function getAvatarColor(messageSender) {
 
 messageForm.addEventListener("submit", sendMessage, true);
 
-function setCurrnetTime() {
-    // currentTime = Math.floor(+ new Date() / 1000);
-}
-
-var messageRef = firebase.database().ref('Room/' + rid);
 
 
-function SaveToFirebase(chatMessage) {
-
-    var messageRefKey = messageRef.push().key; // 메세지 키값 구하기
-    firebase.database().ref('Room/' + rid + '/' + messageRefKey).set(chatMessage);
-
-}
-
-function LoadFromFirebase() {
-    if (rid) {
-        if (messageRef)
-            messageRef.off();//이전 메세지 ref 이벤트 제거
-
-        messageRef =  firebase.database().ref('Room/' + rid);
-        
-    }
-
-}
+// var messageRef = firebase.database().ref('Room/' + rid);
+//
+//
+// function SaveToFirebase(chatMessage) {
+//
+//     var messageRefKey = messageRef.push().key; // 메세지 키값 구하기
+//     firebase.database().ref('Room/' + rid + '/' + messageRefKey).set(chatMessage);
+//
+// }
+//
+// function LoadFromFirebase() {
+//     if (rid) {
+//         if (messageRef)
+//             messageRef.off();//이전 메세지 ref 이벤트 제거
+//
+//         messageRef =  firebase.database().ref('Room/' + rid);
+//
+//     }
+//
+// }
 
 function loadMessage(){
     //지난 메세지 불러오기
