@@ -15,12 +15,6 @@ public class RoomController {
 
     final static RoomRepository ROOM_REPOSITORY = new RoomRepository();
 
-    //채팅홈
-    @GetMapping(value = "/chatHome")
-    public String chatHome(Model model) {
-        return "chatHome";
-    }
-
 
     // 모든 채팅방 목록 반환
     @GetMapping(value = "/chatList")
