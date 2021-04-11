@@ -26,7 +26,7 @@
                     <div class="card-header">Register</div>
                     <div class="card-body">
                         <form name="my-form" onsubmit="return validform()" action="/members/new" method="post">
-                            <input  id="uid" type="hidden" th:value="${uid}" name="uid"/>
+                            <input id="uid" type="hidden" th:value="${uid}" name="uid"/>
                             <div class="form-group row">
                                 <label for="name" class="col-md-4 col-form-label text-md-right">이름</label>
                                 <div class="col-md-6">
@@ -46,7 +46,7 @@
                             <div class="form-group row">
                                 <label for="age" class="col-md-4 col-form-label text-md-right">나이</label>
                                 <div class="col-md-6">
-                                    <input type="Number" id="age" class="form-control" min= "200" max="99" value="20">
+                                    <input type="Number" id="age" class="form-control" min="20" max="99" value="20">
                                 </div>
                             </div>
 

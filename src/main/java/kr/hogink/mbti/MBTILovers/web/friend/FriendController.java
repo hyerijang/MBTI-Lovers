@@ -19,7 +19,8 @@ public class FriendController {
     @GetMapping(value = "/friends")
     public String list(Model model, @CookieValue(name = USER_COOKIE) String cookieUid) {
         List<Friend> friends = friendService.findAllByUid(cookieUid);
-        model.addAttribute("friends", friends);
+        if (friends != null)
+            model.addAttribute("friends", friends);
         return "members/friendsList";
     }
 }
