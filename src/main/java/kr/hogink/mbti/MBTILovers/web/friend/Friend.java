@@ -10,7 +10,7 @@ import javax.persistence.IdClass;
 @Getter
 @Setter
 @Entity
-@IdClass(FriendId.class)
+@IdClass(FriendDTO.class)
 public class Friend {
 
     @Id

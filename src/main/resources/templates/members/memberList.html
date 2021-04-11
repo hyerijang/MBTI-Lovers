@@ -18,12 +18,23 @@
             </thead>
             <tbody>
             <tr th:each="member : ${members}">
+
+
                 <td th:text="${member.uid}"></td>
                 <td th:text="${member.name}"></td>
                 <td th:text="${member.age}"></td>
                 <td th:text="${member.gender}"></td>
                 <td th:text="${member.mbti}"></td>
                 <td th:text="${member.stateMessage}"></td>
+                <form name="friendDTO" action="/friends/acceptRequest" method="post">
+                    <input id="fid" type="hidden" th:value="${member.uid}" name="fid"/>
+                    <td>
+                        <button type="submit" class="btn btn-primary">
+                            친구신청
+                        </button>
+                    </td>
+                </form>
+
             </tr>
             </tbody>
         </table>
