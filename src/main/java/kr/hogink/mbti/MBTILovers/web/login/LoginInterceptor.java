@@ -16,7 +16,6 @@ import javax.servlet.http.HttpSession;
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 
 
-
     private static final Logger logger = LoggerFactory.getLogger(LoggerFactory.class);
 
     // 로그인 처리 후 session 정보 보관
@@ -40,7 +39,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             if (true) {
                 logger.info("make loginCookie");
                 // 로그인 쿠키 객체 생성
-                Cookie loginCookie = new Cookie("currentUserUid", member.getUid());
+                Cookie loginCookie = new Cookie(LoginController.USER_COOKIE, member.getUid());
                 // 모든 경로에서 접근 가능하게 처리
                 loginCookie.setPath("/");
                 // 쿠키 유효 기간
@@ -52,8 +51,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             Object destination = session.getAttribute("destination");
             // 삼항 연산자로 이전페이지가 존재하지 않으면 메인페이지로 이동
             response.sendRedirect(destination != null ? (String) destination : "/");
-        }
-        else {
+        } else {
             //신규유저 가입하러 이동
             logger.info("신규유저가입 페이지로 이동");
             response.sendRedirect("/members/new");
