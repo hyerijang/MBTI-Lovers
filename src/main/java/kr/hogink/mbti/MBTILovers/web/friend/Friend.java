@@ -14,9 +14,10 @@ import javax.persistence.IdClass;
 public class Friend {
 
     @Id
-    String uid;
+    private String uid;
     @Id
-    String fid; //friend's uid
-    String relation;
+    private String fid; //friend's uid
+    private String relation;
+    private Long rid;
 
 }
