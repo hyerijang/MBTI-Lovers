@@ -3,7 +3,7 @@ package kr.hogink.mbti.MBTILovers.web.friend;
 import java.io.Serializable;
 
 
-public class FriendDTO implements Serializable {
+public class FriendDTO {
 
     private String fid;
 
