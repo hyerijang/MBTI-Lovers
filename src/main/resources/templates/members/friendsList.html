@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+    <div>
+        <a href="/">뒤로가기</a>
+        <table border="1">
+            <thead>
+            <tr>
+                <th>UID</th>
+                <th>FID</th>
+                <th>관계</th>
+                <th>방번호</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="friend : ${friends}">
+                <td th:text="${friend.uid}"></td>
+                <td th:text="${friend.fid}"></td>
+                <td th:text="${friend.relation}"></td>
+                <td th:text="${friend.rid}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div> <!-- /container -->
+</body>
+</html>
