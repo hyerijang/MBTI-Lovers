@@ -11,7 +11,7 @@ public interface FriendService {
 
     Optional<Friend> findOneByFid();
 
-    String addFriend(Friend friend);
+    String saveFriend(Friend friend);
 
-    Optional<Friend> findOneByFriendId(String uid, String fid);
+    Optional<Friend> findOneByUidAndFid(String uid, String fid);
 }

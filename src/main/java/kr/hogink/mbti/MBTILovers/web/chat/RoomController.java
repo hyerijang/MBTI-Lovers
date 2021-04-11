@@ -1,11 +1,9 @@
 package kr.hogink.mbti.MBTILovers.web.chat;
 
 import kr.hogink.mbti.MBTILovers.web.friend.Friend;
-import kr.hogink.mbti.MBTILovers.web.friend.FriendId;
 import kr.hogink.mbti.MBTILovers.web.friend.FriendService;
 import kr.hogink.mbti.MBTILovers.web.login.LoginController;
 import kr.hogink.mbti.MBTILovers.web.member.Member;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Optional;
 
 import static kr.hogink.mbti.MBTILovers.web.login.LoginController.USER_COOKIE;
 
@@ -32,8 +29,6 @@ public class RoomController {
     @GetMapping(value = "/chatList")
 
     public String list(Model model) {
-//        createRoom("room1");
-//        createRoom("room2");
         List<Room> rooms = ROOM_REPOSITORY.findAllRoom();
         model.addAttribute("rooms", rooms);
         return "chat/chatList";
@@ -44,7 +39,7 @@ public class RoomController {
     @PostMapping("/room")
     public String createRoom(RoomDTO roomDTO, @CookieValue(name = USER_COOKIE) String cookieUid) {
 
-        Friend friend = friendService.findOneByFriendId(cookieUid, roomDTO.getFid()).get();
+        Friend friend = friendService.findOneByUidAndFid(cookieUid, roomDTO.getFid()).get();
         if (friend != null) {
             if (friend.getRid() != null)
                 return "redirect:/chat/enter/" + friend.getRid().toString();
@@ -57,7 +52,7 @@ public class RoomController {
                 ROOM_REPOSITORY.createChatRoom(room);
 
                 friend.setRid(room.getRid());
-                friendService.addFriend(friend);// 수정
+                friendService.saveFriend(friend);
                 return "redirect:/chat/enter/" + room.getRid().toString();
             }
 

@@ -21,7 +21,7 @@ class FriendServiceTest {
         friend.setUid("홍길동2");
         friend.setFid("임꺽정2");
         friend.setRelation("친구");
-        friendService.addFriend(friend);
+        friendService.saveFriend(friend);
     }
 
 

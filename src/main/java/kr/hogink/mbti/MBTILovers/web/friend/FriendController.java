@@ -1,11 +1,11 @@
 package kr.hogink.mbti.MBTILovers.web.friend;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static kr.hogink.mbti.MBTILovers.web.login.LoginController.USER_COOKIE;
 
@@ -27,14 +27,19 @@ public class FriendController {
         return "members/friendsList";
     }
 
-    // 채팅방 생성
+    // 친구 수락
     @PostMapping("/friends/acceptRequest")
     public String Accept(FriendDTO friendDTO, @CookieValue(name = USER_COOKIE) String cookieUid) {
-        Friend friend = new Friend();
+        Friend friend;
+        Optional<Friend> f = friendService.findOneByUidAndFid(cookieUid, friendDTO.getFid());
+        if (f.isPresent())
+            friend = f.get();
+        else
+            friend = new Friend();
         friend.setUid(cookieUid);
         friend.setFid(friendDTO.getFid());
         friend.setRelation("친구");
-        friendService.addFriend(friend);
+        friendService.saveFriend(friend);
         return "redirect:/friends";
     }
 }
