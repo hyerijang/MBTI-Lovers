@@ -1,7 +1,11 @@
 package kr.hogink.mbti.MBTILovers.web.chat;
 
+import kr.hogink.mbti.MBTILovers.web.friend.Friend;
+import kr.hogink.mbti.MBTILovers.web.friend.FriendId;
+import kr.hogink.mbti.MBTILovers.web.friend.FriendService;
 import kr.hogink.mbti.MBTILovers.web.login.LoginController;
 import kr.hogink.mbti.MBTILovers.web.member.Member;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -9,18 +13,27 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
+
+import static kr.hogink.mbti.MBTILovers.web.login.LoginController.USER_COOKIE;
 
 @Controller
 public class RoomController {
 
     final static RoomRepository ROOM_REPOSITORY = new RoomRepository();
 
+    FriendService friendService;
+
+    public RoomController(FriendService friendService) {
+        this.friendService = friendService;
+    }
 
     // 모든 채팅방 목록 반환
     @GetMapping(value = "/chatList")
+
     public String list(Model model) {
-        createRoom("room1");
-        createRoom("room2");
+//        createRoom("room1");
+//        createRoom("room2");
         List<Room> rooms = ROOM_REPOSITORY.findAllRoom();
         model.addAttribute("rooms", rooms);
         return "chat/chatList";
@@ -29,27 +42,44 @@ public class RoomController {
 
     // 채팅방 생성
     @PostMapping("/room")
-    @ResponseBody
-    public Room createRoom(@RequestParam String name) {
-        Room room = new Room();
-        room.setName(name);
-        return ROOM_REPOSITORY.createChatRoom(room);
+    public String createRoom(RoomDTO roomDTO, @CookieValue(name = USER_COOKIE) String cookieUid) {
+
+        Friend friend = friendService.findOneByFriendId(cookieUid, roomDTO.getFid()).get();
+        if (friend != null) {
+            if (friend.getRid() != null)
+                return "redirect:/chat/enter/" + friend.getRid().toString();
+
+            else {
+                Room room = new Room();
+                room.setName(roomDTO.getName());
+
+                //방생성
+                ROOM_REPOSITORY.createChatRoom(room);
+
+                friend.setRid(room.getRid());
+                friendService.addFriend(friend);// 수정
+                return "redirect:/chat/enter/" + room.getRid().toString();
+            }
+
+        }
+
+        return "채팅방 입장 실패";
     }
 
-    
+
     //채팅방 입장화면 {rid}를 통해 입장
     @GetMapping(value = "/chat/enter/{rid}")
     public String createFrom(HttpServletRequest request, Model model, @PathVariable Long rid) {
         //세션 정보로 sender 설정
         HttpSession session = request.getSession();
-        Member user = (Member)session.getAttribute(LoginController.USER_SESSION);
+        Member user = (Member) session.getAttribute(LoginController.USER_SESSION);
         Room room = ROOM_REPOSITORY.findRoomByRid(rid);
 
         //room 정보
-        model.addAttribute("rid",room.getRid());
-        model.addAttribute("name",room.getName());
-        model.addAttribute("sender",user.getName());
-        model.addAttribute("senderUid",user.getUid());
+        model.addAttribute("rid", room.getRid());
+        model.addAttribute("name", room.getName());
+        model.addAttribute("sender", user.getName());
+        model.addAttribute("senderUid", user.getUid());
         //채팅방 입장
         return "chat/roomdetail";
     }

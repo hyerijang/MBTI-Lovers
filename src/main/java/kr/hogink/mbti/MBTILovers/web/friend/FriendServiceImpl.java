@@ -30,5 +30,10 @@ public class FriendServiceImpl implements FriendService {
         return friend.getRelation();
     }
 
+    @Override
+    public Optional<Friend> findOneByFriendId(String uid, String fid) {
+        return friendRepository.findOneByUidAndFid(uid, fid);
+    }
+
 
 }

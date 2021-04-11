@@ -12,8 +12,12 @@ import static kr.hogink.mbti.MBTILovers.web.login.LoginController.USER_COOKIE;
 @Controller
 public class FriendController {
 
-    @Autowired
     FriendService friendService;
+
+    public FriendController(FriendService friendService) {
+        this.friendService = friendService;
+    }
+
 
     @GetMapping(value = "/friends")
     public String list(Model model, @CookieValue(name = USER_COOKIE) String cookieUid) {

@@ -1,5 +1,6 @@
 package kr.hogink.mbti.MBTILovers.web.friend;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import javax.persistence.IdClass;
 @Getter
 @Setter
 @Entity
+@Data
 @IdClass(FriendId.class)
 public class Friend {
 
