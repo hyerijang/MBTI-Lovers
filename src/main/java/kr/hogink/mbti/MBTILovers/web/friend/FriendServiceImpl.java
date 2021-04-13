@@ -36,8 +36,13 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public Optional<Friend> findOneByUidAndFid(String uid, String fid) {
+    public Optional<Friend> getFriendInfo(String uid, String fid) {
         return friendRepository.findOneByUidAndFid(uid, fid);
+    }
+
+    @Override
+    public Optional<Friend> getFriendName(String uid, Long rid) {
+        return friendRepository.findOneByUidAndRid(uid, rid);
     }
 
     Friend reverseFriend(Friend friend) {

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
 
 import static kr.hogink.mbti.MBTILovers.web.login.LoginController.USER_COOKIE;
 
@@ -31,8 +32,13 @@ public class RoomController {
     // 모든 채팅방 목록 반환
     @GetMapping(value = "/chatList")
 
-    public String list(Model model) {
+    public String list(Model model, @CookieValue(name = USER_COOKIE) String cookieUid) {
         List<Room> rooms = roomService.findAllRoom();
+        
+        if (!rooms.isEmpty())
+            for (Room room : rooms) {
+                room.setName(getFriendName(cookieUid, room.getRid()));
+            }
         model.addAttribute("rooms", rooms);
         return "chat/chatList";
     }
@@ -42,16 +48,15 @@ public class RoomController {
     @PostMapping("/room")
     public String createRoom(RoomDTO roomDTO, @CookieValue(name = USER_COOKIE) String cookieUid) {
 
-        Friend friend = friendService.findOneByUidAndFid(cookieUid, roomDTO.getFid()).get();
+        Friend friend = friendService.getFriendInfo(cookieUid, roomDTO.getFid()).get();
         if (friend != null) {
             if (friend.getRid() != null)
                 return "redirect:/chat/enter/" + friend.getRid().toString();
 
             else {
-                //방생성
+                //방생성 및 친구객체에 방정보 저장
                 Room room = new Room();
                 roomService.createChatRoom(room);
-
                 friend.setRid(room.getRid());
                 friendService.saveFriend(friend);
                 return "redirect:/chat/enter/" + room.getRid().toString();
@@ -73,12 +78,25 @@ public class RoomController {
 
         //room 정보
         model.addAttribute("rid", room.getRid());
-        model.addAttribute("name", room.getName());
+        model.addAttribute("name", getFriendName(user.getUid(), room.getRid()));
         model.addAttribute("sender", user.getName());
         model.addAttribute("senderUid", user.getUid());
 
         //채팅방 입장
         return "chat/roomdetail";
+    }
+
+    private String getFriendName(String uid, Long rid) {
+
+        Optional<Friend> f = friendService.getFriendName(uid, rid);
+        if (f.isPresent()) {
+            String friendUid = f.get().getFid();
+            return memberService.findOneByUid(friendUid).get().getName();
+        } else {
+            IllegalStateException e = new IllegalStateException("친구 정보가 없습니다.");
+            throw e;
+        }
+
     }
 
 

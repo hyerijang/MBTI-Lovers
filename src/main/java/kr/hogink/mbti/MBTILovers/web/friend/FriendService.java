@@ -13,5 +13,8 @@ public interface FriendService {
 
     void saveFriend(Friend friend);
 
-    Optional<Friend> findOneByUidAndFid(String uid, String fid);
+    Optional<Friend> getFriendInfo(String uid, String fid);
+
+    Optional<Friend> getFriendName(String uid, Long rid);
+
 }

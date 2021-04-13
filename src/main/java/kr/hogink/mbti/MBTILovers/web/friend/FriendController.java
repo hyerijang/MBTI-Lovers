@@ -38,7 +38,7 @@ public class FriendController {
 
     public Friend getFriend(String uid, String fid) {
 
-        Optional<Friend> f = friendService.findOneByUidAndFid(uid, fid);
+        Optional<Friend> f = friendService.getFriendInfo(uid, fid);
 
         //이미 존재하는 친구
         if (f.isPresent())

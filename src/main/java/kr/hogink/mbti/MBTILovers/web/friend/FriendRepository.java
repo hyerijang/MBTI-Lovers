@@ -16,4 +16,6 @@ public interface FriendRepository extends JpaRepository<Friend, FriendId> {
     Friend save(Friend friend);
 
     Optional<Friend> findOneByUidAndFid(String uid, String fid);
+
+    Optional<Friend> findOneByUidAndRid(String uid, Long rid);
 }

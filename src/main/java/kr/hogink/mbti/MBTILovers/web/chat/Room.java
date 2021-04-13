@@ -11,7 +11,7 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rid;
-    private String name;
+    private String name; //상대방의 이름 저장
 
 
     public Long getRid() {
