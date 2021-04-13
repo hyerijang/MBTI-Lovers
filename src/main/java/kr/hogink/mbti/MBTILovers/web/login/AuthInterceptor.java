@@ -49,11 +49,16 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
             // 쿠키 유무 확인
             Cookie loginCookie = WebUtils.getCookie(request, LoginController.USER_COOKIE);
             if (loginCookie != null) {
-                Member member = memberService.findOneByUid(loginCookie.getValue()).get();
-                if (member != null)
-                    session.setAttribute(LoginController.USER_SESSION, member);
-                return true;
-
+                Optional<Member> member = memberService.findOneByUid(loginCookie.getValue());
+                if (member.isPresent()) {
+                    session.setAttribute(LoginController.USER_SESSION, member.get());
+                    return true;
+                } else {
+                    //존재하지 않는 멤버
+                    //로그인 쿠키 삭제
+                    logger.info("존재하지 않는 멤버는 로그인 할 수 없습니다.");
+                    loginCookie.setMaxAge(0);
+                }
             }
 
             response.sendRedirect("/user/login");
