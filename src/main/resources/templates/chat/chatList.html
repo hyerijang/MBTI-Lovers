@@ -1,10 +1,16 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+    <link rel="stylesheet" type="text/css"
+          href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css'>
+
+</head>
 <body>
+
 <div class="container">
+    <h2>채팅 목록</h2>
     <div>
-        <a href="/">뒤로가기</a>
-        <h2>채팅 목록</h2>
         <table border="1">
             <thead>
             <tr>
@@ -19,11 +25,33 @@
                 <td th:text="${room.name}"></td>
                 <td th:text="${room.lastSentContent}"></td>
                 <td th:text="${room.lastSentTimeAt}"></td>
-                <td><a th:href="@{/chat/enter/{rid} (rid = ${room.rid})}">입장</a></td>
+                <td>
+                    <button class="btn btn-primary" th:href=" @{/chat/enter/{rid} (rid = ${room.rid})}"
+                            th:onclick="'location.href=\''+ @{/chat/enter/{rid} (rid = ${room.rid})} + '\''">
+                        입장
+                    </button>
+                </td>
             </tr>
             </tbody>
         </table>
     </div>
 </div> <!-- /container -->
+
+<nav class=" navbar fixed-bottom navbar-light navbar-fixed-bottom bg-faded justify-content-between flex-nowrap flex-row
+                            border bg-primary
+                    ">
+    <div class="container-fluid justify-content-center">
+        <ul class="nav navbar-nav flex-row float-right nav-fill w-100">
+            <li class="nav-item"><a class="nav-link pr-3 text-white" href="/friends">친구</a></li>
+            <li class="nav-item"><a class="nav-link pr-3 disabled" href="/chatList">채팅</a></li>
+            <li class="nav-item "><a class="nav-link pr-3 text-white" href="/members">매칭</a></li>
+            <li class="nav-item "><a class="nav-link pr-3 text-white" href="/">메뉴</a></li>
+        </ul>
+    </div>
+</nav>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js'></script>
+
 </body>
 </html>
