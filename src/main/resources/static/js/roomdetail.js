@@ -21,7 +21,6 @@ var colors = [
 ];
 
 
-
 //메세지 정보
 var rid = document.querySelector("#rid").value.trim();
 var sender = document.querySelector("#sender").value.trim();
@@ -36,11 +35,12 @@ var messageArray;
 window.onload = connect();
 
 
-function clearChatData(){
+function clearChatData() {
     //로컬스토리지 삭제
     localStorage.clear();
     console.log("로컬스토리지 삭제")
 }
+
 function connect() {
 
     // clearChatData();
@@ -110,11 +110,11 @@ function onMessageReceived(payload) {
     var message = JSON.parse(payload.body);
     messageArray.push(message);
     localStorage.setItem("room" + rid, JSON.stringify(messageArray));
-    // console.log(messageArray);
+    console.log(messageArray);
     printMessage(message);
 }
 
-function printMessage(message){
+function printMessage(message) {
 
     var messageElement = document.createElement("div");
 
@@ -173,7 +173,6 @@ function getAvatarColor(messageSender) {
 messageForm.addEventListener("submit", sendMessage, true);
 
 
-
 // var messageRef = firebase.database().ref('Room/' + rid);
 //
 //
@@ -195,7 +194,7 @@ messageForm.addEventListener("submit", sendMessage, true);
 //
 // }
 
-function loadMessage(){
+function loadMessage() {
     //지난 메세지 불러오기
     output = localStorage.getItem("room" + rid);
     if (output != null)
@@ -208,7 +207,7 @@ function loadMessage(){
     }
 }
 
-function  setCurrentTime(){
+function setCurrentTime() {
     currentTime = new Date().getTime();
 
 }
