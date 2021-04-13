@@ -1,6 +1,9 @@
 package kr.hogink.mbti.MBTILovers.web;
 
 
+import kr.hogink.mbti.MBTILovers.web.chat.RoomRepository;
+import kr.hogink.mbti.MBTILovers.web.chat.RoomService;
+import kr.hogink.mbti.MBTILovers.web.chat.RoomServiceImpl;
 import kr.hogink.mbti.MBTILovers.web.friend.FriendRepository;
 import kr.hogink.mbti.MBTILovers.web.friend.FriendService;
 import kr.hogink.mbti.MBTILovers.web.friend.FriendServiceImpl;
@@ -16,13 +19,15 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 @Configuration
-public class SpringConfig  {
+public class SpringConfig {
     private final MemberRepository memberRepository;
     private final FriendRepository friendRepository;
+    private final RoomRepository roomRepository;
 
-    public SpringConfig(MemberRepository memberRepository, FriendRepository friendRepository) {
+    public SpringConfig(MemberRepository memberRepository, FriendRepository friendRepository, RoomRepository roomRepository) {
         this.memberRepository = memberRepository;
         this.friendRepository = friendRepository;
+        this.roomRepository = roomRepository;
     }
 
     @Bean
@@ -41,5 +46,9 @@ public class SpringConfig  {
     }
 
 
-
+    @Bean
+    public RoomService roomService() {
+        return new RoomServiceImpl(roomRepository);
+    }
 }
+

@@ -39,7 +39,7 @@ public class MemberController {
         member.setStateMessage(form.getStateMessage());
         member.setProfileImage(form.getProfileImage());
 
-        System.out.println("유아이디"+newUserUid);
+//        System.out.println("UID: "+newUserUid);
         memberService.join(member);
         return "redirect:/";
     }
