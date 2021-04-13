@@ -8,7 +8,6 @@ import javax.persistence.Id;
 public class RoomDTO {
 
     private Long rid;
-    private String name;
     private String fid;
 
     public String getFid() {
@@ -27,12 +26,5 @@ public class RoomDTO {
         this.rid = rid;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
 
