@@ -20,9 +20,15 @@ public class HomeController {
         if (session.getAttribute(LoginController.USER_SESSION) != null) {
             Member member = (Member) session.getAttribute(LoginController.USER_SESSION);
 
-            if (member!= null)
+            if (member != null)
                 model.addAttribute("uid", member.getUid());
         }
         return "home";
+    }
+
+    //파일 업로드 테스트
+    @GetMapping("/file")
+    public String file() {
+        return "fileUploadTest";
     }
 }
