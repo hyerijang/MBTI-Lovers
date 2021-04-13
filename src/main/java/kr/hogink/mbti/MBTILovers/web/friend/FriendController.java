@@ -25,7 +25,7 @@ public class FriendController {
         List<Friend> friends = friendService.findAllByUid(cookieUid);
         if (friends != null)
             model.addAttribute("friends", friends);
-        return "members/friendsList";
+        return "friend/friendsList";
     }
 
     // 친구 수락

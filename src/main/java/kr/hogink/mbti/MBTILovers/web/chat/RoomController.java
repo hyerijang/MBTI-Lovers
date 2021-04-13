@@ -5,6 +5,9 @@ import kr.hogink.mbti.MBTILovers.web.friend.FriendService;
 import kr.hogink.mbti.MBTILovers.web.login.LoginController;
 import kr.hogink.mbti.MBTILovers.web.member.Member;
 import kr.hogink.mbti.MBTILovers.web.member.MemberService;
+import lombok.extern.flogger.Flogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +25,8 @@ public class RoomController {
     FriendService friendService;
     RoomService roomService;
     MemberService memberService;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 
     public RoomController(FriendService friendService, RoomService roomService, MemberService memberService) {
         this.friendService = friendService;
@@ -34,12 +39,18 @@ public class RoomController {
 
     public String list(Model model, @CookieValue(name = USER_COOKIE) String cookieUid) {
         List<Room> rooms = roomService.findAllRoom();
-        
-        if (!rooms.isEmpty())
+
+        if (!rooms.isEmpty()) {
             for (Room room : rooms) {
-                room.setName(getFriendName(cookieUid, room.getRid()));
+                try {
+                    room.setName(getFriendName(cookieUid, room.getRid()));
+                } catch (IllegalStateException e) {
+                    logger.error(e.getMessage());
+                }
+                model.addAttribute("rooms", rooms);
             }
-        model.addAttribute("rooms", rooms);
+        }
+
         return "chat/chatList";
     }
 
@@ -75,6 +86,7 @@ public class RoomController {
         HttpSession session = request.getSession();
         Member user = (Member) session.getAttribute(LoginController.USER_SESSION);
         Room room = roomService.findRoomByRid(rid);
+
 
         //room 정보
         model.addAttribute("rid", room.getRid());
