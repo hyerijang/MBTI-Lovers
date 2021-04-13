@@ -10,5 +10,5 @@ public interface RoomService {
 
     Room findRoomByRid(Long rid);
 
-
+    void save(Room room);
 }

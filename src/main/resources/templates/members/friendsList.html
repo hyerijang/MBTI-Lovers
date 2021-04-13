@@ -10,24 +10,21 @@
 <div class="container">
     <div>
         <a href="/">뒤로가기</a>
+        <h2>친구 목록</h2>
         <table border="1">
             <thead>
             <tr>
-                <th>UID</th>
                 <th>FID</th>
                 <th>관계</th>
-                <th>방번호</th>
+                <th>친구 이름</th>
             </tr>
             </thead>
             <tbody>
 
             <tr th:each="friend : ${friends}">
-                <td th:text="${friend.uid}"></td>
                 <td th:text="${friend.fid}"></td>
                 <td th:text="${friend.relation}"></td>
                 <form name="roomDTO" action="/room" method="post">
-                    <!--                    방 이름-->
-                    <!--                    <input id="name" type="hidden" th:value="${friend.fid}" name="name"/>-->
                     <input id="fid" type="hidden" th:value="${friend.fid}" name="fid"/>
                     <td th:text="${friend.rid}"></td>
                     <td>

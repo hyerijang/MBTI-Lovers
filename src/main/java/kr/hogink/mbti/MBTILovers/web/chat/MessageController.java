@@ -20,19 +20,25 @@ public class MessageController {
 
     private final SimpMessagingTemplate messagingTemplate;
 
-    public MessageController(SimpMessagingTemplate template) {
-        this.messagingTemplate = template;
+    private final RoomService roomService;
+
+    public MessageController(SimpMessagingTemplate messagingTemplate, RoomService roomService) {
+        this.messagingTemplate = messagingTemplate;
+        this.roomService = roomService;
     }
-
-
 
     @MessageMapping("/chat.sendMessage") //기존 request mapping 역할
-    public void sendMessage(@Payload Message chatMessage){
-        System.out.println("현재 방 : " + chatMessage.getRid());
-        messagingTemplate.convertAndSend("/sub/chat/room/".trim()+chatMessage.getRid(),chatMessage);
+    public void sendMessage(@Payload Message chatMessage) {
+        Long rid = chatMessage.getRid();
+        System.out.println("현재 방 : " + rid);
+        messagingTemplate.convertAndSend("/sub/chat/room/".trim() + rid, chatMessage);
+
+        Room room = roomService.findRoomByRid(rid);
+        room.setLastSentContent(chatMessage.getContent());
+        room.setLastSentTimeAt(chatMessage.getSentTimeAt());
+        roomService.save(room);
     }
 
-    
 
 }
 

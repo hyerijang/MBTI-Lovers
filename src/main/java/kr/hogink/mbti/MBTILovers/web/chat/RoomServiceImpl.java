@@ -30,4 +30,10 @@ public class RoomServiceImpl implements RoomService {
     public Room findRoomByRid(Long rid) {
         return roomRepository.findRoomByRid(rid).get();
     }
+
+    @Override
+    public void save(Room room) {
+        roomRepository.save(room);
+    }
 }
+
