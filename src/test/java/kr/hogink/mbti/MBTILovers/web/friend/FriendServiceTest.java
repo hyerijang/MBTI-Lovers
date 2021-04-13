@@ -20,7 +20,7 @@ class FriendServiceTest {
         Friend friend = new Friend();
         friend.setUid("홍길동2");
         friend.setFid("임꺽정2");
-        friend.setRelation("친구");
+        friend.setRelation(Friend.RelationType.FRIEND);
         friendService.saveFriend(friend);
     }
 

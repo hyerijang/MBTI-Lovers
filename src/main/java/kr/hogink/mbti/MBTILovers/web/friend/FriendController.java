@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+import static kr.hogink.mbti.MBTILovers.web.friend.Friend.RelationType.FRIEND;
 import static kr.hogink.mbti.MBTILovers.web.login.LoginController.USER_COOKIE;
 
 @Controller
@@ -30,16 +31,23 @@ public class FriendController {
     // 친구 수락
     @PostMapping("/friends/acceptRequest")
     public String Accept(FriendDTO friendDTO, @CookieValue(name = USER_COOKIE) String cookieUid) {
-        Friend friend;
-        Optional<Friend> f = friendService.findOneByUidAndFid(cookieUid, friendDTO.getFid());
-        if (f.isPresent())
-            friend = f.get();
-        else
-            friend = new Friend();
-        friend.setUid(cookieUid);
-        friend.setFid(friendDTO.getFid());
-        friend.setRelation("친구");
+        Friend friend = getFriend(cookieUid, friendDTO.getFid());
         friendService.saveFriend(friend);
         return "redirect:/friends";
+    }
+
+    public Friend getFriend(String uid, String fid) {
+
+        Optional<Friend> f = friendService.findOneByUidAndFid(uid, fid);
+
+        //이미 존재하는 친구
+        if (f.isPresent())
+            return f.get();
+
+        Friend friend = new Friend();
+        friend.setUid(uid);
+        friend.setFid(fid);
+        friend.setRelation(FRIEND);
+        return friend;
     }
 }

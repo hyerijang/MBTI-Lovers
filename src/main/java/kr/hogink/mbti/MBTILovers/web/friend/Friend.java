@@ -4,9 +4,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -19,7 +17,25 @@ public class Friend {
     private String uid;
     @Id
     private String fid; //friend's uid
-    private String relation;
+    @Enumerated(EnumType.STRING)
+    private RelationType relation;
     private Long rid;
 
+    public enum RelationType {
+
+        FRIEND("친구");
+
+        private String title;
+
+        RelationType(String title) {
+            this.title = title;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+    }
+
+
 }
+

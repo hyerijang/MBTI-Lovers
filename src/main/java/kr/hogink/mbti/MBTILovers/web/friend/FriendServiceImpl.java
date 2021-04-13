@@ -28,12 +28,15 @@ public class FriendServiceImpl implements FriendService {
 
     @Override
     public String saveFriend(Friend friend) {
-        if (friend.getUid() == friend.getFid())
+        if (friend.getUid().trim() == friend.getFid().trim())
             return "자신과는 친구 될수 없음";
-        friendRepository.save(friend);
-        Friend friendR = reverseFriend(friend);
-        friendRepository.save(friendR);
-        return friend.getRelation();
+        else {
+            friendRepository.save(friend);
+            Friend friendR = reverseFriend(friend);
+            friendRepository.save(friendR);
+            return friend.getRelation().toString();
+        }
+
     }
 
     @Override
