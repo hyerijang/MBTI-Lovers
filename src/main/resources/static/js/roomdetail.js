@@ -29,8 +29,8 @@ var currentTime = new Date().getTime();
 
 
 //방 정보
-var output = null;
-var messageArray;
+// var output = null;
+// var messageArray;
 //채팅방 입장시 소켓 서버와 연결
 window.onload = connect();
 
@@ -44,7 +44,7 @@ function clearChatData() {
 function connect() {
 
     // clearChatData();
-    loadMessage();
+    LoadFromFirebase();
 
     if (sender) {
         usernamePage.classList.add("hidden");
@@ -108,10 +108,11 @@ function onMessageReceived(payload) {
     //메세지 출력
     //받은 메세지를 json형태로 배열에 저장
     var message = JSON.parse(payload.body);
-    messageArray.push(message);
-    localStorage.setItem("room" + rid, JSON.stringify(messageArray));
-    console.log(messageArray);
-    printMessage(message);
+    SaveToFirebase(message);
+    // messageArray.push(message);
+    // localStorage.setItem("room" + rid, JSON.stringify(messageArray));
+    // console.log(messageArray);
+    // printMessage(message);
 }
 
 function printMessage(message) {
@@ -173,39 +174,35 @@ function getAvatarColor(messageSender) {
 messageForm.addEventListener("submit", sendMessage, true);
 
 
-// var messageRef = firebase.database().ref('Room/' + rid);
-//
-//
-// function SaveToFirebase(chatMessage) {
-//
-//     var messageRefKey = messageRef.push().key; // 메세지 키값 구하기
-//     firebase.database().ref('Room/' + rid + '/' + messageRefKey).set(chatMessage);
-//
-// }
-//
-// function LoadFromFirebase() {
-//     if (rid) {
-//         if (messageRef)
-//             messageRef.off();//이전 메세지 ref 이벤트 제거
-//
-//         messageRef =  firebase.database().ref('Room/' + rid);
-//
-//     }
-//
-// }
+var messageRef = firebase.database().ref('Room/' + rid);
 
-function loadMessage() {
-    //지난 메세지 불러오기
-    output = localStorage.getItem("room" + rid);
-    if (output != null)
-        messageArray = JSON.parse(output);
-    else
-        messageArray = new Array(); //기록이 없으면 새 어레이 생성
 
-    for (const message of messageArray) {
-        printMessage(message);
+function SaveToFirebase(chatMessage) {
+
+    var messageRefKey = messageRef.push().key; // 메세지 키값 구하기
+    firebase.database().ref('Room/' + rid + '/' + messageRefKey).set(chatMessage);
+
+}
+
+function LoadFromFirebase() {
+    if (rid) {
+        if (messageRef)
+            messageRef.off();//이전 메세지 ref 이벤트 제거
+
+        messageRef = firebase.database().ref('Room/' + rid);
+
+        messageRef.on('value', (snapshot) => {
+            snapshot.forEach((childSnapshot) => {
+                var childKey = childSnapshot.key;
+                console.log(childSnapshot.val());
+                printMessage(childSnapshot.val());
+            });
+        });
+
+
     }
 }
+
 
 function setCurrentTime() {
     currentTime = new Date().getTime();
