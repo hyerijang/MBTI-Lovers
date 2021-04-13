@@ -1,6 +1,6 @@
 package kr.hogink.mbti.MBTILovers.web.friend;
 
-import org.slf4j.ILoggerFactory;
+import kr.hogink.mbti.MBTILovers.web.member.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,11 +10,14 @@ import java.util.Optional;
 @Service
 @Transactional
 public class FriendServiceImpl implements FriendService {
-    public FriendServiceImpl(FriendRepository friendRepository) {
-        this.friendRepository = friendRepository;
-    }
 
     private final FriendRepository friendRepository;
+    private final MemberRepository memberRepository;
+
+    public FriendServiceImpl(FriendRepository friendRepository, MemberRepository memberRepository) {
+        this.friendRepository = friendRepository;
+        this.memberRepository = memberRepository;
+    }
 
     @Override
     public List<Friend> findAllByUid(String uid) {
@@ -30,9 +33,8 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public void saveFriend(Friend friend) {
         validateSelfFriend(friend);
-        friendRepository.save(friend);
-        Friend friendR = reverseFriend(friend);
-        friendRepository.save(friendR);
+        setAndSaveFriend(friend);
+        setAndSaveFriend(reverseFriend(friend));
     }
 
     @Override
@@ -62,5 +64,9 @@ public class FriendServiceImpl implements FriendService {
             throw new IllegalStateException("자신과는 친구가 될 수 없습니다.");
     }
 
-
+    private void setAndSaveFriend(Friend friend) {
+        friend.setFriendMember(memberRepository.findByUid(friend.getFid()).get());
+        friendRepository.save(friend);
+        friendRepository.save(friend);
+    }
 }

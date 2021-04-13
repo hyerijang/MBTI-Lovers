@@ -1,15 +1,15 @@
 package kr.hogink.mbti.MBTILovers.web.friend;
 
+import kr.hogink.mbti.MBTILovers.web.member.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-@Transactional
+//@Transactional
 class FriendServiceTest {
 
     @Autowired
@@ -18,13 +18,17 @@ class FriendServiceTest {
     @Autowired
     FriendRepository friendRepository;
 
+    @Autowired
+    MemberRepository memberRepository;
+
     @Test
     void 친구추가() {
         Friend friend = new Friend();
-        friend.setUid("홍길동2");
-        friend.setFid("임꺽정2");
+        friend.setUid("1");
+        friend.setFid("2");
         friend.setRelation(Friend.RelationType.FRIEND);
         friendService.saveFriend(friend);
+        System.out.println(friend.getFriendMember().getMbti());
     }
 
     @Test

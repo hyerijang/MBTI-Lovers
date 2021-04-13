@@ -18,17 +18,20 @@
             <tr>
                 <!--                <th>FID</th>-->
                 <!--                <th>관계</th>-->
-                <th>친구 이름</th>
+                <th>이름</th>
+                <th>mbti</th>
+                <th>상태메세지</th>
+                <th>채팅하기</th>
             </tr>
             </thead>
             <tbody>
 
             <tr th:each="friend : ${friends}">
-                <!--                <td th:text="${friend.fid}"></td>-->
-                <!--                <td th:text="${friend.relation}"></td>-->
+                <td th:text="${friend.friendMember.getName()}"></td>
+                <td th:text="${friend.friendMember.getMbti()}"></td>
+                <td th:text="${friend.friendMember.getStateMessage()}"></td>
                 <form name="roomDTO" action="/room" method="post">
                     <input id="fid" type="hidden" th:value="${friend.fid}" name="fid"/>
-                    <td th:text="${friend.rid}"></td>
                     <td>
                         <button type="submit" class="btn btn-primary">
                             채팅하기

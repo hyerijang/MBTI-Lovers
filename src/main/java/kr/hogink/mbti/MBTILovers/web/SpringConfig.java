@@ -37,7 +37,7 @@ public class SpringConfig {
 
     @Bean
     public FriendService friendService() {
-        return new FriendServiceImpl(friendRepository);
+        return new FriendServiceImpl(friendRepository, memberRepository);
     }
 
     @Bean

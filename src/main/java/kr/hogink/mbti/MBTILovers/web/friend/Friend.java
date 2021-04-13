@@ -1,5 +1,6 @@
 package kr.hogink.mbti.MBTILovers.web.friend;
 
+import kr.hogink.mbti.MBTILovers.web.member.Member;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,9 +18,19 @@ public class Friend {
     private String uid;
     @Id
     private String fid; //friend's uid
+    @ManyToOne
+    private Member friendMember;
     @Enumerated(EnumType.STRING)
     private RelationType relation;
     private Long rid;
+
+    public Member getFriendMember() {
+        return friendMember;
+    }
+
+    public void setFriendMember(Member friendMember) {
+        this.friendMember = friendMember;
+    }
 
     public enum RelationType {
 
