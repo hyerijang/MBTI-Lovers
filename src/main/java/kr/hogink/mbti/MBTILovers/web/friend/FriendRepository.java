@@ -11,11 +11,12 @@ import java.util.Optional;
 @Repository
 public interface FriendRepository extends JpaRepository<Friend, FriendId> {
 
-    List<Friend> findAllByUid(String uid);
+    <T> List<T> findAllByUid(String uid);
 
     Friend save(Friend friend);
 
     Optional<Friend> findOneByUidAndFid(String uid, String fid);
 
     Optional<Friend> findOneByUidAndRid(String uid, Long rid);
+
 }

@@ -2,6 +2,7 @@ package kr.hogink.mbti.MBTILovers.web.chat;
 
 import kr.hogink.mbti.MBTILovers.web.friend.Friend;
 import kr.hogink.mbti.MBTILovers.web.friend.FriendService;
+import kr.hogink.mbti.MBTILovers.web.friend.RoomMapping;
 import kr.hogink.mbti.MBTILovers.web.login.LoginController;
 import kr.hogink.mbti.MBTILovers.web.member.Member;
 import kr.hogink.mbti.MBTILovers.web.member.MemberService;
@@ -38,19 +39,22 @@ public class RoomController {
     @GetMapping(value = "/chatList")
 
     public String list(Model model, @CookieValue(name = USER_COOKIE) String cookieUid) {
-        List<Room> rooms = roomService.findAllRoom();
+//        List<Room> rooms = roomService.findAllRoom();
+//
+//        if (!rooms.isEmpty()) {
+//            for (Room room : rooms) {
+//                try {
+//                    room.setName(getFriendName(cookieUid, room.getRid()));
+//                } catch (IllegalStateException e) {
+//                    logger.error(e.getMessage());
+//                }
+//                model.addAttribute("rooms", rooms);
+//            }
+//        }
 
-        if (!rooms.isEmpty()) {
-            for (Room room : rooms) {
-                try {
-                    room.setName(getFriendName(cookieUid, room.getRid()));
-                } catch (IllegalStateException e) {
-                    logger.error(e.getMessage());
-                }
-                model.addAttribute("rooms", rooms);
-            }
-        }
-
+        List<Friend> roomMappingList = friendService.findAllByUid(cookieUid);
+        if (!roomMappingList.isEmpty())
+            model.addAttribute("rooms", roomMappingList);
         return "chat/chatList";
     }
 
@@ -61,18 +65,14 @@ public class RoomController {
 
         Friend friend = friendService.getFriendInfo(cookieUid, roomDTO.getFid()).get();
         if (friend != null) {
-            if (friend.getRid() != null)
-                return "redirect:/chat/enter/" + friend.getRid().toString();
-
-            else {
-                //방생성 및 친구객체에 방정보 저장
+            //방생성 및 친구객체에 방정보 저장
+            if (friend.getRoom() == null) {
                 Room room = new Room();
                 roomService.createChatRoom(room);
-                friend.setRid(room.getRid());
+                friend.setRoom(room);
                 friendService.saveFriend(friend);
-                return "redirect:/chat/enter/" + room.getRid().toString();
             }
-
+            return "redirect:/chat/enter/" + friend.getRoom().getRid();
         }
 
         return "채팅방 입장 실패";
@@ -90,7 +90,7 @@ public class RoomController {
 
         //room 정보
         model.addAttribute("rid", room.getRid());
-        model.addAttribute("name", getFriendName(user.getUid(), room.getRid()));
+        model.addAttribute("name", "채팅방");
         model.addAttribute("sender", user.getName());
         model.addAttribute("senderUid", user.getUid());
 

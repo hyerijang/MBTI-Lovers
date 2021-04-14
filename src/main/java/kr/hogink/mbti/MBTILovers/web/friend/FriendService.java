@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface FriendService {
 
-    List<Friend> findAllByUid(String uid);
+    <T> List<T> findAllByUid(String uid);
 
     Optional<Friend> findOneByFid();
 

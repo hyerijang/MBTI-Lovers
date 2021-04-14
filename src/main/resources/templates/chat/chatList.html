@@ -14,6 +14,7 @@
         <table border="1">
             <thead>
             <tr>
+                <th>rid</th>
                 <th>상대방이름</th>
                 <th>마지막메세지</th>
                 <th>마지막시간</th>
@@ -22,12 +23,13 @@
             </thead>
             <tbody>
             <tr th:each="room : ${rooms}">
-                <td th:text="${room.name}"></td>
-                <td th:text="${room.lastSentContent}"></td>
-                <td th:text="${room.lastSentTimeAt}"></td>
+                <td th:text="${room.getRoom().getRid()}"></td>
+                <td th:text="${room.getFriendMember().getName()}"></td>
+                <td th:text="${room.getRoom().getLastSentContent()}"></td>
+                <td th:text="${room.getRoom().getLastSentTimeAt()}"></td>
                 <td>
-                    <button class="btn btn-primary" th:href=" @{/chat/enter/{rid} (rid = ${room.rid})}"
-                            th:onclick="'location.href=\''+ @{/chat/enter/{rid} (rid = ${room.rid})} + '\''">
+                    <button class="btn btn-primary" th:href=" @{/chat/enter/{rid} (rid = ${room.getRoom().getRid()})}"
+                            th:onclick="'location.href=\''+ @{/chat/enter/{rid} (rid = ${room.getRoom().getRid()})} + '\''">
                         입장
                     </button>
                 </td>
