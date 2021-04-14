@@ -54,6 +54,8 @@ public class FriendServiceImpl implements FriendService {
         reverse.setRelation(friend.getRelation()); //일단 동일한 관계 되도록 함
         if (friend.getRid() != null)
             reverse.setRid(friend.getRid());
+        if (friend.getRoom() != null)
+            reverse.setRoom(friend.getRoom());
         return reverse;
     }
 

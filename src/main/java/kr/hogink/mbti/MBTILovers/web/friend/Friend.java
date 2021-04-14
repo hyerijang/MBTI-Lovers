@@ -1,5 +1,6 @@
 package kr.hogink.mbti.MBTILovers.web.friend;
 
+import kr.hogink.mbti.MBTILovers.web.chat.Room;
 import kr.hogink.mbti.MBTILovers.web.member.Member;
 import lombok.Data;
 import lombok.Getter;
@@ -23,6 +24,16 @@ public class Friend {
     @Enumerated(EnumType.STRING)
     private RelationType relation;
     private Long rid;
+    @ManyToOne
+    private Room room;
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     public Member getFriendMember() {
         return friendMember;
@@ -48,5 +59,12 @@ public class Friend {
     }
 
 
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
 }
 
