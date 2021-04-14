@@ -54,6 +54,13 @@
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
 <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js'></script>
-
+<script>
+    window.onpageshow = function (event) {
+        if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
+            console.log('페이지 리로드');
+            window.location.reload(true);
+        }
+    };
+</script>
 </body>
 </html>
