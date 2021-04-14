@@ -44,7 +44,7 @@ function clearChatData() {
 function connect() {
 
     // clearChatData();
-    LoadFromFirebase();
+    LoadAllMessageFromFirebase();
 
     if (sender) {
         usernamePage.classList.add("hidden");
@@ -109,11 +109,12 @@ function onMessageReceived(payload) {
     //메세지 출력
     //받은 메세지를 json형태로 배열에 저장
     var message = JSON.parse(payload.body);
+    LoadlastMessageFromFirebase();
 
 }
 
 function printMessage(message) {
-    console.log(message);
+    // console.log(message);
 
     var messageElement = document.createElement("div");
 
@@ -179,14 +180,14 @@ function SaveToFirebase(chatMessage) {
 
 }
 
-function LoadFromFirebase() {
+function LoadAllMessageFromFirebase() {
     if (rid) {
         if (messageRef)
             messageRef.off();//이전 메세지 ref 이벤트 제거
 
         messageRef = firebase.database().ref('Room/' + rid);
 
-        messageRef.on('value', (snapshot) => {
+        messageRef.once('value', (snapshot) => {
             snapshot.forEach((childSnapshot) => {
                 var childKey = childSnapshot.key;
                 // console.log(childSnapshot.val());
@@ -194,10 +195,26 @@ function LoadFromFirebase() {
             });
         });
 
-
     }
 }
 
+
+function LoadlastMessageFromFirebase() {
+    if (rid) {
+        
+        messageRef.limitToLast(1).once('value').then((snapshot) => {
+
+            snapshot.forEach(function (child) {
+                var message = child.val();
+                console.log(message);
+                printMessage(message);
+            });
+
+        });
+
+
+    }
+}
 
 function setCurrentTime() {
     currentTime = new Date().getTime();
