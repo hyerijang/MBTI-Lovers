@@ -90,7 +90,7 @@ public class RoomController {
 
         //room 정보
         model.addAttribute("rid", room.getRid());
-        model.addAttribute("name", "채팅방");
+        model.addAttribute("name", room.getRid() + "번 채팅방");
         model.addAttribute("sender", user.getName());
         model.addAttribute("senderUid", user.getUid());
 

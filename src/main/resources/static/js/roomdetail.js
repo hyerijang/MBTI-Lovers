@@ -33,7 +33,7 @@ var currentTime = new Date().getTime();
 // var messageArray;
 //채팅방 입장시 소켓 서버와 연결
 window.onload = connect();
-
+var messageRef;
 
 function clearChatData() {
     //로컬스토리지 삭제
@@ -96,9 +96,10 @@ function sendMessage(event) {
         };
         stompClient.send("/pub/chat.sendMessage", {}, JSON.stringify(chatMessage));
         messageInput.value = "";
+        SaveToFirebase(chatMessage);
+        event.preventDefault();
     }
 
-    // SaveToFirebase(chatMessage);
     event.preventDefault();
 
 }
@@ -108,14 +109,11 @@ function onMessageReceived(payload) {
     //메세지 출력
     //받은 메세지를 json형태로 배열에 저장
     var message = JSON.parse(payload.body);
-    SaveToFirebase(message);
-    // messageArray.push(message);
-    // localStorage.setItem("room" + rid, JSON.stringify(messageArray));
-    // console.log(messageArray);
-    // printMessage(message);
+
 }
 
 function printMessage(message) {
+    console.log(message);
 
     var messageElement = document.createElement("div");
 
@@ -137,7 +135,7 @@ function printMessage(message) {
 
         //이름
         var avatarElement = document.createElement("i");
-        var avatarText = document.createTextNode(message.sender[0]);
+        var avatarText = document.createTextNode(message.sender);
         avatarElement.appendChild(avatarText);
         avatarElement.style["background-color"] = getAvatarColor(message.sender);
         messageElement.appendChild(avatarElement);
@@ -172,9 +170,6 @@ function getAvatarColor(messageSender) {
 }
 
 messageForm.addEventListener("submit", sendMessage, true);
-
-
-var messageRef = firebase.database().ref('Room/' + rid);
 
 
 function SaveToFirebase(chatMessage) {
