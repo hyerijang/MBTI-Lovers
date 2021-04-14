@@ -194,7 +194,7 @@ function LoadFromFirebase() {
         messageRef.on('value', (snapshot) => {
             snapshot.forEach((childSnapshot) => {
                 var childKey = childSnapshot.key;
-                console.log(childSnapshot.val());
+                // console.log(childSnapshot.val());
                 printMessage(childSnapshot.val());
             });
         });
