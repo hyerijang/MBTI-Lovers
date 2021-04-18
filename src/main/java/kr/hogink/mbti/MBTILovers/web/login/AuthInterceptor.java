@@ -12,30 +12,59 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Controller
 public class AuthInterceptor extends HandlerInterceptorAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
-//    private final MemberService memberService;
-//
-//    public AuthInterceptor(MemberService memberService) {
-//        this.memberService = memberService;
-//    }
+    private final MemberService memberService;
+
+    public AuthInterceptor(MemberService memberService) {
+        this.memberService = memberService;
+    }
 
 
-    private static final String LOGIN = "login";
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response,
                              Object handler) throws Exception {
         HttpSession session = request.getSession();
-        if (session.getAttribute(LOGIN ) == null) {
+
+        String newUserUid = (String) session.getAttribute(LoginController.NewUserUid);
+        if (newUserUid != null) {
+            Optional<Member> member = memberService.findOneByUid(newUserUid);
+
+            if (member.isPresent()) {
+                session.setAttribute(LoginController.USER_SESSION, member.get());
+                session.removeAttribute(LoginController.NewUserUid);
+            }
+
+        }
+
+        if (session.getAttribute(LoginController.USER_SESSION) == null) {
             // 현재 페이지 저장
             saveDestination(request);
-            response.sendRedirect("user/login");
+
+            // 쿠키 유무 확인
+            Cookie loginCookie = WebUtils.getCookie(request, LoginController.USER_COOKIE);
+            if (loginCookie != null) {
+                Optional<Member> member = memberService.findOneByUid(loginCookie.getValue());
+                if (member.isPresent()) {
+                    session.setAttribute(LoginController.USER_SESSION, member.get());
+                    return true;
+                } else {
+                    //존재하지 않는 멤버
+                    //로그인 쿠키 삭제
+                    logger.info("존재하지 않는 멤버는 로그인 할 수 없습니다.");
+                    loginCookie.setMaxAge(0);
+                }
+            }
+
+            response.sendRedirect("/user/login");
             return false;
         }
+
 
         return true;
     }
@@ -45,7 +74,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         String uri = request.getRequestURI();   // 현재 페이지
         String query = request.getQueryString(); // 쿼리
         if (query == null || query.equals("null")) {
-            query =  "";
+            query = "";
         } else {
             query = "?" + query;
         }

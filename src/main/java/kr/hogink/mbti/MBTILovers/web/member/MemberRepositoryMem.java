@@ -4,23 +4,20 @@ import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
-public class MemberRepositoryMem implements MemberRepository{
+public class MemberRepositoryMem implements MemberRepository {
 
-    private static Map<Long, Member> store = new HashMap<>();
+    private static Map<String, Member> store = new HashMap<>();
     private static long sequence = 0L;
 
     @Override
     public Member save(Member member) {
-        member.setId(++sequence);
-        store.put(member.getId(),member);
+        if (member.getUid() == null)
+            member.setUid("UID" + (++sequence)); //임시
+        store.put(member.getUid(), member);
         return member;
     }
 
 
-    @Override
-    public Optional<Member> findById(Long id) {
-        return Optional.of(store.get(id));
-    }
     @Override
     public Optional<Member> findByUid(String uid) {
         return Optional.of(store.get(uid));

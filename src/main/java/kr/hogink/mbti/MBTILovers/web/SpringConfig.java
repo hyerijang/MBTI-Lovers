@@ -1,6 +1,12 @@
 package kr.hogink.mbti.MBTILovers.web;
 
 
+import kr.hogink.mbti.MBTILovers.web.chat.RoomRepository;
+import kr.hogink.mbti.MBTILovers.web.chat.RoomService;
+import kr.hogink.mbti.MBTILovers.web.chat.RoomServiceImpl;
+import kr.hogink.mbti.MBTILovers.web.friend.FriendRepository;
+import kr.hogink.mbti.MBTILovers.web.friend.FriendService;
+import kr.hogink.mbti.MBTILovers.web.friend.FriendServiceImpl;
 import kr.hogink.mbti.MBTILovers.web.login.AuthInterceptor;
 import kr.hogink.mbti.MBTILovers.web.login.LoginInterceptor;
 import kr.hogink.mbti.MBTILovers.web.login.LoginService;
@@ -13,12 +19,15 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 @Configuration
-public class SpringConfig extends WebMvcConfigurationSupport {
+public class SpringConfig {
     private final MemberRepository memberRepository;
+    private final FriendRepository friendRepository;
+    private final RoomRepository roomRepository;
 
-
-    public SpringConfig(MemberRepository memberRepository) {
+    public SpringConfig(MemberRepository memberRepository, FriendRepository friendRepository, RoomRepository roomRepository) {
         this.memberRepository = memberRepository;
+        this.friendRepository = friendRepository;
+        this.roomRepository = roomRepository;
     }
 
     @Bean
@@ -26,37 +35,20 @@ public class SpringConfig extends WebMvcConfigurationSupport {
         return new MemberServiceImpl(memberRepository);
     }
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**")
-                .addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
+    @Bean
+    public FriendService friendService() {
+        return new FriendServiceImpl(friendRepository, memberRepository);
     }
-
-
-    @Override
-    protected void addInterceptors(InterceptorRegistry registry) {
-        // 인증 인터셉터
-        // 로그인된 유저인지 검증
-        // 경로는 "/경로" 여야함
-        registry.addInterceptor(new AuthInterceptor())
-                .addPathPatterns("/members");
-
-        //로그인 인터셉터
-        //로그인을 처리함
-        registry.addInterceptor(new LoginInterceptor())
-                .addPathPatterns("/user/loginPost");
-
-
-    }
-
-    private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {
-            "classpath:/META-INF/resources/", "classpath:/resources/",
-            "classpath:/static/", "classpath:/public/"
-    };
-
 
     @Bean
     public LoginService loginService() {
         return new LoginServiceImpl(memberService());
     }
+
+
+    @Bean
+    public RoomService roomService() {
+        return new RoomServiceImpl(roomRepository);
+    }
 }
+

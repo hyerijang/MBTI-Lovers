@@ -1,18 +1,14 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 
 @Entity
 public class Member {
     //    private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private String uid; //firebase uid
     private String name;
     private String gender;
@@ -20,7 +16,7 @@ public class Member {
     private String mbti;
     private String stateMessage;
     private String profileImage;
-    private Date lastConnectTime;
+    private LocalDateTime connectedTimeAt;
 
 
     public String getUid() {
@@ -29,14 +25,6 @@ public class Member {
 
     public void setUid(String uid) {
         this.uid = uid;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -87,11 +75,11 @@ public class Member {
         this.profileImage = profileImage;
     }
 
-    public Date getLastConnectTime() {
-        return lastConnectTime;
+    public LocalDateTime getConnectedTimeAt() {
+        return connectedTimeAt;
     }
 
-    public void setLastConnectTime(Date lastConnectTime) {
-        this.lastConnectTime = lastConnectTime;
+    public void setConnectedTimeAt(LocalDateTime lastConnectTime) {
+        this.connectedTimeAt = lastConnectTime;
     }
 }

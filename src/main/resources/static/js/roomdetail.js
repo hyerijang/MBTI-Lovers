@@ -7,11 +7,7 @@ var messageForm = document.querySelector("#messageForm");
 var messageInput = document.querySelector("#message");
 var messageArea = document.querySelector("#messageArea");
 // var connectingElement = document.querySelector(".connecting"); //연결상태 표시
-
 var stompClient = null;
-var username = null;
-
-var roomId = document.getElementById('roomId').innerText;
 
 var colors = [
     "#2196F3",
@@ -24,10 +20,33 @@ var colors = [
     "#39bbb0",
 ];
 
-function connect(event) {
-    username = document.querySelector("#name").value.trim();
 
-    if (username) {
+//메세지 정보
+var rid = document.querySelector("#rid").value.trim();
+var sender = document.querySelector("#sender").value.trim();
+var senderUid = document.querySelector("#senderUid").value.trim();
+var currentTime = new Date().getTime();
+
+
+//방 정보
+// var output = null;
+// var messageArray;
+//채팅방 입장시 소켓 서버와 연결
+window.onload = connect();
+var messageRef;
+
+function clearChatData() {
+    //로컬스토리지 삭제
+    localStorage.clear();
+    console.log("로컬스토리지 삭제")
+}
+
+function connect() {
+
+    // clearChatData();
+    LoadAllMessageFromFirebase();
+
+    if (sender) {
         usernamePage.classList.add("hidden");
         chatPage.classList.remove("hidden");
 
@@ -36,21 +55,25 @@ function connect(event) {
 
         stompClient.connect({}, onConnected, onError);
     }
-    event.preventDefault();
+    // event.preventDefault();
 }
 
 function onConnected() {
+
     // room 개설
-    stompClient.subscribe("/sub/chat/room/" +roomId, onMessageReceived);
-
-    // Tell your username to the server
-    stompClient.send(
-        "/sub/chat/room/"+roomId,
-        {},
-        JSON.stringify({sender: username, type: "JOIN"})
-    );
-
-    // connectingElement.classList.add("hidden");
+    stompClient.subscribe("/sub/chat/room/" + rid, onMessageReceived);
+    setCurrentTime();
+    // stompClient.send(
+    //     "/pub/chat.sendMessage",
+    //     {},
+    //     JSON.stringify({
+    //         rid: rid,
+    //         type: "JOIN",
+    //         sender: sender,
+    //         senderUid: senderUid,
+    //         sentTimeAt: currentTime
+    //     })
+    // );
 }
 
 function onError(error) {
@@ -58,22 +81,40 @@ function onError(error) {
     // connectingElement.style.color = "red";
 }
 
+//메세지 전송
 function sendMessage(event) {
+    setCurrentTime();
     var messageContent = messageInput.value.trim();
     if (messageContent && stompClient) {
         var chatMessage = {
-            sender: username,
-            content: messageInput.value,
+            rid: rid,
             type: "CHAT",
+            content: messageInput.value,
+            sender: sender,
+            senderUid: senderUid,
+            sentTimeAt: currentTime
         };
-        stompClient.send("/sub/chat/room/" +roomId, {}, JSON.stringify(chatMessage));
+        stompClient.send("/pub/chat.sendMessage", {}, JSON.stringify(chatMessage));
         messageInput.value = "";
+        SaveToFirebase(chatMessage);
+        event.preventDefault();
     }
+
     event.preventDefault();
+
 }
 
+//메세지 수신
 function onMessageReceived(payload) {
+    //메세지 출력
+    //받은 메세지를 json형태로 배열에 저장
     var message = JSON.parse(payload.body);
+    LoadlastMessageFromFirebase();
+
+}
+
+function printMessage(message) {
+    // console.log(message);
 
     var messageElement = document.createElement("div");
 
@@ -86,7 +127,7 @@ function onMessageReceived(payload) {
     } else if (message.type === "LEAVE") {
         messageElement.classList.add("media", "media-meta-day"); // 임시 적용 css
         message.content = message.sender + "님이 나갔습니다.";
-    } else if (username == message.sender) {
+    } else if (sender == message.sender) {
         //메세지를 보낸 사람이 나인 경우
         messageElement.classList.add("media", "media-chat", "media-chat-reverse");
     } else {
@@ -95,7 +136,7 @@ function onMessageReceived(payload) {
 
         //이름
         var avatarElement = document.createElement("i");
-        var avatarText = document.createTextNode(message.sender[0]);
+        var avatarText = document.createTextNode(message.sender);
         avatarElement.appendChild(avatarText);
         avatarElement.style["background-color"] = getAvatarColor(message.sender);
         messageElement.appendChild(avatarElement);
@@ -117,6 +158,7 @@ function onMessageReceived(payload) {
 
     messageArea.appendChild(messageElement);
     messageArea.scrollTop = messageArea.scrollHeight;
+
 }
 
 function getAvatarColor(messageSender) {
@@ -128,5 +170,53 @@ function getAvatarColor(messageSender) {
     return colors[index];
 }
 
-usernameForm.addEventListener("submit", connect, true);
 messageForm.addEventListener("submit", sendMessage, true);
+
+
+function SaveToFirebase(chatMessage) {
+
+    var messageRefKey = messageRef.push().key; // 메세지 키값 구하기
+    firebase.database().ref('Room/' + rid + '/' + messageRefKey).set(chatMessage);
+
+}
+
+function LoadAllMessageFromFirebase() {
+    if (rid) {
+        if (messageRef)
+            messageRef.off();//이전 메세지 ref 이벤트 제거
+
+        messageRef = firebase.database().ref('Room/' + rid);
+
+        messageRef.once('value', (snapshot) => {
+            snapshot.forEach((childSnapshot) => {
+                var childKey = childSnapshot.key;
+                // console.log(childSnapshot.val());
+                printMessage(childSnapshot.val());
+            });
+        });
+
+    }
+}
+
+
+function LoadlastMessageFromFirebase() {
+    if (rid) {
+        
+        messageRef.limitToLast(1).once('value').then((snapshot) => {
+
+            snapshot.forEach(function (child) {
+                var message = child.val();
+                console.log(message);
+                printMessage(message);
+            });
+
+        });
+
+
+    }
+}
+
+function setCurrentTime() {
+    currentTime = new Date().getTime();
+
+}

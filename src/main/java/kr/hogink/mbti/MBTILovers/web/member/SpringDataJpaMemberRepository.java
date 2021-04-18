@@ -8,11 +8,10 @@ import java.util.Optional;
 
 @Repository
 @Primary
-public interface SpringDataJpaMemberRepository extends JpaRepository<Member,Long> ,MemberRepository{
+public interface SpringDataJpaMemberRepository extends JpaRepository<Member, String>, MemberRepository {
 
     @Override
     Optional<Member> findByName(String name);
-
 
 
 }

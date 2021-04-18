@@ -1,14 +1,48 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<body>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+    <link rel="stylesheet" type="text/css"
+          href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css'>
+
+</head>
+
+<body style="padding-bottom: 100px">
+
 <div class="container">
     <div><h1>MBTI-Lovers</h1>
-        <p>회원 기능</p>
+
+        <!--        로그인-->
+        <form th:if="${uid} == null" action="/user/loginPost" method="post">
+            <input type="text" name="uid" placeholder="파이어베이스uid">
+            <button type="submit">로그인</button>
+        </form>
+        </form>
+        <p th:if="${uid} != null" th:text="${uid}" style="background-color: #9fcdff">uid</p>
+
         <p>
-            <a href="/members/new">회원 가입</a> <a href="/members">회원 목록</a> <a href="/chat/room">채팅방</a>
+            <a href="/members/new">회원 가입</a>
+            <a href="/user/logout">로그아웃</a>
+
         </p>
-        <p>회원 이미지!</p>
-        <img src="images/defaultProfileImage.png" height="100px">
+        <!--        <p>회원 이미지!</p>-->
+        <!--        <img src="images/defaultProfileImage.png" height="100px">-->
     </div>
-</div> <!-- /container --> </body>
+
+</div>
+<nav class="navbar fixed-bottom navbar-light navbar-fixed-bottom bg-faded justify-content-between flex-nowrap flex-row border bg-primary ">
+    <div class="container-fluid justify-content-center">
+        <ul class="nav navbar-nav flex-row float-right nav-fill w-100">
+            <li class="nav-item"><a class="nav-link pr-3 text-white" href="/friends">친구</a></li>
+            <li class="nav-item"><a class="nav-link pr-3 text-white" href="/chatList">채팅</a></li>
+            <li class="nav-item "><a class="nav-link pr-3 text-white" href="/members">매칭</a></li>
+            <li class="nav-item "><a class="nav-link pr-3 disabled" href="/">메뉴</a></li>
+        </ul>
+    </div>
+</nav>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js'></script>
+
+</body>
 </html>
