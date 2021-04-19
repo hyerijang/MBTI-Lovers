@@ -26,23 +26,7 @@ public class Friend {
     private Long rid;
     @ManyToOne
     private Room room;
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
-    public Member getFriendMember() {
-        return friendMember;
-    }
-
-    public void setFriendMember(Member friendMember) {
-        this.friendMember = friendMember;
-    }
-
+    
     public enum RelationType {
 
         FRIEND("친구");
@@ -58,13 +42,5 @@ public class Friend {
         }
     }
 
-
-    public Room getRoom() {
-        return room;
-    }
-
-    public void setRoom(Room room) {
-        this.room = room;
-    }
 }
 

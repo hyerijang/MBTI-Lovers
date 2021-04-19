@@ -14,10 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
-//linux 서버에서 500 오류 안나려면
-//@RequestMapping 리턴시  "user/login" 로 해야함
-//"/user/loing"으로하면 오류
-
 
 @Controller
 @RequestMapping("/user")

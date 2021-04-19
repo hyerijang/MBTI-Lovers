@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 
 
-    private static final Logger logger = LoggerFactory.getLogger(LoggerFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);
 
     // 로그인 처리 후 session 정보 보관
     @Override
