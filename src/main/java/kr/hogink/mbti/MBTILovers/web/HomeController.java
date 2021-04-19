@@ -33,4 +33,9 @@ public class HomeController {
     public String file() {
         return "fileUploadTest";
     }
+
+    @GetMapping("/matching")
+    public String matching() {
+        return "matching";
+    }
 }
