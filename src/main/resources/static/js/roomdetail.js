@@ -201,7 +201,7 @@ function LoadAllMessageFromFirebase() {
 
 function LoadlastMessageFromFirebase() {
     if (rid) {
-        
+
         messageRef.limitToLast(1).once('value').then((snapshot) => {
 
             snapshot.forEach(function (child) {
@@ -220,3 +220,9 @@ function setCurrentTime() {
     currentTime = new Date().getTime();
 
 }
+
+var state = null;
+var title = null;
+var url = location.href;
+
+history.pushState(state, title, url);
