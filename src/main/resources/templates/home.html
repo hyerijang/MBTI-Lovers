@@ -18,10 +18,11 @@
             <button type="submit">로그인</button>
         </form>
         </form>
-        <p th:if="${uid} != null" th:text="${uid}" style="background-color: #9fcdff">uid</p>
+        <!--        <p th:if="${uid} != null" th:text="${uid}" style="background-color: #9fcdff">uid</p>-->
+        <p th:if="${user} != null" th:text="${user.getName()}" style="background-color: #9fcdff">uid</p>
 
         <p>
-            <a href="/members/new">회원 가입</a>
+            <!--            <a href="/members/new">회원 가입</a>-->
             <a href="/user/logout">로그아웃</a>
 
         </p>

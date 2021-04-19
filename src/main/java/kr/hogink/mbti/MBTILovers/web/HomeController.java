@@ -20,8 +20,10 @@ public class HomeController {
         if (session.getAttribute(LoginController.USER_SESSION) != null) {
             Member member = (Member) session.getAttribute(LoginController.USER_SESSION);
 
-            if (member != null)
+            if (member != null) {
                 model.addAttribute("uid", member.getUid());
+                model.addAttribute("user", member);
+            }
         }
         return "home";
     }
