@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+    <link rel="stylesheet" type="text/css"
+          href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css'>
+
+</head>
+<body>
+
+<div class="container">
+    <h2>채팅 목록</h2>
+    <div>
+        <table border="1">
+            <thead>
+            <tr>
+                <th>rid</th>
+                <th>상대방이름</th>
+                <th>마지막메세지</th>
+                <th>마지막시간</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="room : ${rooms}">
+                <td th:text="${room.getRoom().getRid()}"></td>
+                <td th:text="${room.getFriendMember().getName()}"></td>
+                <td th:text="${room.getRoom().getLastSentContent()}"></td>
+                <td th:text="${room.getRoom().getLastSentTimeAt()}"></td>
+                <td>
+                    <button class="btn btn-primary" th:href=" @{/chat/enter/{rid} (rid = ${room.getRoom().getRid()})}"
+                            th:onclick="'location.href=\''+ @{/chat/enter/{rid} (rid = ${room.getRoom().getRid()})} + '\''">
+                        입장
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div> <!-- /container -->
+
+<nav class=" navbar fixed-bottom navbar-light navbar-fixed-bottom bg-faded justify-content-between flex-nowrap flex-row
+                            border bg-primary
+                    ">
+    <div class="container-fluid justify-content-center">
+        <ul class="nav navbar-nav flex-row float-right nav-fill w-100">
+            <li class="nav-item"><a class="nav-link pr-3 text-white" href="/friends">친구</a></li>
+            <li class="nav-item"><a class="nav-link pr-3 disabled" href="/chatList">채팅</a></li>
+            <li class="nav-item "><a class="nav-link pr-3 text-white" href="/members">매칭</a></li>
+            <li class="nav-item "><a class="nav-link pr-3 text-white" href="/">메뉴</a></li>
+        </ul>
+    </div>
+</nav>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js'></script>
+<script>
+    window.onpageshow = function (event) {
+        if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
+            console.log('페이지 리로드');
+            window.location.reload(true);
+        }
+    };
+</script>
+</body>
+</html>

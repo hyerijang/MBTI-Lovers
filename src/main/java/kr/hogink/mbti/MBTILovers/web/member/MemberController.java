@@ -1,11 +1,13 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
+import kr.hogink.mbti.MBTILovers.web.login.LoginController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -20,21 +22,24 @@ public class MemberController {
     }
 
     @GetMapping(value = "/members/new")
-    public String createFrom() {
+    public String createFrom(HttpSession session) {
         return "members/createMemberForm";
     }
 
 
     @PostMapping("/members/new")
-    public String create(MemberForm form) {
+    public String create(MemberForm form, HttpSession session) {
+        String newUserUid = (String) session.getAttribute(LoginController.NewUserUid);
         Member member = new Member();
+        member.setUid(newUserUid);
         member.setName(form.getName());
         member.setGender(form.getGender());
         member.setAge(form.getAge());
-        member.setUid(form.getUid());
         member.setMbti(form.getMbti());
         member.setStateMessage(form.getStateMessage());
         member.setProfileImage(form.getProfileImage());
+
+//        System.out.println("UID: "+newUserUid);
         memberService.join(member);
         return "redirect:/";
     }
@@ -55,15 +60,14 @@ public class MemberController {
 
     @PostMapping("/members/edit")
     public String edit(MemberForm form) {
-        Member member = memberService.findOneById((long) 1).get();//임시
-        member.setName(form.getName());
-        member.setGender(form.getGender());
-        member.setAge(form.getAge());
-        member.setUid(form.getUid());
-        member.setMbti(form.getMbti());
-        member.setStateMessage(form.getStateMessage());
-        member.setProfileImage(form.getProfileImage());
-//        memberService.modifyUser(member);
+//        Member member = memberService.findOneByUid((long) 1).get();//임시
+//        member.setName(form.getName());
+//        member.setGender(form.getGender());
+//        member.setAge(form.getAge());
+//        member.setMbti(form.getMbti());
+//        member.setStateMessage(form.getStateMessage());
+//        member.setProfileImage(form.getProfileImage());
+////        memberService.modifyUser(member);
         return "redirect:/";
     }
 
