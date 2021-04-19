@@ -24,9 +24,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public String join(Member member) {
         //uid가 비어있으면 임시 uid 발급
-        if(member.getUid() == null)
+        if (member.getUid() == null)
             member.setUid(UUID.randomUUID().toString());
-        //같은 이름이 있는 중복 회원x
+        //같은 UID인 중복회원 x
         validateDuplicateMember(member);
         //프로필 이미지로 기본이미지 세팅
         setDefaultProfileImage(member);
@@ -37,7 +37,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private void validateDuplicateMember(Member member) {
-        memberRepository.findByName(member.getName()).
+        memberRepository.findByUid(member.getUid()).
                 ifPresent(m -> {
                     throw new IllegalStateException("이미 존재하는 회원입니다.");
                 });
@@ -51,7 +51,7 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
-    public void setLastConnectTime(Member member){
+    public void setLastConnectTime(Member member) {
         member.setConnectedTimeAt(LocalDateTime.now());
     }
 
