@@ -1,7 +1,6 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -11,9 +10,12 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@RequiredArgsConstructor
+@NoArgsConstructor
 public class Member {
     //    private static final long serialVersionUID = 1L;
     @Id
+    @NonNull
     private String uid; //firebase uid
     private String name;
     private String gender;
@@ -23,5 +25,5 @@ public class Member {
     private String profileImage;
     private LocalDateTime connectedTimeAt;
 
-    
+
 }
