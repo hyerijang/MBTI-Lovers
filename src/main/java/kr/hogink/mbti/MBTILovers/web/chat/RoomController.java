@@ -2,11 +2,9 @@ package kr.hogink.mbti.MBTILovers.web.chat;
 
 import kr.hogink.mbti.MBTILovers.web.friend.Friend;
 import kr.hogink.mbti.MBTILovers.web.friend.FriendService;
-import kr.hogink.mbti.MBTILovers.web.friend.RoomMapping;
-import kr.hogink.mbti.MBTILovers.web.login.LoginController;
+import kr.hogink.mbti.MBTILovers.web.login.LoginType;
 import kr.hogink.mbti.MBTILovers.web.member.Member;
 import kr.hogink.mbti.MBTILovers.web.member.MemberService;
-import lombok.extern.flogger.Flogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -18,7 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
-import static kr.hogink.mbti.MBTILovers.web.login.LoginController.USER_COOKIE;
+import static kr.hogink.mbti.MBTILovers.web.login.LoginType.USER_UID_COOKIE;
 
 @Controller
 public class RoomController {
@@ -38,7 +36,7 @@ public class RoomController {
     // 모든 채팅방 목록 반환
     @GetMapping(value = "/chatList")
 
-    public String list(Model model, @CookieValue(name = USER_COOKIE) String cookieUid) {
+    public String list(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
 //        List<Room> rooms = roomService.findAllRoom();
 //
 //        if (!rooms.isEmpty()) {
@@ -61,7 +59,7 @@ public class RoomController {
 
     // 채팅방 생성
     @PostMapping("/room")
-    public String createRoom(RoomDTO roomDTO, @CookieValue(name = USER_COOKIE) String cookieUid) {
+    public String createRoom(RoomDTO roomDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
 
         Friend friend = friendService.getFriendInfo(cookieUid, roomDTO.getFid()).get();
         if (friend != null) {
@@ -84,7 +82,7 @@ public class RoomController {
     public String createFrom(HttpServletRequest request, Model model, @PathVariable Long rid) {
         //세션 정보로 sender 설정
         HttpSession session = request.getSession();
-        Member user = (Member) session.getAttribute(LoginController.USER_SESSION);
+        Member user = (Member) session.getAttribute(LoginType.USER_MEMBER_SESSION);
         Room room = roomService.findRoomByRid(rid);
 
 

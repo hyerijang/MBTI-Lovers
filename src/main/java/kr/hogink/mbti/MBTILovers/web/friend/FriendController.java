@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static kr.hogink.mbti.MBTILovers.web.friend.Friend.RelationType.FRIEND;
-import static kr.hogink.mbti.MBTILovers.web.login.LoginController.USER_COOKIE;
+import static kr.hogink.mbti.MBTILovers.web.login.LoginType.USER_UID_COOKIE;
 
 @Controller
 public class FriendController {
@@ -21,7 +21,7 @@ public class FriendController {
 
 
     @GetMapping(value = "/friends")
-    public String list(Model model, @CookieValue(name = USER_COOKIE) String cookieUid) {
+    public String list(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
         List<Friend> friends = friendService.findAllByUid(cookieUid);
         if (friends != null)
             model.addAttribute("friends", friends);
@@ -30,7 +30,7 @@ public class FriendController {
 
     // 친구 수락
     @PostMapping("/friends/acceptRequest")
-    public String Accept(FriendDTO friendDTO, @CookieValue(name = USER_COOKIE) String cookieUid) {
+    public String Accept(FriendDTO friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
         Friend friend = getFriend(cookieUid, friendDTO.getFid());
         friendService.saveFriend(friend);
         return "redirect:/friends";
