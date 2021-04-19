@@ -49,7 +49,7 @@ public class LoginController {
 
         if (member.isPresent()) {
             //기존 유저면 접속시간 갱신
-            memberService.editLastConnectTime(member.get());
+            memberService.renewLastConnectTime(member.get());
             //model에 멤버 객체를 currentUser라는 이름의 변수에 저장
             model.addAttribute("currentUser", member.get());
         } else {
