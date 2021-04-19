@@ -20,9 +20,8 @@ public class MemberRepositoryMem implements MemberRepository {
 
     @Override
     public Optional<Member> findByUid(String uid) {
-        return Optional.of(store.get(uid));
+        return Optional.ofNullable(store.get(uid));
     }
-
 
 
     @Override

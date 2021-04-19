@@ -25,57 +25,49 @@ class MemberServiceTest {
     @BeforeEach
     public void beforeEach() {
         memberRepository = new MemberRepositoryMem();
-        memberService =  new MemberServiceImpl(memberRepository);
+        memberService = new MemberServiceImpl(memberRepository);
     }
+
     @AfterEach
     public void afterEach() {
         memberRepository.clearStore();
     }
+
     @Test
     void 회원가입() {
         //given
         Member member = new Member();
-        member.setName("spring");
+        member.setUid("spring");
         //when
         String saveId = memberService.join(member);
         //then
-        //assertj의 assertions
         Member findMember = memberService.findOneByUid(saveId).get();
-        assertThat(member.getName()).isEqualTo(findMember.getName());
+        assertThat(member.getUid()).isEqualTo(findMember.getUid());
     }
 
     @Test
     public void 중복_회원_예외() {
         //given
         Member member1 = new Member();
-        member1.setName("spring");
+        member1.setUid("spring");
         Member member2 = new Member();
-        member2.setName("spring");
+        member2.setUid("spring");
         //when
         memberService.join(member1);
+        //then
         IllegalStateException e = assertThrows(IllegalStateException.class, () -> memberService.join(member2));
         assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
-        //then
     }
 
 
+//    @Test
+//    public void 경로검증() throws URISyntaxException {
+//
+//        String path = File.separator + "static" + File.separator + "images" + File.separator;
+//        String fileName = "defaultProfileImage.png";
+//        URL res = getClass().getClassLoader().getResource(path + fileName);
+//        File file = Paths.get(res.toURI()).toFile();
+//        System.out.println("file is exist ? " + file.exists());
+//    }
 
-
-    @Test
-    public void 경로검증() throws URISyntaxException {
-
-        String path = File.separator + "static" +File.separator +"images" + File.separator;
-        String fileName = "defaultProfileImage.png";
-        URL res = getClass().getClassLoader().getResource(path + fileName);
-        File file = Paths.get(res.toURI()).toFile();
-        System.out.println("file is exist ? " + file.exists());
-    }
-
-    @Test
-    void findMembers() {
-    }
-
-    @Test
-    void findOne() {
-    }
 }
