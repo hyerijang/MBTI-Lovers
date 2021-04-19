@@ -9,30 +9,49 @@ branches:
 # Travis CI 서버의 Home
 cache:
   directories:
-    - '$HOME/.m2/repository'
-    - '$HOME/.gradle'
+    - "$HOME/.m2/repository"
+    - "$HOME/.gradle"
 
 script: "sudo ./gradlew build -x test"
+
+before_install:
+  - sudo chmod 777 ./gradlew
+
+before_deploy:
+  - zip -r springboot-webservice *
+  - mkdir -p deploy
+  - mv springboot-webservice.zip deploy/springboot-webservice.zip
+
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
+    secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
+    bucket: mbti-webservice-deploy # 6-3-3에서 생성한 S3 버킷
+    region: ap-northeast-2
+    skip_cleanup: true
+    acl: private
+    local_dir: deploy # before_deploy에서 생성한 디렉토리
+    wait-until-deployed: true
+    on:
+      repo: hyerijang/MBTI-Lovers-webServer
+      branch: master
+
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
+    secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
+    bucket: mbti-webservice-deploy # S3 버킷
+    key: springboot-webservice.zip # 빌드 파일을 압축해서 전달
+    bundle_type: zip
+    application: springboot-webservice # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션
+    deployment_group: mbti-deploy-group # 웹 콘솔에서 등록한 CodeDeploy 배포 그룹
+    region: ap-northeast-2
+    wait-until-deployed: true
+    on:
+      repo: hyerijang/MBTI-Lovers-webServer
+      branch: master
 
 # CI 실행 완료시 메일로 알람
 notifications:
   email:
     recipients:
-      - hyeri3316@g.hongik.ac.kr
-
-before_install:
-  - sudo chmod 777 ./gradlew 
-
-deploy:
-- provider: s3
-  access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
-  secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
-  bucket: mbti-webservice-deploy # 6-3-3에서 생성한 S3 버킷
-  region: ap-northeast-2
-  skip_cleanup: true
-  acl: private
-  wait-until-deployed: true
-  on:
-    repo: hyerijang/MBTI-Lovers-web
- #Github 주소
-    branch: master
+      - chjang5621@naver.com
