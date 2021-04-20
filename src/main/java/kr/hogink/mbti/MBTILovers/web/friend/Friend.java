@@ -1,6 +1,6 @@
 package kr.hogink.mbti.MBTILovers.web.friend;
 
-import kr.hogink.mbti.MBTILovers.web.chat.Room;
+import kr.hogink.mbti.MBTILovers.web.chat.room.Room;
 import kr.hogink.mbti.MBTILovers.web.member.Member;
 import lombok.Data;
 import lombok.Getter;

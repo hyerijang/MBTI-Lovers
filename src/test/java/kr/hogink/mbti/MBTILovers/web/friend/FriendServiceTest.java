@@ -1,9 +1,7 @@
 package kr.hogink.mbti.MBTILovers.web.friend;
 
-import kr.hogink.mbti.MBTILovers.web.chat.Room;
-import kr.hogink.mbti.MBTILovers.web.chat.RoomService;
+import kr.hogink.mbti.MBTILovers.web.chat.room.RoomService;
 import kr.hogink.mbti.MBTILovers.web.member.Member;
-import kr.hogink.mbti.MBTILovers.web.member.MemberRepository;
 import kr.hogink.mbti.MBTILovers.web.member.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

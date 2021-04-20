@@ -1,7 +1,5 @@
-package kr.hogink.mbti.MBTILovers.web.chat;
+package kr.hogink.mbti.MBTILovers.web.chat.room;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 

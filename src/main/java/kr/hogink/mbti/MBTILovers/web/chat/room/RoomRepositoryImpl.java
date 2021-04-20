@@ -1,12 +1,9 @@
-package kr.hogink.mbti.MBTILovers.web.chat;
+package kr.hogink.mbti.MBTILovers.web.chat.room;
 
-import kr.hogink.mbti.MBTILovers.web.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Repository

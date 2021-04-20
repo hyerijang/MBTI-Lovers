@@ -1,4 +1,4 @@
-package kr.hogink.mbti.MBTILovers.web.chat;
+package kr.hogink.mbti.MBTILovers.web.chat.room;
 
 import kr.hogink.mbti.MBTILovers.web.friend.Friend;
 import kr.hogink.mbti.MBTILovers.web.friend.FriendService;

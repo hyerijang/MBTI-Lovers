@@ -1,4 +1,4 @@
-package kr.hogink.mbti.MBTILovers.web.chat;
+package kr.hogink.mbti.MBTILovers.web.chat.room;
 
 import lombok.Getter;
 import lombok.Setter;
