@@ -26,12 +26,12 @@ public class Friend {
     private Long rid;
     @ManyToOne
     private Room room;
-    
+
     public enum RelationType {
 
         FRIEND("친구");
 
-        private String title;
+        private final String title;
 
         RelationType(String title) {
             this.title = title;

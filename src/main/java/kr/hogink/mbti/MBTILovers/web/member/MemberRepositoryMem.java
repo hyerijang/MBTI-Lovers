@@ -6,7 +6,7 @@ import java.util.*;
 
 public class MemberRepositoryMem implements MemberRepository {
 
-    private static Map<String, Member> store = new HashMap<>();
+    private static final Map<String, Member> store = new HashMap<>();
     private static long sequence = 0L;
 
     @Override
