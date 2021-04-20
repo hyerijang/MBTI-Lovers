@@ -11,15 +11,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
 import static kr.hogink.mbti.MBTILovers.web.login.LoginType.USER_UID_COOKIE;
 
 @Controller
+@SessionAttributes(LoginType.USER_MEMBER_SESSION)
 public class RoomController {
+
 
     FriendService friendService;
     RoomService roomService;
@@ -66,12 +66,11 @@ public class RoomController {
 
     //채팅방 입장화면 {rid}를 통해 입장
     @GetMapping(value = "/chat/enter/{rid}")
-    public String createFrom(HttpServletRequest request, Model model, @PathVariable Long rid) {
+    public String createFrom(@ModelAttribute(LoginType.USER_MEMBER_SESSION) Member user,
+                             Model model,
+                             @PathVariable Long rid) {
         //세션 정보로 sender 설정
-        HttpSession session = request.getSession();
-        Member user = (Member) session.getAttribute(LoginType.USER_MEMBER_SESSION);
         Room room = roomService.findRoomByRid(rid);
-
 
         //room 정보
         model.addAttribute("rid", room.getRid());
