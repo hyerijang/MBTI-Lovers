@@ -3,9 +3,10 @@
 
 <body>
 
-<form action="/upload" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" accept="image/*" multiple/>
-    <button>Load</button>
+<form action="/upload" method="post" enctype="multipart/form-data" onsubmit="return handleFileSelect();">
+    <input type="file" name="file" id="fileinput" accept="image/*" multiple/>
+    <button>Load
+    </button>
 </form>
 <script src="/js/fileupload.js"></script>
 </body>

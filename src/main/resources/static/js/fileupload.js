@@ -14,14 +14,9 @@ function handleFileSelect() {
     } else if (!input.files[0]) {
         alert("Please select a file before clicking 'Load'");
     } else {
-        file = input.files[0];
-        uploadFile(file);
-
+        console.log("file upload");
+        return true;
     }
+    return false;
 }
 
-function uploadFile(file) {
-    let formData = new FormData();
-    formData.append('files', file);
-    console.log("파일데이터 갱신");
-}
