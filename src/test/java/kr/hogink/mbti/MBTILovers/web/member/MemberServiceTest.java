@@ -1,18 +1,9 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
 
-import kr.hogink.mbti.MBTILovers.web.member.Member;
-import kr.hogink.mbti.MBTILovers.web.member.MemberService;
-import kr.hogink.mbti.MBTILovers.web.member.MemberServiceImpl;
-import kr.hogink.mbti.MBTILovers.web.member.MemberRepositoryMem;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.File;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,11 +11,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class MemberServiceTest {
 
     MemberService memberService;
-    MemberRepositoryMem memberRepository;
+    MemoryMemberRepository memberRepository;
 
     @BeforeEach
     public void beforeEach() {
-        memberRepository = new MemberRepositoryMem();
+        memberRepository = new MemoryMemberRepository();
         memberService = new MemberServiceImpl(memberRepository);
     }
 

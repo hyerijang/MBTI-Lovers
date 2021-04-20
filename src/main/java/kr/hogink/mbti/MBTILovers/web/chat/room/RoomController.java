@@ -37,19 +37,6 @@ public class RoomController {
     @GetMapping(value = "/chatList")
 
     public String list(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
-//        List<Room> rooms = roomService.findAllRoom();
-//
-//        if (!rooms.isEmpty()) {
-//            for (Room room : rooms) {
-//                try {
-//                    room.setName(getFriendName(cookieUid, room.getRid()));
-//                } catch (IllegalStateException e) {
-//                    logger.error(e.getMessage());
-//                }
-//                model.addAttribute("rooms", rooms);
-//            }
-//        }
-
         List<Friend> roomMappingList = friendService.findAllByUid(cookieUid);
         if (!roomMappingList.isEmpty())
             model.addAttribute("rooms", roomMappingList);
