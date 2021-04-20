@@ -18,11 +18,11 @@ import static kr.hogink.mbti.MBTILovers.web.file.FilePath.imagesPath;
 @Log4j2
 public class FileService {
 
-    public void fileUpload(MultipartFile multipartFile) {
-        fileUpload(multipartFile, null);
+    public Path fileUpload(MultipartFile multipartFile) {
+        return fileUpload(multipartFile, null);
     }
 
-    public void fileUpload(MultipartFile multipartFile, String filename) {
+    public Path fileUpload(MultipartFile multipartFile, String filename) {
         String originalFilename = StringUtils.cleanPath(multipartFile.getOriginalFilename());
         Path copyOfLocation = setFilePath(originalFilename, filename);
 
@@ -36,6 +36,7 @@ public class FileService {
             throw new FileStorageException("Could not store file : " + multipartFile.getOriginalFilename());
         }
 
+        return copyOfLocation;
     }
 
     public Path setFilePath(String oldFilename, String newFilename) {
