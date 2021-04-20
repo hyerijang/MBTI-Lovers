@@ -15,13 +15,13 @@ function handleFileSelect() {
         alert("Please select a file before clicking 'Load'");
     } else {
         file = input.files[0];
-        fr = new FileReader();
-        fr.onload = receivedText;
-        fr.readAsText(file);
+        uploadFile(file);
+
     }
 }
 
-function receivedText() {
-    //result = fr.result;
-    document.getElementById('editor').appendChild(document.createTextNode(fr.result))
+function uploadFile(file) {
+    let formData = new FormData();
+    formData.append('files', file);
+    console.log("파일데이터 갱신");
 }

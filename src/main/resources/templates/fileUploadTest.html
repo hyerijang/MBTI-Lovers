@@ -2,9 +2,11 @@
 <html>
 
 <body>
-<input type="file" id="fileinput"/>
-<input type='button' id='btnLoad' value='Load' onclick='handleFileSelect();'>
-<div id="editor"></div>
+
+<form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" accept="image/*" multiple/>
+    <button>Load</button>
+</form>
 <script src="/js/fileupload.js"></script>
 </body>
 </html>

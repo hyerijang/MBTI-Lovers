@@ -57,8 +57,8 @@ class MemberServiceTest {
 //        String path = File.separator + "static" + File.separator + "images" + File.separator;
 //        String fileName = "defaultProfileImage.png";
 //        URL res = getClass().getClassLoader().getResource(path + fileName);
-//        File file = Paths.get(res.toURI()).toFile();
-//        System.out.println("file is exist ? " + file.exists());
+//        File File = Paths.get(res.toURI()).toFile();
+//        System.out.println("File is exist ? " + File.exists());
 //    }
 
 }

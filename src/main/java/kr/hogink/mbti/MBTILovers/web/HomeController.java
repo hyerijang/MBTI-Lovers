@@ -23,11 +23,6 @@ public class HomeController {
         return "home";
     }
 
-    //파일 업로드 테스트
-    @GetMapping("/file")
-    public String file() {
-        return "fileUploadTest";
-    }
 
     @GetMapping("/matching")
     public String matching() {

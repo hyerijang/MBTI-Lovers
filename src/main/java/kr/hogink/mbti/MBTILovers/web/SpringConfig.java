@@ -4,6 +4,7 @@ package kr.hogink.mbti.MBTILovers.web;
 import kr.hogink.mbti.MBTILovers.web.chat.room.RoomRepository;
 import kr.hogink.mbti.MBTILovers.web.chat.room.RoomService;
 import kr.hogink.mbti.MBTILovers.web.chat.room.RoomServiceImpl;
+import kr.hogink.mbti.MBTILovers.web.file.FileService;
 import kr.hogink.mbti.MBTILovers.web.friend.FriendRepository;
 import kr.hogink.mbti.MBTILovers.web.friend.FriendService;
 import kr.hogink.mbti.MBTILovers.web.friend.FriendServiceImpl;
@@ -45,5 +46,12 @@ public class SpringConfig {
     public RoomService roomService() {
         return new RoomServiceImpl(roomRepository);
     }
+
+//    @Bean
+//    public FileService fileService() {
+//        return new FileService();
+//    }
+
+
 }
 
