@@ -28,7 +28,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         HttpSession session = request.getSession();
         // model에 저장된 값을 member에 저장
         ModelMap modelMap = modelAndView.getModelMap();
-        Member member = (Member) modelMap.get("currentUser");
+        Member member = (Member) modelMap.get(LoginType.USER_MEMBER_SESSION);
 
         // System.out.println(member+"님이 로그인 하셨습니다");
         if (member != null) {
