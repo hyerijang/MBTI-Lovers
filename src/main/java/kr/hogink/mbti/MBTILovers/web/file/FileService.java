@@ -19,8 +19,13 @@ import static kr.hogink.mbti.MBTILovers.web.file.FilePath.imagesPath;
 public class FileService {
 
     public void fileUpload(MultipartFile multipartFile) {
+        fileUpload(multipartFile, null);
+    }
 
-        Path copyOfLocation = Paths.get(imagesPath + File.separator + StringUtils.cleanPath(multipartFile.getOriginalFilename()));
+    public void fileUpload(MultipartFile multipartFile, String filename) {
+        String originalFilename = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        Path copyOfLocation = setFilePath(originalFilename, filename);
+
         log.info("저장될 파일 경로  : " + copyOfLocation.toString());
         try {
             // inputStream을 가져와서
@@ -32,4 +37,16 @@ public class FileService {
         }
 
     }
+
+    public Path setFilePath(String oldFilename, String newFilename) {
+        String filename;
+        //파일 이름을 명시하지 않은 경우 기존 파일 이름으로 설정
+        if (newFilename == null) {
+            filename = oldFilename; //기존 파일 이름
+        } else {
+            filename = newFilename + oldFilename.substring(oldFilename.lastIndexOf(".")); //새로운 파일이름 + 기존 파일 확장자
+        }
+        return Paths.get(imagesPath + File.separator + filename);
+    }
+
 }
