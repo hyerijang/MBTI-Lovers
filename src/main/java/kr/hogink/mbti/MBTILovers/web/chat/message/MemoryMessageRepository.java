@@ -2,7 +2,7 @@ package kr.hogink.mbti.MBTILovers.web.chat.message;
 
 import java.util.*;
 
-public class MessageRepositoryMem {
+public class MemoryMessageRepository {
 
     private static final Map<Long, Message> chatRecord = new HashMap<>();
     //메모리에 저장
