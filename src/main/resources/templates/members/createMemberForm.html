@@ -25,7 +25,9 @@
                 <div class="card">
                     <div class="card-header">Register</div>
                     <div class="card-body">
-                        <form name="my-form" onsubmit="return validform()" action="/members/new" method="post">
+                        <form id="my-form" name=" my-form
+                        " action="/members/new" method="post"
+                              onsubmit="return handleFileSelect()">
                             <input id="uid" type="hidden" th:value="${uid}" name="uid"/>
                             <div class="form-group row">
                                 <label for="name" class="col-md-4 col-form-label text-md-right">이름</label>
@@ -65,33 +67,87 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="profileImage"
-                                       class="col-md-4 col-form-label text-md-right">profileImage</label>
+                                <!--                                <label for="profileImage"-->
+                                <!--                                       class="col-md-4 col-form-label text-md-right">profileImage</label>-->
                                 <div class="col-md-6">
-                                    <input type="text" id="profileImage" class="form-control" name="profileImage">
+                                    <input type="hidden" id="profileImage" class="form-control" name="profileImage">
                                 </div>
                             </div>
+                        </form>
 
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Register
-                                </button>
+                        <form action="/upload" method="post" enctype="multipart/form-data"
+                              onsubmit="return handleFileSelect();" target="iframe1" id="imageform">
+                            <!--                            <input type="file" name="file" id="fileinput" accept="image/*" multiple/>-->
+                            <div class="form-group row">
+                                <label for="fileinput"
+                                       class="col-md-4 col-form-label text-md-right">profileImage</label>
+                                <div class="col-md-6">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="fileinput" accept="image/*"
+                                               name="file" aria-describedby="customFileInput" >
+                                        <label class="custom-file-label" for="fileinput" style=" overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Select file</label>
+                                    </div>
+                                </div>
                             </div>
+                        </form>
+
+
+                        <div class="col-md-6 offset-md-4">
+                            <button type="submit" class="btn btn-primary" form="my-form">
+                                Register
+                            </button>
+                        </div>
                     </div>
-                    </form>
+
+
                 </div>
             </div>
         </div>
     </div>
     </div>
 
+    <iframe id="iframe1" name="iframe1" style="display:none"></iframe>
 </main>
 
+
+<script>
+    document.querySelector('.custom-file-input').addEventListener('change', function (e) {
+        var name = document.getElementById("fileinput").files[0].name;
+        var nextSibling = e.target.nextElementSibling
+        nextSibling.innerText = name
+    })
+</script>
 <script src="/js/mbti.js"></script>
 <script src="/js/gender.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<script src="/js/fileupload.js"></script>
+<script>
+    function submit2() {
 
+        input = document.getElementById('fileinput');
+        if (!input) {
+            alert("Um, couldn't find the fileinput element.");
+        } else if (!input.files) {
+            alert("This browser doesn't seem to support the `files` property of file inputs.");
+        } else if (!input.files[0]) {
+            alert("Please select a file before clicking 'Load'");
+        } else {
+            console.log("file upload");
+            form = document.getElementById('imageform');
+            if (form != null) {
+                //파일 업로드
+                form.target = "iframe1";
+                form.submit();
+                return true;
+            }
+
+        }
+
+
+        return false;
+    }
+</script>
 </body>
 </html>

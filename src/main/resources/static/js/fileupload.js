@@ -15,8 +15,16 @@ function handleFileSelect() {
         alert("Please select a file before clicking 'Load'");
     } else {
         console.log("file upload");
-        return true;
+        form = document.getElementById('imageform');
+        if (form != null) {
+            //파일 업로드
+            form.target = "iframe1";
+            form.submit();
+            return true;
+        }
+
     }
+    
     return false;
 }
 
