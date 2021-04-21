@@ -23,9 +23,12 @@ public class FileService {
     }
 
     public Path fileUpload(MultipartFile multipartFile, String filename) {
-        String originalFilename = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-        Path copyOfLocation = setFilePath(originalFilename, filename);
+        Path copyOfLocation = setFilePath(multipartFile, filename);
+        saveFile(multipartFile, copyOfLocation);
+        return copyOfLocation;
+    }
 
+    private void saveFile(MultipartFile multipartFile, Path copyOfLocation) {
         log.info("저장될 파일 경로  : " + copyOfLocation.toString());
         try {
             // inputStream을 가져와서
@@ -35,11 +38,10 @@ public class FileService {
             e.printStackTrace();
             throw new FileStorageException("Could not store file : " + multipartFile.getOriginalFilename());
         }
-
-        return copyOfLocation;
     }
 
-    public Path setFilePath(String oldFilename, String newFilename) {
+    public Path setFilePath(MultipartFile multipartFile, String newFilename) {
+        String oldFilename = StringUtils.cleanPath(multipartFile.getOriginalFilename());
         String filename;
         //파일 이름을 명시하지 않은 경우 기존 파일 이름으로 설정
         if (newFilename == null) {
