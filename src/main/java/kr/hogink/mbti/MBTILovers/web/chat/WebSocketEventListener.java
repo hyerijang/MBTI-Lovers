@@ -1,5 +1,6 @@
 package kr.hogink.mbti.MBTILovers.web.chat;
 
+import kr.hogink.mbti.MBTILovers.web.chat.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class WebSocketEventListener {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
 
         String username = (String) headerAccessor.getSessionAttributes().get("username");
-        if(username != null) {
+        if (username != null) {
             logger.info("User Disconnected : " + username);
 
             Message chatMessage = new Message();

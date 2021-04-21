@@ -69,6 +69,5 @@ public class FriendServiceImpl implements FriendService {
     private void setAndSaveFriend(Friend friend) {
         friend.setFriendMember(memberRepository.findByUid(friend.getFid()).get());
         friendRepository.save(friend);
-        friendRepository.save(friend);
     }
 }

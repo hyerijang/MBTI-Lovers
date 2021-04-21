@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 
 
-    private static final Logger logger = LoggerFactory.getLogger(LoggerFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);
 
     // 로그인 처리 후 session 정보 보관
     @Override
@@ -28,18 +28,18 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         HttpSession session = request.getSession();
         // model에 저장된 값을 member에 저장
         ModelMap modelMap = modelAndView.getModelMap();
-        Member member = (Member) modelMap.get("currentUser");
+        Member member = (Member) modelMap.get(LoginType.USER_MEMBER_SESSION);
 
         // System.out.println(member+"님이 로그인 하셨습니다");
         if (member != null) {
             logger.info("login success");
             // session에 로그인한 사용자의 멤버 객체를 저장
-            session.setAttribute(LoginController.USER_SESSION, member);
+            session.setAttribute(LoginType.USER_MEMBER_SESSION, member);
             //쿠키 생성
             if (true) {
                 logger.info("make loginCookie");
                 // 로그인 쿠키 객체 생성
-                Cookie loginCookie = new Cookie(LoginController.USER_COOKIE, member.getUid());
+                Cookie loginCookie = new Cookie(LoginType.USER_UID_COOKIE, member.getUid());
                 // 모든 경로에서 접근 가능하게 처리
                 loginCookie.setPath("/");
                 // 쿠키 유효 기간
@@ -67,11 +67,11 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         HttpSession session = request.getSession();
         // 기존 session login 값이 존재하면
 
-        if (session.getAttribute(LoginController.USER_SESSION) != null) {
+        if (session.getAttribute(LoginType.USER_MEMBER_SESSION) != null) {
 
             logger.info("clear login data before");
             // 삭제
-            session.removeAttribute(LoginController.USER_SESSION);
+            session.removeAttribute(LoginType.USER_MEMBER_SESSION);
         }
         return true;
     }

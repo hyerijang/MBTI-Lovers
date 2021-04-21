@@ -9,6 +9,8 @@ public interface MemberService {
     String join(Member member);
 
     List<Member> findMembers();
+
     Optional<Member> findOneByUid(String memberUid);
-    void editLastConnectTime(Member member);
+
+    void renewLastConnectTime(Member member);
 }

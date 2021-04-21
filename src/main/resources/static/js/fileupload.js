@@ -14,14 +14,9 @@ function handleFileSelect() {
     } else if (!input.files[0]) {
         alert("Please select a file before clicking 'Load'");
     } else {
-        file = input.files[0];
-        fr = new FileReader();
-        fr.onload = receivedText;
-        fr.readAsText(file);
+        console.log("file upload");
+        return true;
     }
+    return false;
 }
 
-function receivedText() {
-    //result = fr.result;
-    document.getElementById('editor').appendChild(document.createTextNode(fr.result))
-}
