@@ -2,11 +2,17 @@ package kr.hongik.mbti;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import androidx.annotation.Nullable;
 
 import org.apache.http.util.EncodingUtils;
 
@@ -14,6 +20,7 @@ public class webViewActivity extends Activity {
 
     private WebView wv;
     private WebSettings settings; //웹뷰세팅
+    private ValueCallback mFilePathCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +32,9 @@ public class webViewActivity extends Activity {
 
         wv = findViewById(R.id.wv);
         wv.setWebViewClient(new WebViewClient());
-        wv.setWebChromeClient(new WebChromeClient()); //콜백 허용
         wv.postUrl(myUrlAddress, EncodingUtils.getBytes(postData, "BASE64"));
-        setWebView();
+
+        setWebView(wv);
     }
 
     public void onResume() {
@@ -40,8 +47,9 @@ public class webViewActivity extends Activity {
 
     }
 
-    public void setWebView() {
-        settings = wv.getSettings(); //세부 세팅 등록
+    public void setWebView(WebView wv) {
+        //세부 세팅 등록
+        settings = wv.getSettings();
         settings.setJavaScriptEnabled(true); // 웹페이지 자바스크립트 허용 여부
         settings.setDomStorageEnabled(true); // 로컬저장소 허용 여부
         settings.setJavaScriptCanOpenWindowsAutomatically(true); //팝업창 허영
@@ -52,6 +60,38 @@ public class webViewActivity extends Activity {
         settings.setAppCacheEnabled(false); //앱 내부 캐시 사용 안함
         settings.setDomStorageEnabled(true); //로컬스토리지 사용 허용
         settings.setAllowFileAccess(true);//웹뷰에서 파일 액세스 활성화
+        setWebViewFileUpload();
+    }
+
+    public void setWebViewFileUpload() {
+        wv.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onShowFileChooser(WebView webView, ValueCallback filePathCallback, FileChooserParams fileChooserParams) {
+                mFilePathCallback = filePathCallback;
+
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("image/*");
+
+                startActivityForResult(intent, 0);
+                return true;
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Log.e("resultCode:: ", String.valueOf(resultCode));
+        if(requestCode == 0 && resultCode == Activity.RESULT_OK){
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mFilePathCallback.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(resultCode, data));
+            }else{
+                mFilePathCallback.onReceiveValue(new Uri[]{data.getData()});
+            }
+            mFilePathCallback = null;
+        }else{
+            mFilePathCallback.onReceiveValue(null);
+        }
     }
 }
 
