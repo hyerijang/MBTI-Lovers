@@ -68,7 +68,8 @@ public class MemberServiceImpl implements MemberService {
     private void setDefaultProfileImage(Member member) {
 
         String defaultFileName = "defaultProfileImage.png";
-        member.setProfileImage(defaultFileName);
+        if(member.getProfileImage() == null)
+            member.setProfileImage(defaultFileName);
 
     }
 
