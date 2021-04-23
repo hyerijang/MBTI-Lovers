@@ -1,31 +1,17 @@
-function createSelectBox(id, name, listData) {
-  var select = document.createElement("select");
-  select.id = id;
-  select.name = name;
-
-  //최상위 전체 option 삽입
-  var option = document.createElement("option");
-  option.text = "MBTI";
-  select.appendChild(option);
-
-  for (var i in listData) {
-    var option = document.createElement("option");
-    option.text = listData[i].value;
-    select.appendChild(option);
-  }
-
-  return select;
-}
-
 /**
  * select -> option 자동으로 만들기
  */
 function createSelectBoxAndOptions(selectId, listData) {
   var select = document.getElementById(selectId);
+  var user_mbti = document.getElementById("user_mbti");
   for (var i in listData) {
     var option = document.createElement("option");
     option.text = listData[i].value;
     select.appendChild(option);
+    if(select[i].value  == user_mbti.value)
+    {
+      select[i].selected = true;
+    }
   }
 }
 

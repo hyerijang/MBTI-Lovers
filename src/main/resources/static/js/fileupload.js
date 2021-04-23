@@ -11,9 +11,11 @@ function handleFileSelect() {
         alert("Um, couldn't find the fileinput element.");
     } else if (!input.files) {
         alert("This browser doesn't seem to support the `files` property of file inputs.");
-    } else if (!input.files[0]) {
-        alert("Please select a file before clicking 'Load'");
-    } else {
+    }
+    // else if (!input.files[0]) {
+        // alert("Please select a file before clicking 'Load'");
+    // }
+    else {
         console.log("file upload");
         form = document.getElementById('imageform');
         if (form != null) {

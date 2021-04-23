@@ -1,16 +1,21 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
 import kr.hogink.mbti.MBTILovers.web.login.LoginType;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.util.WebUtils;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
+@Log4j2
 public class MemberController {
     private final MemberService memberService;
 
@@ -27,9 +32,9 @@ public class MemberController {
 
     @PostMapping("/members/new")
     public String create(MemberForm form, HttpSession session) {
-        String newUserUid = (String) session.getAttribute(LoginType.NEW_USER_UID_SESSION);
         Member member = new Member();
-        member.setUid(newUserUid);
+        String uid = (String) session.getAttribute(LoginType.NEW_USER_UID_SESSION);
+        member.setUid(uid);
         member.setName(form.getName());
         member.setGender(form.getGender());
         member.setAge(form.getAge());
@@ -51,21 +56,33 @@ public class MemberController {
 
 
     @GetMapping(value = "/members/edit")
-    public String editFrom() {
+    public String editFrom(HttpSession session, Model model) {
+        Member member = (Member) session.getAttribute(LoginType.USER_MEMBER_SESSION);
+        model.addAttribute("user", member);
         return "members/editMemberForm";
     }
 
 
     @PostMapping("/members/edit")
-    public String edit(MemberForm form) {
-//        Member member = memberService.findOneByUid((long) 1).get();//임시
-//        member.setName(form.getName());
-//        member.setGender(form.getGender());
-//        member.setAge(form.getAge());
-//        member.setMbti(form.getMbti());
-//        member.setStateMessage(form.getStateMessage());
-//        member.setProfileImage(form.getProfileImage());
-////        memberService.modifyUser(member);
+    public String edit(MemberForm form, HttpSession session, HttpServletRequest request) {
+        Member member = new Member();
+        String uid = (String) session.getAttribute(LoginType.NEW_USER_UID_SESSION);
+        if (uid == null) {
+            log.info("회원정보 수정");
+            Cookie loginCookie = WebUtils.getCookie(request, LoginType.USER_UID_COOKIE);
+            uid = loginCookie.getValue();
+        }
+
+        member.setUid(uid);
+        member.setName(form.getName());
+        member.setGender(form.getGender());
+        member.setAge(form.getAge());
+        member.setMbti(form.getMbti());
+        member.setStateMessage(form.getStateMessage());
+        member.setProfileImage(form.getProfileImage());
+        memberService.edit(member);
+        //세션정보 갱신
+        session.setAttribute(LoginType.USER_MEMBER_SESSION, memberService.findOneByUid(uid).get());
         return "redirect:/";
     }
 
