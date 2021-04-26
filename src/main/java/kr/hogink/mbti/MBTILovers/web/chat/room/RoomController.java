@@ -5,6 +5,7 @@ import kr.hogink.mbti.MBTILovers.web.friend.FriendService;
 import kr.hogink.mbti.MBTILovers.web.login.LoginType;
 import kr.hogink.mbti.MBTILovers.web.member.Member;
 import kr.hogink.mbti.MBTILovers.web.member.MemberService;
+import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -18,13 +19,13 @@ import static kr.hogink.mbti.MBTILovers.web.login.LoginType.USER_UID_COOKIE;
 
 @Controller
 @SessionAttributes(LoginType.USER_MEMBER_SESSION)
+@Log4j2
 public class RoomController {
 
 
     FriendService friendService;
     RoomService roomService;
     MemberService memberService;
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
     public RoomController(FriendService friendService, RoomService roomService, MemberService memberService) {
@@ -77,20 +78,21 @@ public class RoomController {
         model.addAttribute("name", room.getRid() + "번 채팅방");
         model.addAttribute("sender", user.getName());
         model.addAttribute("senderUid", user.getUid());
-        logger.info("------------------------------------------");
-        Optional<Friend> friendMember  = friendService.getFriendName(user.getUid(), room);
 
-        if(friendMember.isPresent()) {
-            //친구 정보
-            String fid = friendMember.get().getFid();
-            model.addAttribute("fid",fid);
+        //친구 정보
+        Optional<Friend> friendMember = friendService.getFriendName(user.getUid(), room);
+        String fid = null;
+        if (friendMember.isPresent()) {
+            fid = friendMember.get().getFid();
+            model.addAttribute("fid", fid);
             model.addAttribute("f_profileImage", memberService.findOneByUid(fid).get().getProfileImage());
-
-
-            logger.info(fid);
-            //채팅방 입장
-            return "chat/roomdetail";
         }
+
+        log.info("------------------------------------------");
+        log.info("rid:" + room.getRid());
+        log.info("uid:" + user.getUid());
+        log.info("fid :" + fid);
+
         return "chat/roomdetail";
 
     }
