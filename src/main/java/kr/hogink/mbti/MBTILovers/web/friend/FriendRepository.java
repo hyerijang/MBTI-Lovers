@@ -1,5 +1,6 @@
 package kr.hogink.mbti.MBTILovers.web.friend;
 
+import kr.hogink.mbti.MBTILovers.web.chat.room.Room;
 import kr.hogink.mbti.MBTILovers.web.member.MemberRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -17,6 +18,7 @@ public interface FriendRepository extends JpaRepository<Friend, FriendId> {
 
     Optional<Friend> findOneByUidAndFid(String uid, String fid);
 
-    Optional<Friend> findOneByUidAndRid(String uid, Long rid);
+    Optional<Friend> findOneByUidAndRoom(String uid, Room room);
+
 
 }

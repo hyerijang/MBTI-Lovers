@@ -77,14 +77,27 @@ public class RoomController {
         model.addAttribute("name", room.getRid() + "번 채팅방");
         model.addAttribute("sender", user.getName());
         model.addAttribute("senderUid", user.getUid());
+        logger.info("------------------------------------------");
+        Optional<Friend> friendMember  = friendService.getFriendName(user.getUid(), room);
 
-        //채팅방 입장
+        if(friendMember.isPresent()) {
+            //친구 정보
+            String fid = friendMember.get().getFid();
+            model.addAttribute("fid",fid);
+            model.addAttribute("f_profileImage", memberService.findOneByUid(fid).get().getProfileImage());
+
+
+            logger.info(fid);
+            //채팅방 입장
+            return "chat/roomdetail";
+        }
         return "chat/roomdetail";
+
     }
 
-    private String getFriendName(String uid, Long rid) {
+    private String getFriendName(String uid, Room room) {
 
-        Optional<Friend> f = friendService.getFriendName(uid, rid);
+        Optional<Friend> f = friendService.getFriendName(uid, room);
         if (f.isPresent()) {
             String friendUid = f.get().getFid();
             return memberService.findOneByUid(friendUid).get().getName();
