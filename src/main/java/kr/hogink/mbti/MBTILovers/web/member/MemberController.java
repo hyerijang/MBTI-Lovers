@@ -25,25 +25,26 @@ public class MemberController {
     }
 
     @GetMapping(value = "/members/new")
-    public String createFrom(HttpSession session) {
+    public String createFrom(Model model, HttpSession session) {
+        String uid = (String) session.getAttribute(LoginType.NEW_USER_UID_SESSION);
+        model.addAttribute("uid", uid);
         return "members/createMemberForm";
     }
 
 
     @PostMapping("/members/new")
-    public String create(MemberForm form, HttpSession session) {
+    public String create(MemberForm form) {
         Member member = new Member();
-        String uid = (String) session.getAttribute(LoginType.NEW_USER_UID_SESSION);
-        member.setUid(uid);
+        member.setUid(form.getUid());
         member.setName(form.getName());
         member.setGender(form.getGender());
         member.setAge(form.getAge());
+        log.info("!!!!!!!!!!!!!!");
+
+        log.info(form.getAge());
         member.setMbti(form.getMbti());
         member.setStateMessage(form.getStateMessage());
         member.setProfileImage(form.getProfileImage());
-
-        log.info("파일 이름 : " + form.getProfileImage());
-//        System.out.println("UID: "+newUserUid);
         memberService.join(member);
         return "redirect:/";
     }
