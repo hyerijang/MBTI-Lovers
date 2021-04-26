@@ -13,16 +13,16 @@
 </head>
 <body>
 <form action="/upload" method="post" enctype="multipart/form-data"
-      onsubmit="return handleFileSelect();" target="iframe1" id="imageform">
-    <!--                            <input type="file" name="file" id="fileinput" accept="image/*" multiple/>-->
+      onsubmit="return handleFileSelect();" target="iframe1" id="form_imageUpload">
+    <!--                            <input type="file" name="file" id="imageFile" accept="image/*" multiple/>-->
     <div class="form-group row">
-        <label for="fileinput"
+        <label for="imageFile"
                class="col-md-4 col-form-label text-md-right">profileImage</label>
         <div class="col-md-6">
             <div class="custom-file">
-                <input type="file" class="custom-file-input" id="fileinput" accept="image/*"
+                <input type="file" class="custom-file-input" id="imageFile" accept="image/*"
                        name="file" aria-describedby="customFileInput">
-                <label class="custom-file-label" for="fileinput"
+                <label class="custom-file-label" for="imageFile"
                        style=" overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Select
                     file</label>
 
@@ -39,6 +39,6 @@
 </form>
 
 <script src="/js/fileupload.js"></script>
-<script src="/js/imageSetting.js"></script>
+<script src="/js/imagePreview.js"></script>
 </body>
 </html>

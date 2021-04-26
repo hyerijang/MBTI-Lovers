@@ -16,19 +16,19 @@ import java.io.IOException;
 public class S3Controller {
     private final S3Uploader s3Uploader;
 
-    @GetMapping("/test")
+    @GetMapping("/file")
     public String index() {
         return "test";
     }
 
-    @PostMapping("/uploadS3")
+    @PostMapping("/upload")
     @ResponseBody
     public String upload(@RequestParam("data") MultipartFile multipartFile) throws IOException {
         return s3Uploader.upload(multipartFile, "static");
     }
 
-    @PostMapping("/uploadS3ProfileImage")
-    public String uploadProfileImage(@RequestParam("file") MultipartFile file, @RequestParam("uid2") String uid) throws IOException {
+    @PostMapping("/uploadProfileImage")
+    public String uploadProfileImage(@RequestParam("file") MultipartFile file, @RequestParam("uid_imageUpload") String uid) throws IOException {
 
 
         log.info("--------------------------------------");

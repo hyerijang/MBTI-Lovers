@@ -29,5 +29,5 @@ var listData = [
   }
 ];
 
-console.log(listData);
+// console.log(listData);
 createSelectBoxAndOptions("gender", listData)

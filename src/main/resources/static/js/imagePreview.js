@@ -1,5 +1,5 @@
 document.querySelector('.custom-file-input').addEventListener('change', function (e) {
-    var name = document.getElementById("fileinput").files[0].name;
+    var name = document.getElementById("imageFile").files[0].name;
     var nextSibling = e.target.nextElementSibling
     nextSibling.innerText = name
 })
@@ -46,7 +46,7 @@ function readImage(input) {
 }
 
 // input file에 change 이벤트 부여
-const inputImage = document.getElementById("fileinput")
+const inputImage = document.getElementById("imageFile")
 inputImage.addEventListener("change", e => {
     readImage(e.target)
 })

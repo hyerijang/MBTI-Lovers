@@ -10,7 +10,7 @@ function handleFileSelect() {
         return;
     }
 
-    input = document.getElementById('fileinput');
+    input = document.getElementById("imageFile");
     if (!input) {
         alert("Um, couldn't find the fileinput element.");
     } else if (!input.files) {
@@ -22,7 +22,7 @@ function handleFileSelect() {
     else {
         console.log("file upload");
         fileCheck(input);
-        form = document.getElementById('imageform');
+        form = document.getElementById('form_imageUpload');
         if (form != null) {
             //DB에 파일명 저장
             if (profileImage)
