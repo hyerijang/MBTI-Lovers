@@ -12,6 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,11 +37,28 @@ public class RoomController {
         this.memberService = memberService;
     }
 
+    private static int compare(Friend a, Friend b) {
+        Timestamp aTime = a.getRoom().getLastSentTimeAt();
+        Timestamp bTime = b.getRoom().getLastSentTimeAt();
+        if (a.getRoom().getLastSentTimeAt() == null)
+            aTime = new Timestamp(System.currentTimeMillis());
+        else if (bTime == null)
+            bTime = new Timestamp(System.currentTimeMillis());
+        long diff = bTime.getTime() - aTime.getTime();
+        return (int) diff / 1000;
+
+    }
+
+
     // 모든 채팅방 목록 반환
     @GetMapping(value = "/chatList")
 
     public String list(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
         List<Friend> roomMappingList = friendService.findAllByUid(cookieUid);
+        
+        //최신순으로 정렬
+        Collections.sort(roomMappingList, RoomController::compare);
+
         if (!roomMappingList.isEmpty())
             model.addAttribute("rooms", roomMappingList);
         return "chat/chatList";
