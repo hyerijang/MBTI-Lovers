@@ -19,7 +19,6 @@
 <input hidden id="user_gender" th:value="${user.getGender()}">
 <input hidden id="user_mbti" th:value="${user.getMbti()}">
 
-
 <main class="my-form">
     <div class="cotainer">
         <div class="row justify-content-center">
@@ -34,7 +33,8 @@
                             <div class="form-group row">
                                 <label for="name" class="col-md-4 col-form-label text-md-right">이름</label>
                                 <div class="col-md-6">
-                                    <input type="text" id="name" class="form-control" name="name" th:value="${user.getName()}">
+                                    <input type="text" id="name" class="form-control" name="name"
+                                           th:value="${user.getName()}">
                                 </div>
                             </div>
 
@@ -42,7 +42,8 @@
                             <div class="form-group row">
                                 <label for="gender" class="col-md-4 col-form-label text-md-right">성별</label>
                                 <div class="col-md-6">
-                                    <select class="form-control" id="gender" name="gender"  th:value="${user.getGender()}"></select>
+                                    <select class="form-control" id="gender" name="gender"
+                                            th:value="${user.getGender()}"></select>
                                 </div>
                             </div>
 
@@ -50,7 +51,8 @@
                             <div class="form-group row">
                                 <label for="age" class="col-md-4 col-form-label text-md-right">나이</label>
                                 <div class="col-md-6">
-                                    <input type="Number" id="age" class="form-control" min="20" max="99" name="age"  th:value="${user.getAge()}">
+                                    <input type="Number" id="age" class="form-control" min="20" max="99" name="age"
+                                           th:value="${user.getAge()}">
                                 </div>
                             </div>
 
@@ -64,7 +66,8 @@
                             <div class="form-group row">
                                 <label for="stateMessage" class="col-md-4 col-form-label text-md-right">상태메세지</label>
                                 <div class="col-md-6">
-                                    <input type="text" id="stateMessage" name="stateMessage" class="form-control" th:value="${user.getStateMessage()}">
+                                    <input type="text" id="stateMessage" name="stateMessage" class="form-control"
+                                           th:value="${user.getStateMessage()}">
                                 </div>
                             </div>
 
@@ -72,7 +75,7 @@
                                 <!--                                <label for="profileImage"-->
                                 <!--                                       class="col-md-4 col-form-label text-md-right">profileImage</label>-->
                                 <div class="col-md-6">
-                                    <input type="hidden" id="profileImage" class="form-control" name="profileImage">
+                                    <input type="hidden" id="profileImage" class="form-control" name="profileImage" th:value="${user.getProfileImage()}">
                                 </div>
                             </div>
                         </form>
@@ -94,8 +97,7 @@
 
                                     </div>
                                     <div class="box" style="background: #BDBDBD;">
-                                        <img class="profile" id="preview-image"
-                                             th:src="@{/images/defaultProfileImage.png}">
+                                        <img class="profile" id="preview-image">
                                     </div>
                                 </div>
 
