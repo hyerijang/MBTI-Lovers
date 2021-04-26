@@ -29,7 +29,7 @@ public class FileService {
     }
 
     private void saveFile(MultipartFile multipartFile, Path copyOfLocation) {
-        log.info("저장될 파일 경로  : " + copyOfLocation.toString());
+//        log.info("저장될 파일 경로  : " + copyOfLocation.toString());
         try {
             // inputStream을 가져와서
             // copyOfLocation (저장위치)로 파일을 쓴다.

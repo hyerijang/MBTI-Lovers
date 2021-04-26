@@ -80,7 +80,7 @@ public class MemberController {
         member.setAge(form.getAge());
         member.setMbti(form.getMbti());
         member.setStateMessage(form.getStateMessage());
-        member.setProfileImage(form.getProfileImage());
+        member.setProfileImage(uid+form.getProfileImage());
 
         memberService.edit(member);
         //세션정보 갱신

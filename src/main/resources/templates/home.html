@@ -29,8 +29,13 @@
             <a href="/members/edit">회원정보수정</a>
 
         </p>
-        <!--        <p>회원 이미지!</p>-->
-        <!--        <img src="images/defaultProfileImage.png" height="100px">-->
+        <p>디폴트 이미지</p>
+                <img class="profile" id="preview-image" th:src="@{${'/images/' + 'defaultProfileImage.png'}}">
+
+        <p th:text="${user.getProfileImage()}">th </p>
+
+        <img class="profile" id="preview-ProfileImage" th:src="@{/images/{filename}(filename=${user.getProfileImage()})}">
+
     </div>
 
 </div>

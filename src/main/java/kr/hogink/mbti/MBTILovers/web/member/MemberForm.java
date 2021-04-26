@@ -10,7 +10,6 @@ public class MemberForm {
     private String stateMessage;
     private String profileImage;
 
-
     public String getUid() {
         return uid;
     }
