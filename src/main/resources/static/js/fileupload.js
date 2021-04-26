@@ -1,6 +1,7 @@
 var profileImage = document.getElementById('profileImage');
 var input;
 
+
 function handleFileSelect() {
     if (window.File && window.FileReader && window.FileList && window.Blob) {
 
@@ -24,8 +25,8 @@ function handleFileSelect() {
         form = document.getElementById('imageform');
         if (form != null) {
             //DB에 파일명 저장
-            if(profileImage)
-                profileImage.value =  "." + fileExt;
+            if (profileImage)
+                profileImage.value = fileName + "." + fileExt;
             console.log(profileImage.value)
             //파일 업로드
             form.target = "iframe1";
@@ -39,6 +40,7 @@ function handleFileSelect() {
 }
 
 var fileExt;
+var fileName;
 
 function fileCheck(input) {
     //파일 경로.
@@ -50,7 +52,7 @@ function fileCheck(input) {
     //마지막 경로를 .으로 나눔.
     var fileNameSplit = filePathSplit[filePathLength - 1].split('.');
     //파일명 : .으로 나눈 앞부분
-    var fileName = fileNameSplit[0];
+    fileName = fileNameSplit[0];
     //파일 확장자 : .으로 나눈 뒷부분
     fileExt = fileNameSplit[1];
     //파일 크기

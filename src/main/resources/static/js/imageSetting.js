@@ -10,6 +10,7 @@ var profileImgPath = '/images/' + profileImgFileName;
 var defaultProfileImgPath = '/images/defaultProfileImage.png';
 
 setProfileImage()
+
 function setProfileImage() {
     var img = new Image();
     img.src = profileImgPath;

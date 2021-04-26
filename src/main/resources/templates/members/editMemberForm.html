@@ -29,7 +29,7 @@
                         <form id="my-form" name=" my-form
                         " action="/members/edit" method="post"
                               onsubmit="return handleFileSelect()">
-                            <input id="uid" type="hidden" th:value="${uid}" name="uid"/>
+                            <input id="uid" type="hidden" th:value="${user.getUid()}" name="uid"/>
                             <div class="form-group row">
                                 <label for="name" class="col-md-4 col-form-label text-md-right">이름</label>
                                 <div class="col-md-6">
@@ -75,14 +75,16 @@
                                 <!--                                <label for="profileImage"-->
                                 <!--                                       class="col-md-4 col-form-label text-md-right">profileImage</label>-->
                                 <div class="col-md-6">
-                                    <input type="hidden" id="profileImage" class="form-control" name="profileImage" th:value="${user.getProfileImage()}">
+                                    <input type="hidden" id="profileImage" class="form-control" name="profileImage"
+                                           th:value="${user.getProfileImage()}">
                                 </div>
                             </div>
                         </form>
 
                         <!--                        프로필 이미지-->
-                        <form action="/uploadProfileImage" method="post" enctype="multipart/form-data"
+                        <form action="/uploadS3ProfileImage" method="post" enctype="multipart/form-data"
                               onsubmit="return handleFileSelect();" target="iframe1" id="imageform">
+                            <input id="uid2" type="hidden" th:value="${user.getUid()}" name="uid2"/>
                             <!--                            <input type="file" name="file" id="fileinput" accept="image/*" multiple/>-->
                             <div class="form-group row">
                                 <label for="fileinput"

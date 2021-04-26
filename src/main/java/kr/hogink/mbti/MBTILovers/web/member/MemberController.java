@@ -40,9 +40,9 @@ public class MemberController {
         member.setAge(form.getAge());
         member.setMbti(form.getMbti());
         member.setStateMessage(form.getStateMessage());
-        member.setProfileImage(uid+form.getProfileImage());
+        member.setProfileImage(form.getProfileImage());
 
-        log.info("파일 이름 : " + uid+form.getProfileImage());
+        log.info("파일 이름 : " + form.getProfileImage());
 //        System.out.println("UID: "+newUserUid);
         memberService.join(member);
         return "redirect:/";
@@ -80,7 +80,7 @@ public class MemberController {
         member.setAge(form.getAge());
         member.setMbti(form.getMbti());
         member.setStateMessage(form.getStateMessage());
-        member.setProfileImage(uid+form.getProfileImage());
+        member.setProfileImage(form.getProfileImage());
 
         memberService.edit(member);
         //세션정보 갱신
