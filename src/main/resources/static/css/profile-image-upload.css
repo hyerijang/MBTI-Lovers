@@ -7,6 +7,7 @@
     border-radius: 70%;
     overflow: hidden;
     position: relative; /* If you want text inside of it */
+    margin: 25px;
 
 }
 

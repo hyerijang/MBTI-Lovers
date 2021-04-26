@@ -30,11 +30,16 @@
 
         </p>
         <p>디폴트 이미지</p>
-                <img class="profile" id="preview-image" th:src="@{${'/images/' + 'defaultProfileImage.png'}}">
+        <img class="profile" id="preview-image"
+             src="https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/defaultProfileImage.png">
 
         <p th:text="${user.getProfileImage()}">th </p>
 
-        <img class="profile" id="preview-ProfileImage" th:src="@{/images/{filename}(filename=${user.getProfileImage()})}">
+<!--        프로필이미지-->
+        <img class="profile" id="preview-image"
+             th:src="@{https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/{uid}/{filename} (uid =${user.getUid()} , filename=${user.getProfileImage()})}">
+
+        <!--        <img class="profile" id="preview-ProfileImage" th:src="@{/images/{filename}(filename=${user.getProfileImage()})}">-->
 
     </div>
 

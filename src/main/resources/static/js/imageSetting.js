@@ -4,10 +4,12 @@ document.querySelector('.custom-file-input').addEventListener('change', function
     nextSibling.innerText = name
 })
 
+var S3url = 'https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/';
+var uid = document.getElementById("uid").value;
 var previewImage = document.getElementById("preview-image")
 var profileImgFileName = document.getElementById("profileImage").value;
-var profileImgPath = '/images/' + profileImgFileName;
-var defaultProfileImgPath = '/images/defaultProfileImage.png';
+var profileImgPath = S3url + uid + '/' + encodeURI(profileImgFileName);
+var defaultProfileImgPath = S3url + 'defaultProfileImage.png';
 
 setProfileImage()
 
@@ -20,7 +22,6 @@ function setProfileImage() {
 
     //기본 이미지 없는 경우
     previewImage.onerror = function () {
-        console.log(profileImgPath);
         console.log("서버에 파일이 존재하지 않아 기본 프로필 이미지로 대체합니다")
         previewImage.src = defaultProfileImgPath;
     };

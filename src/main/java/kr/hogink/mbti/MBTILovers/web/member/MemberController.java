@@ -39,9 +39,6 @@ public class MemberController {
         member.setName(form.getName());
         member.setGender(form.getGender());
         member.setAge(form.getAge());
-        log.info("!!!!!!!!!!!!!!");
-
-        log.info(form.getAge());
         member.setMbti(form.getMbti());
         member.setStateMessage(form.getStateMessage());
         member.setProfileImage(form.getProfileImage());
@@ -70,7 +67,6 @@ public class MemberController {
         Member member = new Member();
         String uid = (String) session.getAttribute(LoginType.NEW_USER_UID_SESSION);
         if (uid == null) {
-            log.info("회원정보 수정");
             Cookie loginCookie = WebUtils.getCookie(request, LoginType.USER_UID_COOKIE);
             uid = loginCookie.getValue();
         }
