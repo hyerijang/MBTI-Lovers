@@ -42,6 +42,8 @@ public class MemberController {
         member.setMbti(form.getMbti());
         member.setStateMessage(form.getStateMessage());
         member.setProfileImage(form.getProfileImage());
+
+        log.info(member.getStateMessage());
         memberService.join(member);
         return "redirect:/";
     }

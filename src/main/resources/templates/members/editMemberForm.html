@@ -71,38 +71,34 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row">
-                                <!--                                <label for="profileImage"-->
-                                <!--                                       class="col-md-4 col-form-label text-md-right">profileImage</label>-->
-                                <div class="col-md-6">
-                                    <input type="hidden" id="profileImage" class="form-control" name="profileImage"
-                                           th:value="${user.getProfileImage()}">
-                                </div>
-                            </div>
+                            <input type="hidden" id="profileImage" class="form-control" name="profileImage"
+                                   th:value="${user.getProfileImage()}">
+
                         </form>
 
                         <!--                        프로필 이미지-->
                         <form action="/uploadProfileImage" method="post" enctype="multipart/form-data"
                               onsubmit="return handleFileSelect();" target="iframe1" id="form_imageUpload">
-                            <input id="uid_imageUpload" type="hidden" th:value="${user.getUid()}" name="uid_imageUpload"/>
-                            <!--                            <input type="file" name="file" id="imageFile" accept="image/*" multiple/>-->
+                            <input id="uid_imageUpload" type="hidden" th:value="${user.getUid()}"
+                                   name="uid_imageUpload"/>
                             <div class="form-group row">
                                 <label for="imageFile"
-                                       class="col-md-4 col-form-label text-md-right">profileImage</label>
+                                       class="col-md-4 col-form-label text-md-right">프로필이미지</label>
                                 <div class="col-md-6">
+                                    <!--파일 업로드-->
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="imageFile" accept="image/*"
                                                name="file" aria-describedby="customFileInput">
                                         <label class="custom-file-label" for="imageFile"
                                                style=" overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Select
                                             file</label>
-
                                     </div>
-                                    <div class="box" style="background: #BDBDBD;">
+                                    <!--프리뷰-->
+                                    <div class="box box-margin">
                                         <img class="profile" id="preview-image">
                                     </div>
-                                </div>
 
+                                </div>
                             </div>
                         </form>
 

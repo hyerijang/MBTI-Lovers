@@ -34,7 +34,7 @@ public class S3Controller {
         log.info("--------------------------------------");
         log.info("uid :" +uid);
         log.info("upload profileImage file to s3");
-        return s3Uploader.uploadProfileImage(file, "image", uid);
+        return "redirect:/";
     }
 
 }

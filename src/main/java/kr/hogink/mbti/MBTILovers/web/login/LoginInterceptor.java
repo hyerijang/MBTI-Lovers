@@ -30,23 +30,12 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         ModelMap modelMap = modelAndView.getModelMap();
         Member member = (Member) modelMap.get(LoginType.USER_MEMBER_SESSION);
 
-        // System.out.println(member+"님이 로그인 하셨습니다");
         if (member != null) {
             logger.info("login success");
             // session에 로그인한 사용자의 멤버 객체를 저장
             session.setAttribute(LoginType.USER_MEMBER_SESSION, member);
             //쿠키 생성
-            if (true) {
-                logger.info("make loginCookie");
-                // 로그인 쿠키 객체 생성
-                Cookie loginCookie = new Cookie(LoginType.USER_UID_COOKIE, member.getUid());
-                // 모든 경로에서 접근 가능하게 처리
-                loginCookie.setPath("/");
-                // 쿠키 유효 기간
-                loginCookie.setMaxAge(60 * 60 * 24 * 7);
-                // 쿠키 저장!
-                response.addCookie(loginCookie);
-            }
+            CookieManager.makeCookie(response, member.getUid());
             // 로그인 페이지 접근 전의 페이지
             Object destination = session.getAttribute("destination");
             // 삼항 연산자로 이전페이지가 존재하지 않으면 메인페이지로 이동
