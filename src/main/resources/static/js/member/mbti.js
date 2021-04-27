@@ -2,83 +2,83 @@
  * select -> option 자동으로 만들기
  */
 function createSelectBoxAndOptions(selectId, listData) {
-  var select = document.getElementById(selectId);
-  var user_mbti = document.getElementById("user_mbti");
-  for (var i in listData) {
-    var option = document.createElement("option");
-    option.text = listData[i].value;
-    select.appendChild(option);
-    if(select[i].value  == user_mbti.value)
-    {
-      select[i].selected = true;
+    var select = document.getElementById(selectId);
+    var user_mbti = document.getElementById("user_mbti");
+    for (var i in listData) {
+        var option = document.createElement("option");
+        option.text = listData[i].value;
+        select.appendChild(option);
+        if (user_mbti)
+            if (select[i].value == user_mbti.value) {
+                select[i].selected = true;
+            }
     }
-  }
 }
 
 var listData = [
-  {
-    value: "INFP",
-  },
+    {
+        value: "INFP",
+    },
 
-  {
-    value: "ENFP",
-  },
+    {
+        value: "ENFP",
+    },
 
-  {
-    value: "INFJ",
-  },
+    {
+        value: "INFJ",
+    },
 
-  {
-    value: "ENFJ",
-  },
+    {
+        value: "ENFJ",
+    },
 
-  {
-    value: "INTJ",
-  },
+    {
+        value: "INTJ",
+    },
 
-  {
-    value: "ENTJ",
-  },
+    {
+        value: "ENTJ",
+    },
 
-  {
-    value: "INTP",
-  },
+    {
+        value: "INTP",
+    },
 
-  {
-    value: "ENTP",
-  },
+    {
+        value: "ENTP",
+    },
 
-  {
-    value: "ISFP",
-  },
+    {
+        value: "ISFP",
+    },
 
-  {
-    value: "ESFP",
-  },
+    {
+        value: "ESFP",
+    },
 
-  {
-    value: "ISTP",
-  },
+    {
+        value: "ISTP",
+    },
 
-  {
-    value: "ESTP",
-  },
+    {
+        value: "ESTP",
+    },
 
-  {
-    value: "ISFJ",
-  },
+    {
+        value: "ISFJ",
+    },
 
-  {
-    value: "ESFJ",
-  },
+    {
+        value: "ESFJ",
+    },
 
-  {
-    value: "ISTJ",
-  },
+    {
+        value: "ISTJ",
+    },
 
-  {
-    value: "ESTJ",
-  },
+    {
+        value: "ESTJ",
+    },
 ];
 
 // console.log(listData);

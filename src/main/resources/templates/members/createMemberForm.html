@@ -63,33 +63,33 @@
                             <div class="form-group row">
                                 <label for="stateMessage" class="col-md-4 col-form-label text-md-right">상태메세지</label>
                                 <div class="col-md-6">
-                                    <input type="text" id="stateMessage" class="form-control">
+                                    <input class="form-control" id="stateMessage" name="stateMessage" type="text">
                                 </div>
                             </div>
 
-                            <input type="hidden" id="profileImage" class="form-control" name="profileImage">
+                            <input class="form-control" id="profileImage" name="profileImage" type="hidden">
 
                         </form>
 
-                        <!--                        프로필 이미지-->
+                        <!--프로필 이미지-->
                         <form action="/uploadProfileImage" method="post" enctype="multipart/form-data"
                               onsubmit="return handleFileSelect();" target="iframe1" id="form_imageUpload">
                             <input id="uid_imageUpload" type="hidden" th:value="${uid}" name="uid_imageUpload"/>
                             <div class="form-group row">
                                 <label for="imageFile"
-                                       class="col-md-4 col-form-label text-md-right">profileImage</label>
+                                       class="col-md-4 col-form-label text-md-right">프로필이미지</label>
                                 <div class="col-md-6">
+                                    <!--파일 업로드-->
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="imageFile" accept="image/*"
                                                name="file" aria-describedby="customFileInput">
                                         <label class="custom-file-label" for="imageFile"
                                                style=" overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Select
                                             file</label>
-
                                     </div>
-                                    <div class="box" style="background: #BDBDBD;">
-                                        <img class="profile" id="preview-image"
-                                             th:src="@{/images/defaultProfileImage.png}">
+                                    <!--프리뷰-->
+                                    <div class="box box-margin">
+                                        <img class="profile" id="preview-image">
                                     </div>
                                 </div>
 

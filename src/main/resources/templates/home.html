@@ -18,28 +18,24 @@
             <button type="submit">로그인</button>
         </form>
         </form>
-        <!--        <p th:if="${uid} != null" th:text="${uid}" style="background-color: #9fcdff">uid</p>-->
         <p th:if="${user} != null" th:text="${user.getName()}" style="background-color: #9fcdff">uid</p>
 
         <p>
-            <!--            <a href="/members/new">회원 가입</a>-->
             <a href="/user/logout">로그아웃</a>
-            <a href="/matching">매칭</a>
+            <a href="/members">전체 유저</a>
             <a href="/file">파일업로드</a>
             <a href="/members/edit">회원정보수정</a>
-
         </p>
-        <p>디폴트 이미지</p>
-        <img class="profile" id="preview-image"
-             src="https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/defaultProfileImage.png">
 
-        <p th:text="${user.getProfileImage()}">th </p>
+<!--        <p>디폴트 이미지</p>-->
+<!--        <img class="profile" id="preview-image"-->
+<!--             src="https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/defaultProfileImage.png">-->
 
-<!--        프로필이미지-->
-        <img class="profile" id="preview-image"
-             th:src="@{https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/{uid}/{filename} (uid =${user.getUid()} , filename=${user.getProfileImage()})}">
+<!--        &lt;!&ndash;        프로필이미지&ndash;&gt;-->
+<!--        <p th:text="${user.getProfileImage()}">th </p>-->
+<!--        <img class="profile" id="preview-image"-->
+<!--             th:src="@{https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/{uid}/{filename} (uid =${user.getUid()} , filename=${user.getProfileImage()})}">-->
 
-        <!--        <img class="profile" id="preview-ProfileImage" th:src="@{/images/{filename}(filename=${user.getProfileImage()})}">-->
 
     </div>
 
@@ -49,7 +45,7 @@
         <ul class="nav navbar-nav flex-row float-right nav-fill w-100">
             <li class="nav-item"><a class="nav-link pr-3 text-white" href="/friends">친구</a></li>
             <li class="nav-item"><a class="nav-link pr-3 text-white" href="/chatList">채팅</a></li>
-            <li class="nav-item "><a class="nav-link pr-3 text-white" href="/members">매칭</a></li>
+            <li class="nav-item "><a class="nav-link pr-3 text-white" href="/matching">매칭</a></li>
             <li class="nav-item "><a class="nav-link pr-3 disabled" href="/">메뉴</a></li>
         </ul>
     </div>
