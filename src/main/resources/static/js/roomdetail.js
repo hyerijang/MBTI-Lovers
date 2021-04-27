@@ -61,8 +61,7 @@ function connect() {
 }
 
 function onConnected() {
-
-    // room 개설
+    // room 입장
     stompClient.subscribe("/sub/chat/room/" + rid, onMessageReceived);
     setCurrentTime();
     // stompClient.send(
@@ -129,7 +128,7 @@ function printMessage(message) {
     } else if (message.type === "LEAVE") {
         messageElement.classList.add("media", "media-meta-day"); // 임시 적용 css
         message.content = message.sender + "님이 나갔습니다.";
-    } else if (sender == message.sender) {
+    } else if (senderUid === message.senderUid) {
         //메세지를 보낸 사람이 나인 경우
         messageElement.classList.add("media", "media-chat", "media-chat-reverse");
     } else {
@@ -146,9 +145,7 @@ function printMessage(message) {
         //프로필 이미지
         var imageElement = document.createElement("img");
         imageElement.classList.add("avatar");
-        imageElement.src =
-            "https://img.icons8.com/color/36/000000/administrator-male.png"; //임시
-        setProfileImage(imageElement, fid,profileImgFileName);
+        setProfileImage(imageElement, fid, profileImgFileName);
         messageElement.appendChild(imageElement);
     }
 
