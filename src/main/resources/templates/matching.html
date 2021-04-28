@@ -470,43 +470,42 @@
 <script>
 
     // 지도를 생성합니다.
-    var map = new kakao.maps.Map(mapContainer, mapOption);
-
-    // 본사
-    var dkpos1 = new kakao.maps.LatLng(33.450707, 126.570678);
-    // 판교 오피스
-    var dkpos2 = new kakao.maps.LatLng(37.402054, 127.108209);
-    // 고객 센터
-    var dkpos3 = new kakao.maps.LatLng(37.402827, 127.107292);
-
-    // 툴팁을 노출하는 마커를 생성합니다.
-    var marker1 = new TooltipMarker(dkpos1, 'kakao 본사');
-    var marker2 = new TooltipMarker(dkpos2, 'kakao 판교오피스');
-    var marker3 = new TooltipMarker(dkpos3, 'kakao 고객센터');
-    marker1.setMap(map);
-    marker2.setMap(map);
-    marker3.setMap(map);
-
-    // MarkerTracker를 생성합니다.
-    var markerTracker1 = new MarkerTracker(map, marker1);
-    var markerTracker2 = new MarkerTracker(map, marker2);
-    var markerTracker3 = new MarkerTracker(map, marker3);
-
-    // marker의 추적을 시작합니다.
-    markerTracker1.run();
-    markerTracker2.run();
-    markerTracker3.run();
+    // // 본사
+    // var dkpos1 = new kakao.maps.LatLng(33.450707, 126.570678);
+    // // 판교 오피스
+    // var dkpos2 = new kakao.maps.LatLng(37.402054, 127.108209);
+    // // 고객 센터
+    // var dkpos3 = new kakao.maps.LatLng(37.402827, 127.107292);
+    //
+    // // 툴팁을 노출하는 마커를 생성합니다.
+    // var marker1 = new TooltipMarker(dkpos1, 'kakao 본사');
+    // var marker2 = new TooltipMarker(dkpos2, 'kakao 판교오피스');
+    // var marker3 = new TooltipMarker(dkpos3, 'kakao 고객센터');
+    // marker1.setMap(map);
+    // marker2.setMap(map);
+    // marker3.setMap(map);
+    //
+    // // MarkerTracker를 생성합니다.
+    // var markerTracker1 = new MarkerTracker(map, marker1);
+    // var markerTracker2 = new MarkerTracker(map, marker2);
+    // var markerTracker3 = new MarkerTracker(map, marker3);
+    //
+    // // marker의 추적을 시작합니다.
+    // markerTracker1.run();
+    // markerTracker2.run();
+    // markerTracker3.run();
 
 
 </script>
 
 <script>
+
     mapOption = {
         center: new kakao.maps.LatLng(37.54699, 127.09598), // 지도의 중심좌표
         level: 4 // 지도의 확대 레벨
     };
 
-    // var map = new kakao.maps.Map(mapContainer, mapOption);
+    var map = new kakao.maps.Map(mapContainer, mapOption);
 
     var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png', // 마커이미지의 주소입니다
         imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
@@ -514,8 +513,8 @@
 
     // 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
     var content = '<div class="customoverlay">' +
-        '  <a href="https://map.kakao.com/link/map/11394059" target="_blank">' +
-        '    <span class="title">구의야구공원</span>' +
+        '  <a href="http://localhost:8080/members/read/6">' +
+        '    <span class="title">김수정</span>' +
         '  </a>' +
         '</div>';
 
@@ -532,8 +531,8 @@
 
 
     // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
-        markerPosition = new kakao.maps.LatLng(37.54699, 127.09598); // 마커가 표시될 위치입니다
+    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+    var markerPosition = new kakao.maps.LatLng(37.54699, 127.09598); // 마커가 표시될 위치입니다
 
 
     // 마커를 생성합니다
