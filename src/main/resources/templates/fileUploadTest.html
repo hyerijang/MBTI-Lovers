@@ -1,10 +1,44 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
 
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="/css/profile-image-upload.css"/>
+</head>
 <body>
-<input type="file" id="fileinput"/>
-<input type='button' id='btnLoad' value='Load' onclick='handleFileSelect();'>
-<div id="editor"></div>
+<form action="/upload" method="post" enctype="multipart/form-data"
+      onsubmit="return handleFileSelect();" target="iframe1" id="form_imageUpload">
+    <!--                            <input type="file" name="file" id="imageFile" accept="image/*" multiple/>-->
+    <div class="form-group row">
+        <label for="imageFile"
+               class="col-md-4 col-form-label text-md-right">profileImage</label>
+        <div class="col-md-6">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="imageFile" accept="image/*"
+                       name="file" aria-describedby="customFileInput">
+                <label class="custom-file-label" for="imageFile"
+                       style=" overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Select
+                    file</label>
+
+            </div>
+            <div class="box" style="background: #BDBDBD;">
+                <img class="profile" id="preview-image"
+                     th:src="@{/images/defaultProfileImage.png}">
+            </div>
+            <button type="submit" class="btn btn-primary">다음
+            </button>
+        </div>
+
+    </div>
+</form>
+
 <script src="/js/fileupload.js"></script>
+<script src="/js/imagePreview.js"></script>
 </body>
 </html>

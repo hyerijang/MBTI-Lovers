@@ -31,27 +31,29 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                              Object handler) throws Exception {
         HttpSession session = request.getSession();
 
-        String newUserUid = (String) session.getAttribute(LoginController.NewUserUid);
+        String newUserUid = (String) session.getAttribute(LoginType.NEW_USER_UID_SESSION);
         if (newUserUid != null) {
             Optional<Member> member = memberService.findOneByUid(newUserUid);
 
             if (member.isPresent()) {
-                session.setAttribute(LoginController.USER_SESSION, member.get());
-                session.removeAttribute(LoginController.NewUserUid);
+                session.setAttribute(LoginType.USER_MEMBER_SESSION, member.get());
+                session.removeAttribute(LoginType.NEW_USER_UID_SESSION);
+                //쿠키 생성
+                CookieManager.makeCookie(response, newUserUid);
             }
 
         }
 
-        if (session.getAttribute(LoginController.USER_SESSION) == null) {
+        if (session.getAttribute(LoginType.USER_MEMBER_SESSION) == null) {
             // 현재 페이지 저장
             saveDestination(request);
 
             // 쿠키 유무 확인
-            Cookie loginCookie = WebUtils.getCookie(request, LoginController.USER_COOKIE);
+            Cookie loginCookie = WebUtils.getCookie(request, LoginType.USER_UID_COOKIE);
             if (loginCookie != null) {
                 Optional<Member> member = memberService.findOneByUid(loginCookie.getValue());
                 if (member.isPresent()) {
-                    session.setAttribute(LoginController.USER_SESSION, member.get());
+                    session.setAttribute(LoginType.USER_MEMBER_SESSION, member.get());
                     return true;
                 } else {
                     //존재하지 않는 멤버
@@ -84,5 +86,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
             request.getSession().setAttribute("destination", uri + query);
         }
     }
+
 
 }

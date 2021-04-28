@@ -4,9 +4,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
-public class MemberRepositoryMem implements MemberRepository {
+public class MemoryMemberRepository implements MemberRepository {
 
-    private static Map<String, Member> store = new HashMap<>();
+    private static final Map<String, Member> store = new HashMap<>();
     private static long sequence = 0L;
 
     @Override
@@ -20,9 +20,8 @@ public class MemberRepositoryMem implements MemberRepository {
 
     @Override
     public Optional<Member> findByUid(String uid) {
-        return Optional.of(store.get(uid));
+        return Optional.ofNullable(store.get(uid));
     }
-
 
 
     @Override

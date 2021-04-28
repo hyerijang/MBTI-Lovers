@@ -1,6 +1,8 @@
 package kr.hogink.mbti.MBTILovers.web.friend;
 
 
+import kr.hogink.mbti.MBTILovers.web.chat.room.Room;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +17,6 @@ public interface FriendService {
 
     Optional<Friend> getFriendInfo(String uid, String fid);
 
-    Optional<Friend> getFriendName(String uid, Long rid);
+    Optional<Friend> getFriendName(String uid, Room room);
 
 }

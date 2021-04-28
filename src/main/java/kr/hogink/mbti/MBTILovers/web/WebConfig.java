@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.*;
 
 @Configuration
 public class WebConfig extends WebMvcConfigurationSupport {
-    private  final MemberService memberService;
+    private final MemberService memberService;
 
     public WebConfig(MemberService memberService) {
         this.memberService = memberService;
@@ -20,7 +20,8 @@ public class WebConfig extends WebMvcConfigurationSupport {
         // 로그인된 유저인지 검증
         // 경로는 "/경로" 여야함
         registry.addInterceptor(new AuthInterceptor(memberService))
-                .addPathPatterns("/*");
+                .addPathPatterns("/*").excludePathPatterns("/upload").excludePathPatterns("/uploadProfileImage");
+
 
         //로그인 인터셉터
         //로그인을 처리함

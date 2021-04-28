@@ -6,9 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MemberService {
+
     String join(Member member);
+    String edit(Member member);
 
     List<Member> findMembers();
+
     Optional<Member> findOneByUid(String memberUid);
-    void editLastConnectTime(Member member);
+
+    void renewLastConnectTime(Member member);
 }

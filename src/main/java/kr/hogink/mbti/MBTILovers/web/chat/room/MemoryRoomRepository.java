@@ -1,17 +1,15 @@
-package kr.hogink.mbti.MBTILovers.web.chat;
+package kr.hogink.mbti.MBTILovers.web.chat.room;
 
-
-import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
 
-public class RoomRepositoryMem implements RoomRepository {
+public class MemoryRoomRepository implements RoomRepository {
 
     private static Map<Long, Room> chatRoomMap; //메모리에 저장
     private static Long sequence = 0L;
 
-    RoomRepositoryMem() {
+    MemoryRoomRepository() {
         chatRoomMap = new LinkedHashMap<>();
     }
 
