@@ -41,5 +41,9 @@ public class Friend {
         }
     }
 
+    public boolean isRoomEmpty(){
+        return room == null;
+    }
+
 }
 
