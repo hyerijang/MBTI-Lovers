@@ -38,15 +38,23 @@ public class RoomController {
     }
 
     private static int compare(Friend a, Friend b) {
-        Timestamp aTime = a.getRoom().getLastSentTimeAt();
-        Timestamp bTime = b.getRoom().getLastSentTimeAt();
-        if (a.getRoom().getLastSentTimeAt() == null)
-            aTime = new Timestamp(System.currentTimeMillis());
-        else if (bTime == null)
-            bTime = new Timestamp(System.currentTimeMillis());
-        long diff = bTime.getTime() - aTime.getTime();
-        return (int) diff / 1000;
+        Room roomA = a.getRoom();
+        Room roomB = b.getRoom();
 
+        if (roomA != null && roomB != null) {
+            Timestamp aTime = a.getRoom().getLastSentTimeAt();
+            Timestamp bTime = b.getRoom().getLastSentTimeAt();
+            if (aTime == null)
+                aTime = new Timestamp(System.currentTimeMillis());
+            if (bTime == null)
+                bTime = new Timestamp(System.currentTimeMillis());
+            long diff = bTime.getTime() - aTime.getTime();
+            return (int) diff / 1000;
+        }
+
+
+        log.warn("room 정보가 없습니다.");
+        return 0;
     }
 
 
@@ -55,12 +63,25 @@ public class RoomController {
 
     public String list(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
         List<Friend> roomMappingList = friendService.findAllByUid(cookieUid);
-        
-        //최신순으로 정렬
-        Collections.sort(roomMappingList, RoomController::compare);
 
-        if (!roomMappingList.isEmpty())
-            model.addAttribute("rooms", roomMappingList);
+        //최신순으로 정렬
+        if (!roomMappingList.isEmpty()) {
+            //리스트에서 제외
+            roomMappingList.removeIf(friend -> {
+                if (friend.getRoom() == null) {
+                    //room이 생성되지 않은 경우 삭제
+                    return true;
+                } else if (friend.getRoom().getLastSentTimeAt() == null) {
+                    //보낸 메세지가 없는 경우 삭제
+                    return true;
+                }
+                return false;
+            });
+            Collections.sort(roomMappingList, RoomController::compare);
+
+        }
+
+        model.addAttribute("rooms", roomMappingList);
         return "chat/chatList";
     }
 
