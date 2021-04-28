@@ -35,6 +35,20 @@ public class MemberServiceImpl implements MemberService {
         return member.getUid();
     }
 
+    @Override
+    public String edit(Member member) {
+        //UID 검증
+        validateUid(member);
+        //같은 UID인 중복회원 x
+//        validateDuplicateMember(member);
+        //프로필 이미지로 기본이미지 세팅
+        setDefaultProfileImage(member);
+        //현재시각 저장
+        setLastConnectTime(member);
+        memberRepository.save(member);
+        return member.getUid();
+    }
+
     private void validateUid(Member member) {
         //uid가 비어있으면 임시 uid 발급
         if (member.getUid() == null) {
@@ -54,7 +68,8 @@ public class MemberServiceImpl implements MemberService {
     private void setDefaultProfileImage(Member member) {
 
         String defaultFileName = "defaultProfileImage.png";
-        member.setProfileImage(defaultFileName);
+        if(member.getProfileImage() == null)
+            member.setProfileImage(defaultFileName);
 
     }
 

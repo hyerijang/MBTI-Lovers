@@ -28,9 +28,11 @@ var senderUid = document.querySelector("#senderUid").value.trim();
 var currentTime = new Date().getTime();
 
 
-//방 정보
-// var output = null;
-// var messageArray;
+//상대방 프로필 이미지
+var profileImgFileName = document.getElementById("f_profileImage").value;
+var fid = document.getElementById("fid").value;
+
+
 //채팅방 입장시 소켓 서버와 연결
 window.onload = connect();
 var messageRef;
@@ -59,8 +61,7 @@ function connect() {
 }
 
 function onConnected() {
-
-    // room 개설
+    // room 입장
     stompClient.subscribe("/sub/chat/room/" + rid, onMessageReceived);
     setCurrentTime();
     // stompClient.send(
@@ -127,7 +128,7 @@ function printMessage(message) {
     } else if (message.type === "LEAVE") {
         messageElement.classList.add("media", "media-meta-day"); // 임시 적용 css
         message.content = message.sender + "님이 나갔습니다.";
-    } else if (sender == message.sender) {
+    } else if (senderUid === message.senderUid) {
         //메세지를 보낸 사람이 나인 경우
         messageElement.classList.add("media", "media-chat", "media-chat-reverse");
     } else {
@@ -144,8 +145,7 @@ function printMessage(message) {
         //프로필 이미지
         var imageElement = document.createElement("img");
         imageElement.classList.add("avatar");
-        imageElement.src =
-            "https://img.icons8.com/color/36/000000/administrator-male.png"; //임시
+        setProfileImage(imageElement, fid, profileImgFileName);
         messageElement.appendChild(imageElement);
     }
 
@@ -226,3 +226,21 @@ var title = null;
 var url = location.href;
 
 history.pushState(state, title, url);
+
+
+var S3url = 'https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/';
+var defaultProfileImgPath = S3url + 'defaultProfileImage.png';
+
+function setProfileImage(previewImage, uid, profileImgFileName) {
+    var profileImgPath = S3url + uid + '/' + encodeURI(profileImgFileName);
+    //기본 이미지
+    previewImage.src = profileImgPath;
+
+    //기본 이미지 없는 경우
+    previewImage.onerror = function () {
+        console.log("서버에 파일이 존재하지 않아 기본 프로필 이미지로 대체합니다")
+        previewImage.src = defaultProfileImgPath;
+    };
+
+
+}

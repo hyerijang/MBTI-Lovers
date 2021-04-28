@@ -23,7 +23,6 @@ public class Friend {
     private Member friendMember;
     @Enumerated(EnumType.STRING)
     private RelationType relation;
-    private Long rid;
     @ManyToOne
     private Room room;
 

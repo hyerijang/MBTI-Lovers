@@ -38,6 +38,8 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
             if (member.isPresent()) {
                 session.setAttribute(LoginType.USER_MEMBER_SESSION, member.get());
                 session.removeAttribute(LoginType.NEW_USER_UID_SESSION);
+                //쿠키 생성
+                CookieManager.makeCookie(response, newUserUid);
             }
 
         }
@@ -84,5 +86,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
             request.getSession().setAttribute("destination", uri + query);
         }
     }
+
 
 }

@@ -39,9 +39,10 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.16'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.5.RELEASE'
 }
 
 test {
     useJUnitPlatform()
 }
+

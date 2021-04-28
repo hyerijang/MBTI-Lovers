@@ -5,12 +5,16 @@ import kr.hogink.mbti.MBTILovers.web.friend.FriendService;
 import kr.hogink.mbti.MBTILovers.web.login.LoginType;
 import kr.hogink.mbti.MBTILovers.web.member.Member;
 import kr.hogink.mbti.MBTILovers.web.member.MemberService;
+import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,13 +22,13 @@ import static kr.hogink.mbti.MBTILovers.web.login.LoginType.USER_UID_COOKIE;
 
 @Controller
 @SessionAttributes(LoginType.USER_MEMBER_SESSION)
+@Log4j2
 public class RoomController {
 
 
     FriendService friendService;
     RoomService roomService;
     MemberService memberService;
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
     public RoomController(FriendService friendService, RoomService roomService, MemberService memberService) {
@@ -33,11 +37,28 @@ public class RoomController {
         this.memberService = memberService;
     }
 
+    private static int compare(Friend a, Friend b) {
+        Timestamp aTime = a.getRoom().getLastSentTimeAt();
+        Timestamp bTime = b.getRoom().getLastSentTimeAt();
+        if (a.getRoom().getLastSentTimeAt() == null)
+            aTime = new Timestamp(System.currentTimeMillis());
+        else if (bTime == null)
+            bTime = new Timestamp(System.currentTimeMillis());
+        long diff = bTime.getTime() - aTime.getTime();
+        return (int) diff / 1000;
+
+    }
+
+
     // 모든 채팅방 목록 반환
     @GetMapping(value = "/chatList")
 
     public String list(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
         List<Friend> roomMappingList = friendService.findAllByUid(cookieUid);
+        
+        //최신순으로 정렬
+        Collections.sort(roomMappingList, RoomController::compare);
+
         if (!roomMappingList.isEmpty())
             model.addAttribute("rooms", roomMappingList);
         return "chat/chatList";
@@ -78,13 +99,27 @@ public class RoomController {
         model.addAttribute("sender", user.getName());
         model.addAttribute("senderUid", user.getUid());
 
-        //채팅방 입장
+        //친구 정보
+        Optional<Friend> friendMember = friendService.getFriendName(user.getUid(), room);
+        String fid = null;
+        if (friendMember.isPresent()) {
+            fid = friendMember.get().getFid();
+            model.addAttribute("fid", fid);
+            model.addAttribute("f_profileImage", memberService.findOneByUid(fid).get().getProfileImage());
+        }
+
+        log.info("------------------------------------------");
+        log.info("rid:" + room.getRid());
+        log.info("uid:" + user.getUid());
+        log.info("fid :" + fid);
+
         return "chat/roomdetail";
+
     }
 
-    private String getFriendName(String uid, Long rid) {
+    private String getFriendName(String uid, Room room) {
 
-        Optional<Friend> f = friendService.getFriendName(uid, rid);
+        Optional<Friend> f = friendService.getFriendName(uid, room);
         if (f.isPresent()) {
             String friendUid = f.get().getFid();
             return memberService.findOneByUid(friendUid).get().getName();

@@ -1,5 +1,6 @@
 package kr.hogink.mbti.MBTILovers.web.friend;
 
+import kr.hogink.mbti.MBTILovers.web.chat.room.Room;
 import kr.hogink.mbti.MBTILovers.web.member.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,8 +44,8 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public Optional<Friend> getFriendName(String uid, Long rid) {
-        return friendRepository.findOneByUidAndRid(uid, rid);
+    public Optional<Friend> getFriendName(String uid, Room room) {
+        return friendRepository.findOneByUidAndRoom(uid, room);
     }
 
     Friend reverseFriend(Friend friend) {
@@ -52,8 +53,6 @@ public class FriendServiceImpl implements FriendService {
         reverse.setUid(friend.getFid());
         reverse.setFid(friend.getUid());
         reverse.setRelation(friend.getRelation()); //일단 동일한 관계 되도록 함
-        if (friend.getRid() != null)
-            reverse.setRid(friend.getRid());
         if (friend.getRoom() != null)
             reverse.setRoom(friend.getRoom());
         return reverse;
