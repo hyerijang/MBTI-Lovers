@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.util.WebUtils;
 
@@ -13,6 +14,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @Log4j2
@@ -84,6 +86,17 @@ public class MemberController {
         memberService.edit(member);
         //세션정보 갱신
         session.setAttribute(LoginType.USER_MEMBER_SESSION, memberService.findOneByUid(uid).get());
+        return "redirect:/";
+    }
+
+    @GetMapping(value = "/members/read/{uid}")
+    public String readFrom(Model model, @PathVariable String uid) {
+        Optional<Member> member = memberService.findOneByUid(uid);
+        if (member.isPresent()) {
+            model.addAttribute("user", member.get());
+            return "members/readMemberForm.html";
+        }
+        log.warn("존재하지 않는 유저입니다.");
         return "redirect:/";
     }
 
