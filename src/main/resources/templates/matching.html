@@ -7,56 +7,8 @@
             charset="utf-8"
     />
     <title>매칭</title>
-    <style>
-        .node {
-            position: absolute;
-            background-image: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/sign-info-64.png);
-            cursor: pointer;
-            width: 64px;
-            height: 64px;
-        }
 
-        .tooltip {
-            background-color: #fff;
-            position: absolute;
-            border: 2px solid #333;
-            font-size: 25px;
-            font-weight: bold;
-            padding: 3px 5px 0;
-            left: 65px;
-            top: 14px;
-            border-radius: 5px;
-            white-space: nowrap;
-            display: none;
-        }
-
-        .tracker {
-            position: absolute;
-            margin: -35px 0 0 -30px;
-            display: none;
-            cursor: pointer;
-            z-index: 3;
-        }
-
-        .icon {
-            position: absolute;
-            left: 6px;
-            top: 9px;
-            width: 48px;
-            height: 48px;
-            background-image: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/sign-info-48.png);
-        }
-
-        .balloon {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            background-image: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/balloon.png);
-            -ms-transform-origin: 50% 34px;
-            -webkit-transform-origin: 50% 34px;
-            transform-origin: 50% 34px;
-        }
-    </style>
+    <!--기본 설정-->
     <style>
         .customoverlay {
             position: relative;
@@ -106,11 +58,63 @@
             background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png");
         }
     </style>
+    <!--마커 트레이서-->
+    <style>
+        .node {
+            position: absolute;
+            background-image: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/sign-info-64.png);
+            cursor: pointer;
+            width: 64px;
+            height: 64px;
+        }
+
+        .tooltip {
+            background-color: #fff;
+            position: absolute;
+            border: 2px solid #333;
+            font-size: 25px;
+            font-weight: bold;
+            padding: 3px 5px 0;
+            left: 65px;
+            top: 14px;
+            border-radius: 5px;
+            white-space: nowrap;
+            display: none;
+        }
+
+        .tracker {
+            position: absolute;
+            margin: -35px 0 0 -30px;
+            display: none;
+            cursor: pointer;
+            z-index: 3;
+        }
+
+        .icon {
+            position: absolute;
+            left: 6px;
+            top: 9px;
+            width: 48px;
+            height: 48px;
+            /*background-image: url(https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/2/plum.jpg);*/
+        }
+
+        .balloon {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-image: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/balloon.png);
+            -ms-transform-origin: 50% 34px;
+            -webkit-transform-origin: 50% 34px;
+            transform-origin: 50% 34px;
+        }
+    </style>
     <link
             rel="stylesheet"
             type="text/css"
             href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     />
+    <link rel="stylesheet" href="/css/profile-image-upload.css"/>
 </head>
 <body>
 <div id="map" style="width: 100vw; height: calc(100vh - 60px)"></div>
@@ -150,7 +154,7 @@
 
     var mapContainer = document.getElementById("map"), // 지도를 표시할 div
         mapOption = {
-            center: new kakao.maps.LatLng(hongikuniv.x,hongikuniv.y), // 지도의 중심좌표
+            center: new kakao.maps.LatLng(hongikuniv.x, hongikuniv.y), // 지도의 중심좌표
             level: 3, // 지도의 확대 레벨
         };
 
@@ -278,7 +282,7 @@
      * 지도 영역 외부에 존재하는 마커를 추적하는 기능을 가진 객체입니다.
      * 클리핑 알고리즘을 사용하여 tracker의 좌표를 구하고 있습니다.
      */
-    function MarkerTracker(map, target) {
+    function MarkerTracker(map, marker, imageSrc) {
         // 클리핑을 위한 outcode
         var OUTCODE = {
             INSIDE: 0, // 0b0000
@@ -311,6 +315,19 @@
         var balloon = document.createElement("div");
         balloon.className = "balloon";
 
+        //임시 추가
+        var box = document.createElement("div");
+        box.className = "box";
+        box.style.borderRadius = "70%"
+
+        var profile = document.createElement("img");
+        profile.className = "profile";
+        profile.id = "preview-image";
+        profile.src = imageSrc
+        box.appendChild(profile);
+        icon.appendChild(box);
+//임시추가
+
         tracker.appendChild(balloon);
         tracker.appendChild(icon);
 
@@ -318,7 +335,7 @@
 
         // traker를 클릭하면 target의 위치를 지도 중심으로 지정합니다.
         tracker.onclick = function () {
-            map.setCenter(target.getPosition());
+            map.setCenter(marker.getPosition());
             setVisible(false);
         };
 
@@ -333,7 +350,7 @@
             var extBounds = extendBounds(bounds, proj);
 
             // target이 확장된 영역에 속하는지 판단하고
-            if (extBounds.contain(target.getPosition())) {
+            if (extBounds.contain(marker.getPosition())) {
                 // 속하면 tracker를 숨깁니다.
                 setVisible(false);
             } else {
@@ -368,7 +385,7 @@
                 // 계산을 위해 좌표 변환 메소드를 사용하여 모두 화면 좌표로 변환시킵니다.
 
                 // TooltipMarker의 위치
-                var pos = proj.containerPointFromCoords(target.getPosition());
+                var pos = proj.containerPointFromCoords(marker.getPosition());
 
                 // 지도 중심의 위치
                 var center = proj.containerPointFromCoords(map.getCenter());
@@ -556,13 +573,9 @@
     }
 </script>
 
-<!-- 테스트용 마커 생성 -->
-<script>
-    var imageSrc =
-            "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png", // 마커이미지의 주소입니다
-        imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
-        imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
+<!-- 테스트용 마커 및 마커트레이서 생성 -->
+<script>
     // 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
     var content =
         '<div class="customoverlay">' +
@@ -582,24 +595,36 @@
         yAnchor: 1,
     });
 
-    // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-    var markerImage = new kakao.maps.MarkerImage(
-        imageSrc,
-        imageSize,
-        imageOption
-    );
+    // 야구장 마커의 이미지정보
+
+    // 야구장 마커
+    var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png";
     var markerPosition = new kakao.maps.LatLng(37.54699, 127.09598); // 마커가 표시될 위치입니다
+    markerMaker(markerPosition, imageSrc);
 
-    // 마커를 생성합니다
-    var marker1 = new kakao.maps.Marker({
-        position: markerPosition,
-        image: markerImage, // 마커이미지 설정
-    });
+    //홍익대 마커
+    imageSrc = "https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/1/plum.jpg";// 마커이미지의 주소입니다
+    markerPosition = new kakao.maps.LatLng(hongikuniv.x, hongikuniv.y);
+    markerMaker(markerPosition, imageSrc);
 
-    // 마커가 지도 위에 표시되도록 설정합니다
-    marker1.setMap(map);
-    var markerTracker = new MarkerTracker(map, marker1);
-    markerTracker.run();
+    function markerMaker(markerPosition, imageSrc) {
+        var imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
+            imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+        var markerImage = new kakao.maps.MarkerImage(
+            imageSrc,
+            imageSize,
+            imageOption
+        );
+
+        var marker = new kakao.maps.Marker({
+            position: markerPosition,
+            image: markerImage, // 마커이미지 설정
+        });
+        marker.setMap(map);
+        markerTracker = new MarkerTracker(map, marker, imageSrc);
+        markerTracker.run();
+    }
 </script>
 </body>
 </html>
