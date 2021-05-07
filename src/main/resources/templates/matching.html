@@ -644,7 +644,7 @@
         var img = document.createElement("img");
         img.className = "profile";
         img.id = "preview-image";
-        img.src = imageSrc
+        img.src = imageSrc;
         box.appendChild(img);
         content.appendChild(box);
 
@@ -652,24 +652,13 @@
 
     }
 
-    function markerMaker(markerPosition, imageSrc) {
-        var imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
-            imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-
-        var markerImage = new kakao.maps.MarkerImage(
-            imageSrc,
-            imageSize,
-            imageOption
-        );
-
-        var markerContent = markerContentMaker(imageSrc);
+    function markerMaker(markerPosition, markerContent) {
 
         var marker = new kakao.maps.CustomOverlay({
             map: map,
             clickable: true,
             position: markerPosition,
             content: markerContent,
-            zIndex: 3
         });
 
         marker.setMap(map);
@@ -681,8 +670,6 @@
         markerTracker.run();
     }
 
-    var activeId = null;
-    var timeoutId = null;
 
     function contentMaker(name) {
         var content = document.createElement('div');
@@ -699,29 +686,8 @@
             position: marker.getPosition()
         });
 
-        var mouseOverHandler = function () {
-            if (timeoutId !== null && id === activeId) {
-                window.clearTimeout(timeoutId);
-                timeoutId = null;
-                return;
-            }
-            overlay.setMap(map);
-            activeId = id;
-        };
+        return overlay;
 
-        var mouseOutHandler = function () {
-            timeoutId = window.setTimeout(function () {
-                overlay.setMap(null);
-                activeId = null;
-                timeoutId = null;
-            }, 50);
-        };
-
-        kakao.maps.event.addListener(marker, 'mouseover', mouseOverHandler);
-        kakao.maps.event.addListener(marker, 'mouseout', mouseOutHandler);
-
-        content.addEventListener('mouseover', mouseOverHandler);
-        content.addEventListener('mouseout', mouseOutHandler);
     }
 </script>
 
@@ -775,9 +741,19 @@
         var name = place.name;
         var imageSrc = place.imageSrc;
 
-        var marker = markerMaker(position, imageSrc);
+        var markerContent = markerContentMaker(imageSrc);
+        var marker = markerMaker(position, markerContent);
         tracerMaker(marker, imageSrc);
-        customOverlayMaker(marker, id, contentMaker(name))
+
+
+        var overlay = customOverlayMaker(marker, id, contentMaker(name));
+
+        overlay.setMap(map);
+
+        //클릭시에만 유저정보 보임
+        // markerContent.addEventListener('click',function (event){
+        //     overlay.setMap(map);
+        // })
     });
 </script>
 
