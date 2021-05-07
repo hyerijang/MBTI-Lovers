@@ -116,7 +116,30 @@
     />
     <link rel="stylesheet" href="/css/profile-image-upload.css"/>
 
+    <!--말풍선-->
+    <style>
+        .speech-bubble {
+            position: relative;
+            background: #ffffff;
+            border-radius: .4em;
+        }
+
+        .speech-bubble:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border: 0.625em solid transparent;
+            border-top-color: #ffffff;
+            border-bottom: 0;
+            margin-left: -0.625em;
+            margin-bottom: -0.625em;
+        }
+    </style>
 </head>
+
 <body>
 <div id="map" style="width: 100vw; height: calc(100vh - 60px)"></div>
 <!-- 네비게이션 바 -->
@@ -149,17 +172,28 @@
 
 <!-- 맵 초기화 -->
 <script>
+
     var hongikuniv = {
         "x": "37.5525192523979", "y": "126.924990619497 "
     };
 
-    var mapContainer = document.getElementById("map"), // 지도를 표시할 div
-        mapOption = {
-            center: new kakao.maps.LatLng(hongikuniv.x, hongikuniv.y), // 지도의 중심좌표
-            level: 3, // 지도의 확대 레벨
-        };
+    var kakaoPosition = {
+        "x": "33.450705", "y": "126.570677"
+    };
 
-    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+    var map = makeMap(kakaoPosition);
+
+    function makeMap(position) {
+        var mapContainer = document.getElementById("map"), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(position.x, position.y), // 지도의 중심좌표
+                level: 3, // 지도의 확대 레벨
+            };
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        return map;
+    }
 </script>
 
 <!-- 단말의 현위치 좌표값 -->
@@ -316,7 +350,7 @@
         var balloon = document.createElement("div");
         balloon.className = "balloon";
 
-        //임시 추가
+        //임시 Css
         var box = document.createElement("div");
         box.className = "box";
         box.style.borderRadius = "70%"
@@ -327,7 +361,7 @@
         profile.src = imageSrc
         box.appendChild(profile);
         icon.appendChild(box);
-//임시추가
+        //임시추가
 
         tracker.appendChild(balloon);
         tracker.appendChild(icon);
@@ -575,26 +609,26 @@
 </script>
 
 
-<!-- 테스트용 마커 및 마커트레이서 생성 -->
+<!-- 마커 및 마커트레이서 생성 -->
 <script>
-    // 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-    var content =
-        '<div class="customoverlay">' +
-        '  <a href="http://localhost:8080/members/read/6">' +
-        '    <span class="title">김수정</span>' +
-        "  </a>" +
-        "</div>";
-
-    // 커스텀 오버레이가 표시될 위치입니다
-    var position = new kakao.maps.LatLng(37.54699, 127.09598);
-
-    // 커스텀 오버레이를 생성합니다
-    var customOverlay = new kakao.maps.CustomOverlay({
-        map: map,
-        position: position,
-        content: content,
-        yAnchor: 1,
-    });
+    // // 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+    // var content =
+    //     '<div class="customoverlay">' +
+    //     '  <a href="http://localhost:8080/members/read/6">' +
+    //     '    <span class="title">김수정</span>' +
+    //     "  </a>" +
+    //     "</div>";
+    //
+    // // 커스텀 오버레이가 표시될 위치입니다
+    // var position = new kakao.maps.LatLng(37.54699, 127.09598);
+    //
+    // // 커스텀 오버레이를 생성합니다
+    // var customOverlay = new kakao.maps.CustomOverlay({
+    //     map: map,
+    //     position: position,
+    //     content: content,
+    //     yAnchor: 1,
+    // });
 
 
     function markerMaker(markerPosition, imageSrc) {
@@ -611,78 +645,32 @@
             position: markerPosition,
             image: markerImage, // 마커이미지 설정
         });
-        marker.setMap(map);
-        markerTracker = new MarkerTracker(map, marker, imageSrc);
-        markerTracker.run();
 
+        marker.setMap(map);
         return marker;
     }
-</script>
 
-<script>
-    var defImgSrc =  "https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/1/James+Gilleard-The+Grand+Budapest+Hotel.png";// 마커이미지의 주소입니다
-    var places = [
-        {
-            id: 1,
-            name: '카카오',
-            latlng: new kakao.maps.LatLng(33.450705, 126.570677),
-            imageSrc : defImgSrc
-        },
-        {
-            id: 2,
-            name: '생태연못',
-            latlng: new kakao.maps.LatLng(33.450936, 126.569477),
-            imageSrc : defImgSrc
-        },
-        {
-            id: 3,
-            name: '텃밭',
-            latlng: new kakao.maps.LatLng(33.450879, 126.569940),
-            imageSrc : defImgSrc
-        },
-        {
-            id: 4,
-            name: '근린공원',
-            latlng: new kakao.maps.LatLng(33.451393, 126.570738),
-            imageSrc : defImgSrc
-        },
-        {
-            id: 5,
-            name: '홍익대',
-            latlng: new kakao.maps.LatLng(hongikuniv.x, hongikuniv.y),
-            imageSrc : "https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/1/plum.jpg"// 마커이미지의 주소입니다
-        },
-        {
-            id: 6,
-            name: '야구장',
-            latlng: new kakao.maps.LatLng(37.54699, 127.09598),
-            imageSrc : "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png"
-        }
-
-    ];
+    function tracerMaker(marker, imageSrc) {
+        markerTracker = new MarkerTracker(map, marker, imageSrc);
+        markerTracker.run();
+    }
 
     var activeId = null;
     var timeoutId = null;
 
-    places.forEach(function (place) {
-        var id = place.id;
-        var position = place.latlng;
-        var name = place.name;
-        var imageSrc = place.imageSrc;
-
-        var marker = markerMaker(position, imageSrc);
-
-
+    function contentMaker(name) {
         var content = document.createElement('div');
-        content.className = "box"
+        content.className = "speech-bubble"
         content.innerHTML = name;
-        content.style.cssText = 'background-color: white';
+        return content
+    }
 
+    function customOverlayMaker(marker, id, content) {
 
         var overlay = new kakao.maps.CustomOverlay({
             yAnchor: 2.5,
             content: content,
-            position: position
+            position: marker.getPosition()
         });
 
         var mouseOverHandler = function () {
@@ -708,7 +696,64 @@
 
         content.addEventListener('mouseover', mouseOverHandler);
         content.addEventListener('mouseout', mouseOutHandler);
+    }
+</script>
+
+<!--테스트용 마커 정보 및 생성-->
+<script>
+    var defImgSrc = "https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/1/James+Gilleard-The+Grand+Budapest+Hotel.png";// 마커이미지의 주소입니다
+    var places = [
+        {
+            id: 1,
+            name: '카카오',
+            latlng: new kakao.maps.LatLng(33.450705, 126.570677),
+            imageSrc: defImgSrc
+        },
+        {
+            id: 2,
+            name: '생태연못',
+            latlng: new kakao.maps.LatLng(33.450936, 126.569477),
+            imageSrc: defImgSrc
+        },
+        {
+            id: 3,
+            name: '텃밭',
+            latlng: new kakao.maps.LatLng(33.450879, 126.569940),
+            imageSrc: defImgSrc
+        },
+        {
+            id: 4,
+            name: '근린공원',
+            latlng: new kakao.maps.LatLng(33.451393, 126.570738),
+            imageSrc: defImgSrc
+        },
+        {
+            id: 5,
+            name: '홍익대',
+            latlng: new kakao.maps.LatLng(hongikuniv.x, hongikuniv.y),
+            imageSrc: "https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/1/plum.jpg"// 마커이미지의 주소입니다
+        },
+        {
+            id: 6,
+            name: '야구장',
+            latlng: new kakao.maps.LatLng(37.54699, 127.09598),
+            imageSrc: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png"
+        }
+
+    ];
+
+
+    places.forEach(function (place) {
+        var id = place.id;
+        var position = place.latlng;
+        var name = place.name;
+        var imageSrc = place.imageSrc;
+
+        var marker = markerMaker(position, imageSrc);
+        tracerMaker(marker, imageSrc);
+        customOverlayMaker(marker, id, contentMaker(name))
     });
 </script>
+
 </body>
 </html>
