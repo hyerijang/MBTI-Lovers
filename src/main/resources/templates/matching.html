@@ -630,7 +630,7 @@
     //     yAnchor: 1,
     // });
 
-    function markerContentMaker(imageSrc) {
+    function createMarkerContent(imageSrc) {
         var content = document.createElement('div');
         content.className = "marker"
         //마커 크기
@@ -652,7 +652,7 @@
 
     }
 
-    function markerMaker(markerPosition, markerContent) {
+    function createMarker(markerPosition, markerContent) {
 
         var marker = new kakao.maps.CustomOverlay({
             map: map,
@@ -665,20 +665,20 @@
         return marker;
     }
 
-    function tracerMaker(marker, imageSrc) {
+    function createTracer(marker, imageSrc) {
         markerTracker = new MarkerTracker(map, marker, imageSrc);
         markerTracker.run();
     }
 
 
-    function contentMaker(name) {
+    function createSpeechBubbleContent(name) {
         var content = document.createElement('div');
         content.className = "speech-bubble"
         content.innerHTML = name;
         return content
     }
 
-    function customOverlayMaker(marker, id, content) {
+    function createSpeechBubbleOverlay(marker, id, content) {
 
         var overlay = new kakao.maps.CustomOverlay({
             yAnchor: 2.5,
@@ -741,20 +741,22 @@
         var name = place.name;
         var imageSrc = place.imageSrc;
 
-        var markerContent = markerContentMaker(imageSrc);
-        var marker = markerMaker(position, markerContent);
-        tracerMaker(marker, imageSrc);
+        var markerContent = createMarkerContent(imageSrc);
+        var marker = createMarker(position, markerContent);
+        createTracer(marker, imageSrc);
 
 
-        var overlay = customOverlayMaker(marker, id, contentMaker(name));
+        var speechBubbleOverlay = createSpeechBubbleOverlay(marker, id, createSpeechBubbleContent(name));
 
-        overlay.setMap(map);
+        speechBubbleOverlay.setMap(map);
 
         //클릭시에만 유저정보 보임
         // markerContent.addEventListener('click',function (event){
         //     overlay.setMap(map);
         // })
     });
+
+
 </script>
 
 </body>
