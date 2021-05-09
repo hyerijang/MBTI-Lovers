@@ -16,7 +16,7 @@ public interface MemberRepository {
     Optional<Member> findByUid(String uid);
     List<Member> findMemberByPositionXBetween(String Start ,String End);
 
-    @Query("FROM Member where positionX between ?1 AND ?2")
-    List<Member> findNear( String StartX, String EndX );
+    @Query("FROM Member where positionX between ?1 AND ?2 and positionY between ?3 AND ?4")
+    List<Member> findNear( String StartX, String EndX ,String startY, String endY );
 
 }

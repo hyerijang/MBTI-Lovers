@@ -5,9 +5,8 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 public class MemoryMemberRepository implements MemberRepository {
-
     @Override
-    public List<Member> findNear(String StartX, String EndX) {
+    public List<Member> findNear(String StartX, String EndX, String startY, String endY) {
         return null;
     }
 

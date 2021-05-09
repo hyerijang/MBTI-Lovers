@@ -68,7 +68,7 @@ public class MemberServiceImpl implements MemberService {
     private void setDefaultProfileImage(Member member) {
 
         String defaultFileName = "defaultProfileImage.png";
-        if(member.getProfileImage() == null)
+        if (member.getProfileImage() == null)
             member.setProfileImage(defaultFileName);
 
     }
@@ -97,15 +97,24 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-
     /**
      * 전체 회원 조회
      */
     @Override
-    public List<Member> findNearMembers(String X, String  Y) {
+    public List<Member> findNearMembers(String X, String Y) {
 
-        return memberRepository.findNear(X,Y);
-//        return memberRepository.findMemberByPositionXBetween(X,Y);
+        int radius = 10;
+        String StartX = Integer.toString(Integer.parseInt(X) - radius);
+        String StartY = Integer.toString(Integer.parseInt(Y) - radius);
+        String EndX = Integer.toString(Integer.parseInt(X) + radius);
+        String EndY = Integer.toString(Integer.parseInt(Y) + radius);
+
+        return memberRepository.findNear(StartX, EndX, StartY, EndY);
     }
 
+    @Override
+    public List<Member> findNearMembers(String StartX, String EndX, String startY, String endY) {
+        return memberRepository.findNear(StartX, EndX, startY, endY);
+
+    }
 }
