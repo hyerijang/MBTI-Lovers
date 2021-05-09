@@ -141,11 +141,13 @@
 </head>
 
 <body>
+<!--내 위치 정보-->
 <form action="/members/position" method="post" name="userPosition" target="iframe1">
     <!--위치-->
     <input type="hidden" id="positionX" name="positionX">
     <input type="hidden" id="positionY" name="positionY">
 </form>
+
 <iframe id="iframe1" name="iframe1" style="display:none"></iframe>
 
 <div id="map" style="width: 100vw; height: calc(100vh - 60px)"></div>
@@ -188,10 +190,15 @@
         "x": "33.450705", "y": "126.570677"
     };
 
+    var userPosition = {
+        "x": "", "y": ""
+    };
 
     var map = makeMap(kakaoPosition);
 
     function makeMap(position) {
+        userPosition.x = position.x;
+        userPosition.y = position.y;
         var mapContainer = document.getElementById("map"), // 지도를 표시할 div
             mapOption = {
                 center: new kakao.maps.LatLng(position.x, position.y), // 지도의 중심좌표
@@ -205,29 +212,35 @@
 
 <!-- 단말의 현위치 좌표값 -->
 <script>
-    // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
 
-    if (navigator.geolocation) {
-        // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-        navigator.geolocation.getCurrentPosition(function (position) {
-            var lat = position.coords.latitude, // 위도
-                lon = position.coords.longitude; // 경도
 
-            var locPosition = new kakao.maps.LatLng(lat, lon); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-            var message = '<div style="padding:5px;">내 위치</div>'; // 인포윈도우에 표시될 내용입니다
+    //유저 현재 위치 갱신
+    setPosition();
 
-            // 마커와 인포윈도우를 표시합니다
-            displayMarker(locPosition, message);
-            console.log("현재 위치  x좌표:" + locPosition.getLat() + "   y좌표:" + locPosition.getLng());
+    function setPosition() {
+        // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
+        if (navigator.geolocation) {
+            // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var lat = position.coords.latitude, // 위도
+                    lon = position.coords.longitude; // 경도
 
-            document.getElementById("positionX").setAttribute("value", locPosition.getLat());
-            document.getElementById("positionY").setAttribute("value", locPosition.getLng());
-            document.userPosition.submit();
-        });
+                var locPosition = new kakao.maps.LatLng(lat, lon); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+                var message = '<div style="padding:5px;">내 위치</div>'; // 인포윈도우에 표시될 내용입니다
+
+                //유저 마커와 인포윈도우를 표시합니다
+                displayUserMarker(locPosition, message);
+
+                document.getElementById("positionX").setAttribute("value", lat);
+                document.getElementById("positionY").setAttribute("value", lon);
+                document.userPosition.submit();
+            });
+        }
+
     }
 
     // 지도에 내 위치 마커와 인포윈도우를 표시하는 함수입니다
-    function displayMarker(locPosition, message) {
+    function displayUserMarker(locPosition, message) {
         // 마커를 생성합니다
         var marker = new kakao.maps.Marker({
             map: map,
@@ -248,6 +261,15 @@
 
         // 지도 중심좌표를 접속위치로 변경합니다
         map.setCenter(locPosition);
+
+        // 지도 중심좌표를 얻어옵니다
+        var latlng = map.getCenter();
+
+        userPosition.x = latlng.getLat();
+        userPosition.y = latlng.getLng();
+
+        console.log("내 위치  x좌표:" + userPosition.x + "   y좌표:" + userPosition.y);
+
     }
 </script>
 
@@ -742,7 +764,33 @@
 
 </script>
 
+<!--타유저 정보 가져오기-->
+<script>
+    //지도의 중심좌표 변경시 주변 유저 정보를 갱신합니다.
+    // 마우스 드래그로 지도 이동이 완료되었을 때 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
+    kakao.maps.event.addListener(map, 'dragend', function () {
 
+        // 지도 중심좌표를 얻어옵니다
+        var latlng = map.getCenter();
+
+        userPosition.x = latlng.getLat();
+        userPosition.y = latlng.getLng();
+
+        console.log("중심좌표 변경" + ": " + userPosition.x + "\t" + userPosition.y);
+        // getInfo(userPosition.x, userPosition.y);
+    });
+
+
+</script>
+<!--유저 마커 추가-->
+<script>
+    places.push({
+        id: 7,
+        name: '김홍익',
+        latlng: new kakao.maps.LatLng(37.55120982269984, 126.92384996434059),
+        imageSrc: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png"
+    });
+</script>
 
 <!--마커생성-->
 <script>

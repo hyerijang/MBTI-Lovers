@@ -114,6 +114,7 @@ public class MemberController {
             temp.setPositionX(positionX);
             temp.setPositionY(positionY);
             memberService.edit(temp);
+            log.info(positionX +" "+ positionY);
             log.info(cookieUid+"님의 현재 위치를 저장하였습니다.");
         }
 
