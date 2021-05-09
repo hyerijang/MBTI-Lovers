@@ -97,4 +97,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
+
+    /**
+     * 전체 회원 조회
+     */
+    @Override
+    public List<Member> findNearMembers(int X, int Y) {
+        return memberRepository.findAll();
+    }
+
 }

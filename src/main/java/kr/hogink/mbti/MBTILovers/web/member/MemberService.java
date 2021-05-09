@@ -15,4 +15,6 @@ public interface MemberService {
     Optional<Member> findOneByUid(String memberUid);
 
     void renewLastConnectTime(Member member);
+
+    List<Member> findNearMembers(int X, int Y);
 }

@@ -150,6 +150,39 @@
 
 <iframe id="iframe1" name="iframe1" style="display:none"></iframe>
 
+
+<div>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>uid</th>
+            <th>이름</th>
+            <th>나이</th>
+            <th>성별</th>
+            <th>mbti</th>
+            <th>상태메세지</th>
+            <th>x좌표</th>
+            <th>y좌표</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="member : ${members}">
+            <td th:text="${member.uid}"></td>
+            <td th:text="${member.name}"></td>
+            <td th:text="${member.age}"></td>
+            <td th:text="${member.gender}"></td>
+            <td th:text="${member.mbti}"></td>
+            <td th:text="${member.stateMessage}"></td>
+            <td th:text="${member.positionX}"></td>
+            <td th:text="${member.positionY}"></td>
+
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
 <div id="map" style="width: 100vw; height: calc(100vh - 60px)"></div>
 <!-- 네비게이션 바 -->
 <nav

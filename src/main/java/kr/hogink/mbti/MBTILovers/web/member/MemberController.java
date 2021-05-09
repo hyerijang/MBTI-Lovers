@@ -103,23 +103,7 @@ public class MemberController {
         return "redirect:/";
     }
 
-    @PostMapping("/members/position")
-    public String setPosition(@CookieValue(name = USER_UID_COOKIE) String cookieUid, String positionX, String positionY) {
 
-        log.info("[UserPosition] x:" + positionX + " y:" + positionY);
-
-        Optional<Member> user = memberService.findOneByUid(cookieUid);
-        if (user.isPresent()) {
-            Member temp = user.get();
-            temp.setPositionX(positionX);
-            temp.setPositionY(positionY);
-            memberService.edit(temp);
-            log.info(positionX +" "+ positionY);
-            log.info(cookieUid+"님의 현재 위치를 저장하였습니다.");
-        }
-
-        return "redirect:/";
-    }
 
 
 }
