@@ -2,6 +2,7 @@ package kr.hogink.mbti.MBTILovers.web.member;
 
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
@@ -24,6 +25,11 @@ public class Member {
     private String stateMessage;
     private String profileImage;
     private LocalDateTime connectedTimeAt;
+    @Column(name = "position_X")
+    private String positionX;
+    @Column(name = "position_Y")
+    private String  positionY;
+
 
 
 }
