@@ -117,4 +117,9 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findNear(StartX, EndX, startY, endY);
 
     }
+
+    @Override
+    public List<Member> findNearMembers() {
+        return memberRepository.findNear();
+    }
 }

@@ -10,6 +10,11 @@ public class MemoryMemberRepository implements MemberRepository {
         return null;
     }
 
+    @Override
+    public List<Member> findNear() {
+        return null;
+    }
+
     private static final Map<String, Member> store = new HashMap<>();
     private static long sequence = 0L;
 

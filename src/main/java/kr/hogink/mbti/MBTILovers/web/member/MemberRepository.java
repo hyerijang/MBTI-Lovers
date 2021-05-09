@@ -19,4 +19,8 @@ public interface MemberRepository {
     @Query("FROM Member where positionX between ?1 AND ?2 and positionY between ?3 AND ?4")
     List<Member> findNear( String StartX, String EndX ,String startY, String endY );
 
+
+    @Query("FROM Member where positionX IS NOT NULL")
+    List<Member> findNear( );
+
 }

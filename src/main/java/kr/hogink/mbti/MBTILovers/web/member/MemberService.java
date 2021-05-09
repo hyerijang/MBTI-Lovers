@@ -16,6 +16,8 @@ public interface MemberService {
 
     void renewLastConnectTime(Member member);
 
+    List<Member> findNearMembers();
+
     List<Member> findNearMembers(String X, String Y);
 
     List<Member> findNearMembers(String StartX, String EndX, String startY, String endY);
