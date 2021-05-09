@@ -27,7 +27,7 @@ public class MapController {
 
     @GetMapping("/matching")
     public String matching(Model model) {
-        List<Member> members = memberService.findNearMembers(0,0);
+        List<Member> members = memberService.findNearMembers("33","36");
         model.addAttribute("members", members);
         return "matching";
     }

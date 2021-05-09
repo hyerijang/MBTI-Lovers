@@ -6,6 +6,11 @@ import java.util.*;
 
 public class MemoryMemberRepository implements MemberRepository {
 
+    @Override
+    public List<Member> findNear(String StartX, String EndX) {
+        return null;
+    }
+
     private static final Map<String, Member> store = new HashMap<>();
     private static long sequence = 0L;
 
@@ -39,4 +44,8 @@ public class MemoryMemberRepository implements MemberRepository {
         store.clear();
     }
 
+    @Override
+    public List<Member> findMemberByPositionXBetween(String Start, String End) {
+        return null;
+    }
 }

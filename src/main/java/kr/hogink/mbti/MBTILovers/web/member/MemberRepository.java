@@ -1,6 +1,7 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
 import kr.hogink.mbti.MBTILovers.web.member.Member;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.Date;
 import java.util.List;
@@ -13,6 +14,9 @@ public interface MemberRepository {
     Optional<Member> findByName(String name);
     List<Member> findAll();
     Optional<Member> findByUid(String uid);
+    List<Member> findMemberByPositionXBetween(String Start ,String End);
 
+    @Query("FROM Member where positionX between ?1 AND ?2")
+    List<Member> findNear( String StartX, String EndX );
 
 }
