@@ -1,5 +1,6 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
+import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -121,5 +122,17 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<Member> findNearMembers() {
         return memberRepository.findNear();
+    }
+
+    @Override
+    public List<Member> findNearUser(double x, double y, int number) {
+        List<Member> nearPoint = memberRepository.findNearPoint(x,y,number);
+        System.out.println("######################################################################");
+        for (int i = 0; i < nearPoint.size(); i++) {
+            Member member = nearPoint.get(i);
+            System.out.println(member.getUid());
+        }
+        System.out.println("######################################################################");
+        return nearPoint;
     }
 }

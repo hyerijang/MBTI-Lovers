@@ -5,6 +5,10 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 public class MemoryMemberRepository implements MemberRepository {
+    @Override
+    public List<Member> findNearPoint(double x, double y, int number) {
+        return null;
+    }
 
     @Override
     public List<Member> findNearPoint(int number) {

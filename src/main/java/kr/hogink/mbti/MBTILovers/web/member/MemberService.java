@@ -1,6 +1,7 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
 import kr.hogink.mbti.MBTILovers.web.login.LoginVO;
+import org.locationtech.jts.geom.Point;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,4 +22,7 @@ public interface MemberService {
     List<Member> findNearMembers(String X, String Y);
 
     List<Member> findNearMembers(String StartX, String EndX, String startY, String endY);
+
+
+    List<Member> findNearUser(double x, double y, int number);
 }
