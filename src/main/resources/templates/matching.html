@@ -264,9 +264,25 @@
                 //유저 마커와 인포윈도우를 표시합니다
                 displayUserMarker(locPosition, message);
 
+                // 지도 중심좌표를 접속위치로 변경합니다
+                map.setCenter(locPosition);
+
+                // 지도 중심좌표를 얻어옵니다
+                var latlng = map.getCenter();
+
+                userPosition.x = latlng.getLat();
+                userPosition.y = latlng.getLng();
+
+                console.log("내 위치  x좌표:" + userPosition.x + "   y좌표:" + userPosition.y);
+
                 document.getElementById("positionX").setAttribute("value", lat);
                 document.getElementById("positionY").setAttribute("value", lon);
                 document.userPosition.submit();
+
+                // 근처 유저 json
+                // var url = "https://mbti-lovers.kro.kr:8080/matching/near/" + userPosition.x + "/" + userPosition.y;
+                // console.log(url);
+
             });
         }
 
@@ -292,18 +308,9 @@
         // 인포윈도우를 마커위에 표시합니다
         infowindow.open(map, marker);
 
-        // 지도 중심좌표를 접속위치로 변경합니다
-        map.setCenter(locPosition);
-
-        // 지도 중심좌표를 얻어옵니다
-        var latlng = map.getCenter();
-
-        userPosition.x = latlng.getLat();
-        userPosition.y = latlng.getLng();
-
-        console.log("내 위치  x좌표:" + userPosition.x + "   y좌표:" + userPosition.y);
-
     }
+
+
 </script>
 
 <!--지도 영역 밖의 마커위치 추적하기-->
@@ -797,7 +804,7 @@
 
 </script>
 
-<!--타유저 정보 가져오기-->
+<!--지도 중심좌표 변경-->
 <script>
     //지도의 중심좌표 변경시 주변 유저 정보를 갱신합니다.
     // 마우스 드래그로 지도 이동이 완료되었을 때 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
@@ -815,6 +822,41 @@
 
 
 </script>
+<!--근처 유저 정보 가져오기-->
+<script>
+
+    var nearUser = null;
+
+    getNearUser();
+
+    function getNearUser() {
+
+        var request = new XMLHttpRequest();
+        request.open('GET', "matching/near/" + userPosition.x + "/" + userPosition.y, true);
+
+        request.onload = function () {
+            if (request.status >= 200 && request.status < 400) {
+                // Success!
+                nearUser = JSON.parse(request.responseText);
+                console.log("현재 지역에서 가까운 유저 10명")
+                console.log(nearUser);
+            } else {
+                // We reached our target server, but it returned an error
+
+            }
+        };
+
+        request.onerror = function () {
+            // There was a connection error of some sort
+        };
+
+        request.send();
+
+        return nearUser;
+    }
+
+</script>
+
 <!--유저 마커 추가-->
 <script>
     places.push({
