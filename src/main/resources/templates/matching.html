@@ -260,11 +260,11 @@
                 var lat = position.coords.latitude, // 위도
                     lon = position.coords.longitude; // 경도
 
-                var locPosition = new kakao.maps.LatLng(lat, lon); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-                var message = '<div style="padding:5px;">내 위치</div>'; // 인포윈도우에 표시될 내용입니다
-
-                //유저 마커와 인포윈도우를 표시합니다
-                displayUserMarker(locPosition, message);
+                var locPosition = new kakao.maps.LatLng(lat, lon); //접속 위치
+                // var message = '<div style="padding:5px;">내 위치</div>'; // 인포윈도우에 표시될 내용입니다
+                //
+                // //유저 마커와 인포윈도우를 표시합니다
+                // displayUserMarker(locPosition, message);
 
                 // 지도 중심좌표를 접속위치로 변경합니다
                 map.setCenter(locPosition);
@@ -896,6 +896,7 @@
             var uid = member.uid;
             var position = new kakao.maps.LatLng(member.location.coordinates[0], member.location.coordinates[1]);
             var name = member.name;
+            const mbti = member.mbti;
 
             var imageSrc = S3url + uid + '/' + encodeURI(member.profileImage);
             if (member.profileImage == "") {
@@ -908,8 +909,9 @@
             var marker = createMarker(position, markerContent);
             createTracer(marker, imageSrc);
 
-
-            var speechBubbleOverlay = createSpeechBubbleOverlay(marker, uid, createSpeechBubbleContent(name));
+            //말풍선 오버레이
+            var content = "[" + mbti + "]" + name;
+            var speechBubbleOverlay = createSpeechBubbleOverlay(marker, uid, createSpeechBubbleContent(content));
 
             speechBubbleOverlay.setMap(map);
 
