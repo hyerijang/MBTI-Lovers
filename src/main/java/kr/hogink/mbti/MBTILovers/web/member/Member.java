@@ -1,6 +1,7 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
 import lombok.*;
+import org.locationtech.jts.geom.Point;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,6 +31,7 @@ public class Member {
     @Column(name = "position_Y")
     private String  positionY;
 
+    private Point point;
 
 
 }

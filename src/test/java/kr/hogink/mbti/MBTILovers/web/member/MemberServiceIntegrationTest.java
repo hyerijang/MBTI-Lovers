@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -35,5 +37,18 @@ public class MemberServiceIntegrationTest {
         assertThat(member.getName()).isEqualTo(findMember.getName());
     }
 
+
+    @Test
+    void 가까운점() {
+
+        List<Member> nearPoint = memberRepository.findNearPoint();
+        System.out.println("######################################################################");
+
+        for (int i = 0; i < nearPoint.size(); i++) {
+            Member member = nearPoint.get(i);
+            System.out.println(member.getUid());
+
+        }
+    }
 
 }
