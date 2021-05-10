@@ -24,9 +24,11 @@ public class MemberServiceIntegrationTest {
     void 회원가입() {
         //given
         Member member = new Member();
+        String saveId = "testuser";
+        member.setUid(saveId);
         member.setName("테스트유저");
         //when
-        String saveId = memberService.join(member);
+        memberService.join(member);
         //then
         //assertj의 assertions
         Member findMember = memberService.findOneByUid(saveId).get();
