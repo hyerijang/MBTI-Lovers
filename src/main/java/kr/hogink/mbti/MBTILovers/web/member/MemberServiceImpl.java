@@ -98,31 +98,6 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-    /**
-     * 전체 회원 조회
-     */
-    @Override
-    public List<Member> findNearMembers(String X, String Y) {
-
-        int radius = 10;
-        String StartX = Integer.toString(Integer.parseInt(X) - radius);
-        String StartY = Integer.toString(Integer.parseInt(Y) - radius);
-        String EndX = Integer.toString(Integer.parseInt(X) + radius);
-        String EndY = Integer.toString(Integer.parseInt(Y) + radius);
-
-        return memberRepository.findNear(StartX, EndX, StartY, EndY);
-    }
-
-    @Override
-    public List<Member> findNearMembers(String StartX, String EndX, String startY, String endY) {
-        return memberRepository.findNear(StartX, EndX, startY, endY);
-
-    }
-
-    @Override
-    public List<Member> findNearMembers() {
-        return memberRepository.findNear();
-    }
 
     @Override
     public List<Member> findNearUser(double x, double y, int number) {

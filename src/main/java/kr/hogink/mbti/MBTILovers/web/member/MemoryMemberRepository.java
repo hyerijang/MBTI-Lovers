@@ -1,7 +1,5 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
-import org.springframework.stereotype.Repository;
-
 import java.util.*;
 
 public class MemoryMemberRepository implements MemberRepository {
@@ -12,16 +10,6 @@ public class MemoryMemberRepository implements MemberRepository {
 
     @Override
     public List<Member> findNearPoint(int number) {
-        return null;
-    }
-
-    @Override
-    public List<Member> findNear(String StartX, String EndX, String startY, String endY) {
-        return null;
-    }
-
-    @Override
-    public List<Member> findNear() {
         return null;
     }
 
@@ -58,8 +46,5 @@ public class MemoryMemberRepository implements MemberRepository {
         store.clear();
     }
 
-    @Override
-    public List<Member> findMemberByPositionXBetween(String Start, String End) {
-        return null;
-    }
+
 }

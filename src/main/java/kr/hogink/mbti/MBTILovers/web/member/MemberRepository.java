@@ -14,18 +14,11 @@ public interface MemberRepository {
     Optional<Member> findByName(String name);
     List<Member> findAll();
     Optional<Member> findByUid(String uid);
-    List<Member> findMemberByPositionXBetween(String Start ,String End);
-
-    @Query("FROM Member where positionX between ?1 AND ?2 and positionY between ?3 AND ?4")
-    List<Member> findNear( String StartX, String EndX ,String startY, String endY );
 
 
-    @Query("FROM Member where positionX IS NOT NULL")
-    List<Member> findNear( );
-
-    @Query(value = "select * from member where point is not null order by ST_Distance(point, POINT(49, 40))  limit ?1", nativeQuery=true)
+    @Query(value = "select * from member where location is not null order by ST_Distance(location, POINT(49, 40))  limit ?1", nativeQuery=true)
     List<Member> findNearPoint(int number);
 
-    @Query(value = "select * from member where point is not null order by ST_Distance(point, POINT(?1, ?2))  limit ?3", nativeQuery=true)
+    @Query(value = "select * from member where location is not null order by ST_Distance(location, POINT(?1, ?2))  limit ?3", nativeQuery=true)
     List<Member> findNearPoint(double x, double y, int number);
 }

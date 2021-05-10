@@ -30,13 +30,10 @@ public class Member {
     private String stateMessage;
     private String profileImage;
     private LocalDateTime connectedTimeAt;
-    @Column(name = "position_X")
-    private String positionX;
-    @Column(name = "position_Y")
-    private String  positionY;
     @JsonSerialize(using = GeometrySerializer.class)
     @JsonDeserialize(contentUsing = GeometryDeserializer.class)
-    private Point point;
+    @Column(name = "location")
+    private Point location;
 
 
 }
