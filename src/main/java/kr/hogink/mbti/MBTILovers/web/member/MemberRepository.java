@@ -23,7 +23,7 @@ public interface MemberRepository {
     @Query("FROM Member where positionX IS NOT NULL")
     List<Member> findNear( );
 
-    @Query(value = "select * from member where point is not null order by ST_Distance(point, POINT(49, 40))  limit 2", nativeQuery=true)
-    List<Member> findNearPoint();
+    @Query(value = "select * from member where point is not null order by ST_Distance(point, POINT(49, 40))  limit ?1", nativeQuery=true)
+    List<Member> findNearPoint(int number);
 
 }

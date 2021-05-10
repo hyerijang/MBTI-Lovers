@@ -41,7 +41,7 @@ public class MemberServiceIntegrationTest {
     @Test
     void 가까운점() {
 
-        List<Member> nearPoint = memberRepository.findNearPoint();
+        List<Member> nearPoint = memberRepository.findNearPoint(2);
         System.out.println("######################################################################");
 
         for (int i = 0; i < nearPoint.size(); i++) {
