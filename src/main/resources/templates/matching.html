@@ -206,6 +206,8 @@
     </div>
 </nav>
 
+<!--프로필 이미지-->
+<script src="/js/imageUploadPreview.js"></script>
 <!-- appKey -->
 <script
         type="text/javascript"
@@ -805,26 +807,26 @@
 </script>
 <!--테스트용 마커생성-->
 <script>
-    places.forEach(function (place) {
-        var id = place.id;
-        var position = place.latlng;
-        var name = place.name;
-        var imageSrc = place.imageSrc;
-
-        var markerContent = createMarkerContent(imageSrc);
-        var marker = createMarker(position, markerContent);
-        createTracer(marker, imageSrc);
-
-
-        var speechBubbleOverlay = createSpeechBubbleOverlay(marker, id, createSpeechBubbleContent(name));
-
-        speechBubbleOverlay.setMap(map);
-
-        //클릭시에만 유저정보 보임
-        // markerContent.addEventListener('click',function (event){
-        //     overlay.setMap(map);
-        // })
-    });
+    // places.forEach(function (place) {
+    //     var id = place.id;
+    //     var position = place.latlng;
+    //     var name = place.name;
+    //     var imageSrc = place.imageSrc;
+    //
+    //     var markerContent = createMarkerContent(imageSrc);
+    //     var marker = createMarker(position, markerContent);
+    //     createTracer(marker, imageSrc);
+    //
+    //
+    //     var speechBubbleOverlay = createSpeechBubbleOverlay(marker, id, createSpeechBubbleContent(name));
+    //
+    //     speechBubbleOverlay.setMap(map);
+    //
+    //     //클릭시에만 유저정보 보임
+    //     // markerContent.addEventListener('click',function (event){
+    //     //     overlay.setMap(map);
+    //     // })
+    // });
 </script>
 
 <!--지도 중심좌표 변경-->
@@ -861,8 +863,8 @@
             if (request.status >= 200 && request.status < 400) {
                 // Success!
                 nearUser = JSON.parse(request.responseText);
-                console.log("현재 지역에서 가까운 유저 10명")
-                console.log(nearUser);
+                // console.log("현재 지역에서 가까운 유저 10명")
+                // console.log(nearUser);
                 makerNearUserMarker(nearUser);
             } else {
                 // We reached our target server, but it returned an error
@@ -886,7 +888,6 @@
 
 <!-- 마커생성-->
 <script>
-    const S3url = 'https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/';
 
     function makerNearUserMarker(nearUser){
         console.log("가까운 유저 10명의 마커를 만듭니다.");
@@ -898,10 +899,8 @@
 
             var imageSrc = S3url + uid + '/' + encodeURI(member.profileImage);
             if (member.profileImage == "") {
-                imageSrc = S3url + 'defaultProfileImage.png';
+                imageSrc = defaultProfileImgPath;
             }
-            console.log(member.location.coordinates[0]);
-            console.log(member.location.coordinates[1]);
 
             console.log(imageSrc);
 
