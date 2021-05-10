@@ -761,47 +761,70 @@
 
 <!--테스트용 마커 정보-->
 <script>
-    var defImgSrc = "https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/1/James+Gilleard-The+Grand+Budapest+Hotel.png";// 마커이미지의 주소입니다
-    var places = [
-        {
-            id: 1,
-            name: '카카오',
-            latlng: new kakao.maps.LatLng(33.450705, 126.570677),
-            imageSrc: defImgSrc
-        },
-        {
-            id: 2,
-            name: '생태연못',
-            latlng: new kakao.maps.LatLng(33.450936, 126.569477),
-            imageSrc: defImgSrc
-        },
-        {
-            id: 3,
-            name: '텃밭',
-            latlng: new kakao.maps.LatLng(33.450879, 126.569940),
-            imageSrc: defImgSrc
-        },
-        {
-            id: 4,
-            name: '근린공원',
-            latlng: new kakao.maps.LatLng(33.451393, 126.570738),
-            imageSrc: defImgSrc
-        },
-        {
-            id: 5,
-            name: '홍익대',
-            latlng: new kakao.maps.LatLng(hongikuniv.x, hongikuniv.y),
-            imageSrc: "https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/1/plum.jpg"// 마커이미지의 주소입니다
-        },
-        {
-            id: 6,
-            name: '야구장',
-            latlng: new kakao.maps.LatLng(37.54699, 127.09598),
-            imageSrc: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png"
-        }
+    // var defImgSrc = "https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/1/James+Gilleard-The+Grand+Budapest+Hotel.png";// 마커이미지의 주소입니다
+    // var places = [
+    //     {
+    //         id: 1,
+    //         name: '카카오',
+    //         latlng: new kakao.maps.LatLng(33.450705, 126.570677),
+    //         imageSrc: defImgSrc
+    //     },
+    //     {
+    //         id: 2,
+    //         name: '생태연못',
+    //         latlng: new kakao.maps.LatLng(33.450936, 126.569477),
+    //         imageSrc: defImgSrc
+    //     },
+    //     {
+    //         id: 3,
+    //         name: '텃밭',
+    //         latlng: new kakao.maps.LatLng(33.450879, 126.569940),
+    //         imageSrc: defImgSrc
+    //     },
+    //     {
+    //         id: 4,
+    //         name: '근린공원',
+    //         latlng: new kakao.maps.LatLng(33.451393, 126.570738),
+    //         imageSrc: defImgSrc
+    //     },
+    //     {
+    //         id: 5,
+    //         name: '홍익대',
+    //         latlng: new kakao.maps.LatLng(hongikuniv.x, hongikuniv.y),
+    //         imageSrc: "https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/1/plum.jpg"// 마커이미지의 주소입니다
+    //     },
+    //     {
+    //         id: 6,
+    //         name: '야구장',
+    //         latlng: new kakao.maps.LatLng(37.54699, 127.09598),
+    //         imageSrc: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png"
+    //     }
+    //
+    // ];
 
-    ];
+</script>
+<!--테스트용 마커생성-->
+<script>
+    places.forEach(function (place) {
+        var id = place.id;
+        var position = place.latlng;
+        var name = place.name;
+        var imageSrc = place.imageSrc;
 
+        var markerContent = createMarkerContent(imageSrc);
+        var marker = createMarker(position, markerContent);
+        createTracer(marker, imageSrc);
+
+
+        var speechBubbleOverlay = createSpeechBubbleOverlay(marker, id, createSpeechBubbleContent(name));
+
+        speechBubbleOverlay.setMap(map);
+
+        //클릭시에만 유저정보 보임
+        // markerContent.addEventListener('click',function (event){
+        //     overlay.setMap(map);
+        // })
+    });
 </script>
 
 <!--지도 중심좌표 변경-->
@@ -816,7 +839,7 @@
         userPosition.x = latlng.getLat();
         userPosition.y = latlng.getLng();
 
-        console.log("중심좌표 변경" + ": " + userPosition.x + "\t" + userPosition.y);
+        console.log("중심좌표 변경" + ": " + userPosition.x + "," + userPosition.y);
         // getInfo(userPosition.x, userPosition.y);
     });
 
@@ -840,6 +863,7 @@
                 nearUser = JSON.parse(request.responseText);
                 console.log("현재 지역에서 가까운 유저 10명")
                 console.log(nearUser);
+                makerNearUserMarker(nearUser);
             } else {
                 // We reached our target server, but it returned an error
 
@@ -857,38 +881,38 @@
 
 </script>
 
-<!--유저 마커 추가-->
+
+
+
+<!-- 마커생성-->
 <script>
-    places.push({
-        id: 7,
-        name: '김홍익',
-        latlng: new kakao.maps.LatLng(37.55120982269984, 126.92384996434059),
-        imageSrc: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png"
-    });
-</script>
+    const S3url = 'https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/';
 
-<!--마커생성-->
-<script>
-    places.forEach(function (place) {
-        var id = place.id;
-        var position = place.latlng;
-        var name = place.name;
-        var imageSrc = place.imageSrc;
+    function makerNearUserMarker(nearUser){
+        console.log("가까운 유저 10명의 마커를 만듭니다.");
 
-        var markerContent = createMarkerContent(imageSrc);
-        var marker = createMarker(position, markerContent);
-        createTracer(marker, imageSrc);
+        nearUser.forEach(function (member) {
+            var uid = member.uid;
+            var position = new kakao.maps.LatLng(member.location.coordinates[0], member.location.coordinates[1]);
+            var name = member.name;
+            var imageSrc = S3url + uid + '/' + encodeURI(member.profileImage);
+            console.log(member.location.coordinates[0]);
+            console.log(member.location.coordinates[1]);
+
+            console.log(imageSrc);
+
+            var markerContent = createMarkerContent(imageSrc);
+            var marker = createMarker(position, markerContent);
+            createTracer(marker, imageSrc);
 
 
-        var speechBubbleOverlay = createSpeechBubbleOverlay(marker, id, createSpeechBubbleContent(name));
+            var speechBubbleOverlay = createSpeechBubbleOverlay(marker, uid, createSpeechBubbleContent(name));
 
-        speechBubbleOverlay.setMap(map);
+            speechBubbleOverlay.setMap(map);
 
-        //클릭시에만 유저정보 보임
-        // markerContent.addEventListener('click',function (event){
-        //     overlay.setMap(map);
-        // })
-    });
+        });
+    }
+
 </script>
 
 </body>

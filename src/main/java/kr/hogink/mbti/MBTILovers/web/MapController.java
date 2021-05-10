@@ -42,7 +42,7 @@ public class MapController {
         if (user.isPresent()) {
             Member temp = user.get();
 
-            String pointWKT = String.format("POINT(%s %s)", longitude, latitude);
+            String pointWKT = String.format("POINT(%s %s)", latitude, longitude);
             try {
                 Point point = (Point) new WKTReader().read(pointWKT);
                 temp.setLocation(point);
