@@ -895,7 +895,11 @@
             var uid = member.uid;
             var position = new kakao.maps.LatLng(member.location.coordinates[0], member.location.coordinates[1]);
             var name = member.name;
+
             var imageSrc = S3url + uid + '/' + encodeURI(member.profileImage);
+            if (member.profileImage == "") {
+                imageSrc = S3url + 'defaultProfileImage.png';
+            }
             console.log(member.location.coordinates[0]);
             console.log(member.location.coordinates[1]);
 
