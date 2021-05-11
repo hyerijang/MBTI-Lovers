@@ -138,6 +138,55 @@
             margin-bottom: -0.625em;
         }
     </style>
+
+<!-- 위치 컨트롤러-->
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        .radius_border {
+            border: 1px solid #919191;
+            border-radius: 70%;
+        }
+
+
+        .current_location_control {
+            position: absolute;
+            bottom: 70px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            overflow: hidden;
+            z-index: 1;
+            background-color: #f5f5f5;
+
+        }
+
+        .current_location_control span {
+            display: block;
+            width: 36px;
+            height: 40px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .current_location_control span img {
+            width: 30px;
+            height: 30px;
+            padding: 4px;
+            border: none;
+            box-sizing: content-box;
+        }
+
+        /*.custom_zoomcontrol span:first-child {*/
+        /*    border-bottom: 1px solid #bfbfbf;*/
+        /*}*/
+    </style>
 </head>
 
 <body>
@@ -151,10 +200,15 @@
 <iframe id="iframe1" name="iframe1" style="display:none"></iframe>
 
 <!--지도-->
-<div id="map" style="width: 100vw; height: calc(100vh - 60px)">
+<div id="map" style="width: 100vw; height: calc(100vh - 60px); position:relative; overflow:hidden;">
+
 
 </div>
-
+<!-- 현재 위치로 이동시켜주는 컨트롤러 -->
+<div class="current_location_control radius_border">
+        <span onclick="setCurrentLocation()"><img src="https://mbti-image.s3.ap-northeast-2.amazonaws.com/map/current_location.png"
+                                      alt="현재위치"></span>
+</div>
 <!-- 네비게이션 바 -->
 <nav
         class="navbar fixed-bottom navbar-light navbar-fixed-bottom bg-faded justify-content-between flex-nowrap flex-row border bg-primary"
@@ -200,6 +254,9 @@
         "x": "", "y": ""
     };
 
+    //지도 이미지 해상도 낮춤
+    kakao.maps.disableHD();
+
     var map = makeMap(kakaoPosition);
 
     function makeMap(position) {
@@ -210,6 +267,7 @@
                 center: new kakao.maps.LatLng(position.x, position.y), // 지도의 중심좌표
                 level: 3, // 지도의 확대 레벨
             };
+
         var map = new kakao.maps.Map(mapContainer, mapOption);
 
         return map;
@@ -246,7 +304,7 @@
                 userPosition.x = latlng.getLat();
                 userPosition.y = latlng.getLng();
 
-                console.log("내 위치  x좌표:" + userPosition.x + "   y좌표:" + userPosition.y);
+                console.log("현재 내 위치 :" + userPosition.x + "," + userPosition.y);
 
                 document.getElementById("positionX").setAttribute("value", lat);
                 document.getElementById("positionY").setAttribute("value", lon);
@@ -652,24 +710,6 @@
 
 <!-- 마커 및 마커트레이서 생성 -->
 <script>
-    // // 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-    // var content =
-    //     '<div class="customoverlay">' +
-    //     '  <a href="http://localhost:8080/members/read/6">' +
-    //     '    <span class="title">김수정</span>' +
-    //     "  </a>" +
-    //     "</div>";
-    //
-    // // 커스텀 오버레이가 표시될 위치입니다
-    // var position = new kakao.maps.LatLng(37.54699, 127.09598);
-    //
-    // // 커스텀 오버레이를 생성합니다
-    // var customOverlay = new kakao.maps.CustomOverlay({
-    //     map: map,
-    //     position: position,
-    //     content: content,
-    //     yAnchor: 1,
-    // });
 
     function createMarkerContent(imageSrc) {
         var content = document.createElement('div');
@@ -800,9 +840,9 @@
     // });
 </script>
 
-<!--지도 중심좌표 변경-->
+<!--지도 중심좌표 정보 출력-->
 <script>
-    //지도의 중심좌표 변경시 주변 유저 정보를 갱신합니다.
+    //지도의 중심좌표 변경시 그 좌표를 출력합니다
     // 마우스 드래그로 지도 이동이 완료되었을 때 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
     kakao.maps.event.addListener(map, 'dragend', function () {
 
@@ -862,7 +902,6 @@
 
     function makerNearUserMarker(nearUser){
         console.log("가까운 유저 10명의 마커를 만듭니다.");
-
         nearUser.forEach(function (member) {
             var uid = member.uid;
             var position = new kakao.maps.LatLng(member.location.coordinates[0], member.location.coordinates[1]);
@@ -874,7 +913,7 @@
                 imageSrc = defaultProfileImgPath;
             }
 
-            console.log(imageSrc);
+            // console.log(imageSrc);
 
             var markerContent = createMarkerContent(imageSrc);
             var marker = createMarker(position, markerContent);
@@ -890,6 +929,18 @@
     }
 
 </script>
+
+<!-- 현재 위치 이동 컨트롤러-->
+<script>
+
+    // 현재 위치 이동 컨트롤러에 사용
+    function setCurrentLocation() {
+        setPosition();
+    }
+
+
+</script>
+
 
 </body>
 </html>
