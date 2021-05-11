@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        body > form,
+        body > canvas {
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        fieldset > * {
+            vertical-align: middle;
+        }
+
+        label {
+            display: block;
+            margin: 1rem 0;
+        }
+
+        form a {
+            appearance: button;
+            padding: 0.1rem 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<form>
+    <fieldset>
+        <legend>Image compressor</legend>
+        <fieldset>
+            <legend>Image</legend>
+
+            <label>
+                File
+                <input type="file" name="file">
+            </label>
+            or
+            <label>
+                URL
+                <input type="url" name="URL">
+            </label>
+        </fieldset>
+        <fieldset>
+            <legend>Variable</legend>
+            <label>
+                Scale
+                <input type="number" name="scale"
+                       value="1" min="0" step="0.05">
+            </label>
+            <label>
+                Padding
+                <input type="number" name="padding"
+                       min="0" step="1" placeholder="px">
+            </label>
+            <label>
+                Background
+                <input type="text" name="background"
+                       list="color" placeholder="Hex, RGBA or Name">
+                <datalist id="color">
+                    <option value="#007bff">
+                </datalist>
+            </label>
+        </fieldset>
+        <label>
+            Size
+            <output name="size"></output>
+            KB
+        </label>
+        <label>
+            View
+            <output name="view"></output>
+        </label>
+
+        <input type="submit">
+        <input type="reset">
+        <a>Download</a>
+    </fieldset>
+</form>
+
+<canvas></canvas>
+<script>
+    const request = async (URI, option) =>
+        (await fetch(URI, {mode: 'cors', ...option})).blob();
+
+
+    const imageOf = URI => new Promise((resolve, reject) => {
+
+        const image = new Image();
+
+        image.onload = () => resolve(image), image.onerror = reject;
+
+        image.src = URI;
+    });
+
+    const DataURI = /^data:(.+?\/(.+?))?(;base64)?,(\S+)/;
+
+    function blobFrom(URI) {
+
+        var [_, type, __, base64, data] = DataURI.exec(URI) || [];
+
+        data = base64 ? window.atob(data) : data;
+
+        const aBuffer = new ArrayBuffer(data.length);
+
+        const uBuffer = new Uint8Array(aBuffer);
+
+        for (let i = 0; data[i]; i++) uBuffer[i] = data.charCodeAt(i);
+
+        return new Blob([aBuffer], {type});
+    }
+
+
+    const canvas = document.querySelector('canvas');
+
+    const context = canvas.getContext('2d');
+
+    function draw(image, {scale = 1, padding = 0, background}) {
+
+        const width = image.naturalWidth * scale,
+            height = image.naturalHeight * scale;
+
+        canvas.width = width + padding * 2,
+            canvas.height = height + padding * 2;
+
+        if (background) {
+            context.fillStyle = background;
+            context.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        context.drawImage(image, padding, padding, width, height);
+    }
+
+
+    const form = document.forms[0];
+
+    const field = form.elements,
+        button = form.querySelector('a');
+
+    form.onsubmit = async event => {
+
+        event.preventDefault();
+
+        var file, name;
+
+        if (field.file.value) {
+
+            file = field.file.files[0];
+
+            name = file.name;
+        } else {
+            name = field.URL.value;
+
+            file = await request(name),
+                name = name.split('/').slice(-1)[0];
+        }
+
+        const image = await imageOf(URL.createObjectURL(file));
+
+        draw(image, {
+            scale: +field.scale.value,
+            padding: +field.padding.value,
+            background: field.background.value
+        });
+
+        field.view.value = `${canvas.width} x ${canvas.height}`;
+
+        button.download = name.replace(/\w+$/, 'png');
+
+        file = blobFrom(canvas.toDataURL());
+
+        field.size.value = (file.size / 1024).toFixed(2);
+
+        button.href = URL.createObjectURL(file);
+    };
+
+    form.onreset = () => {
+
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        button.removeAttribute('href');
+    };
+
+    self.addEventListener(
+        'unhandledrejection', ({reason}) => self.alert(reason)
+    );
+</script>
+</body>
+
+
+</html>
