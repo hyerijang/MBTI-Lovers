@@ -150,7 +150,6 @@
                                 <form action="/base64Upload" method="post" name="image" id="base64form" target="iframe1">
                                     <input type="hidden" id="base64" name="base64">
                                     <input type="hidden" name="uid" th:value="${uid}">
-                                    <button type="submit">전송</button>
                                 </form>
 
                                 <!--프리뷰-->
@@ -189,6 +188,7 @@
 <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/croppie/2.4.1/croppie.min.js'></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="/js/fileUpload/S3url.js"></script>
 <script src="/js/imageSetter.js"></script>
 <script src="/js/imageUploadPreview.js"></script>
 
@@ -256,7 +256,8 @@
         if(base64.value != null){
             console.log("이미지파일 업로드");
             document.getElementById("base64form").submit();
-            document.getElementById("profileImage").value = "thumbnail.png";
+            var uid = document.getElementById("uid").value;
+            document.getElementById("profileImage").value = uid + ".png";
         }
     }
 </script>

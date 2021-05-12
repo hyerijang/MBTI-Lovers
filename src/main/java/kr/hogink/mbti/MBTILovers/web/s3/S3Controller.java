@@ -50,7 +50,7 @@ public class S3Controller {
 
         log.info("--------------------------------------");
         log.info("base64파일을 png로 변환하여 업로드");
-        File file = s3Uploader.convertBase64ToPng(base64);
+        File file = s3Uploader.convertBase64ToPng(base64,uid);
         log.info("uid :" +uid);
         s3Uploader.uploadProfileImage(file, "image", uid);
         return "redirect:/";

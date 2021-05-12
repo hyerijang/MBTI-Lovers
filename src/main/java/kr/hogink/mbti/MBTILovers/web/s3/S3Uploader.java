@@ -78,14 +78,14 @@ public class S3Uploader {
     }
 
     public String uploadProfileImage(File uploadFile, String dirName, String uid) {
-        String fileName = dirName + "/" + uid + "/" + uploadFile.getName();
+        String fileName = dirName + "/" + uploadFile.getName();
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile);
         return uploadImageUrl;
     }
 
 
-    public File convertBase64ToPng(String base64) {
+    public File convertBase64ToPng(String base64 , String fileName) {
         String base64Data = base64.split(",")[1];
         byte[] decodedBytes = Base64.getDecoder().decode(base64Data);
         ByteArrayInputStream bis = new ByteArrayInputStream(decodedBytes);
@@ -93,7 +93,7 @@ public class S3Uploader {
         File outputFile = null;
         try {
             image = ImageIO.read(bis);
-            outputFile = new File("thumbnail.png");
+            outputFile = new File(fileName +".png");
             ImageIO.write(image, "png", outputFile);
         } catch (IOException e) {
             e.printStackTrace();
