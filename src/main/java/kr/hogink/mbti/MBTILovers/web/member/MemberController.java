@@ -92,11 +92,12 @@ public class MemberController {
         return "redirect:/";
     }
 
-    @GetMapping(value = "/members/read/{uid}")
-    public String readFrom(Model model, @PathVariable String uid) {
-        Optional<Member> member = memberService.findOneByUid(uid);
+    @GetMapping(value = "/members/read/{fid}")
+    public String readFrom(Model model, @PathVariable String fid, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+        Optional<Member> member = memberService.findOneByUid(fid);
         if (member.isPresent()) {
-            model.addAttribute("user", member.get());
+            model.addAttribute("uid", cookieUid);
+            model.addAttribute("member", member.get());
             return "members/readMemberForm.html";
         }
         log.warn("존재하지 않는 유저입니다.");
