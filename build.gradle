@@ -40,6 +40,11 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.5.RELEASE'
+    compile group: 'org.hibernate', name: 'hibernate-spatial', version: '5.4.4.Final'
+    // https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-mapper-asl
+    implementation group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.13'
+    implementation 'org.n52.jackson:jackson-datatype-jts:1.2.4'
+
 }
 
 test {

@@ -65,6 +65,11 @@ public class S3Uploader {
 
     public String uploadProfileImage(MultipartFile multipartFile, String dirName, String uid) throws IOException {
         File uploadFile = convert(multipartFile).orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
+
+        //생성할 썸네일파일의 경로, 로컬 저장
+        File thumb_file_name = new File(multipartFile.getOriginalFilename());
+        File thumb_file = thumb_file_name.getAbsoluteFile();
+
         return uploadProfileImage(uploadFile, dirName, uid);
     }
 

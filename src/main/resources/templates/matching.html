@@ -1,58 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1"
+            charset="utf-8"
+    />
     <title>매칭</title>
-    <style>
-        .node {
-            position: absolute;
-            background-image: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/sign-info-64.png);
-            cursor: pointer;
-            width: 64px;
-            height: 64px;
-        }
 
-        .tooltip {
-            background-color: #fff;
-            position: absolute;
-            border: 2px solid #333;
-            font-size: 25px;
-            font-weight: bold;
-            padding: 3px 5px 0;
-            left: 65px;
-            top: 14px;
-            border-radius: 5px;
-            white-space: nowrap;
-            display: none;
-        }
-
-        .tracker {
-            position: absolute;
-            margin: -35px 0 0 -30px;
-            display: none;
-            cursor: pointer;
-            z-index: 3;
-        }
-
-        .icon {
-            position: absolute;
-            left: 6px;
-            top: 9px;
-            width: 48px;
-            height: 48px;
-            background-image: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/sign-info-48.png);
-        }
-
-        .balloon {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            background-image: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/balloon.png);
-            -ms-transform-origin: 50% 34px;
-            -webkit-transform-origin: 50% 34px;
-            transform-origin: 50% 34px;
-        }
-    </style>
+    <!--기본 설정-->
     <style>
         .customoverlay {
             position: relative;
@@ -92,35 +48,302 @@
         }
 
         .customoverlay:after {
-            content: '';
+            content: "";
             position: absolute;
             margin-left: -12px;
             left: 50%;
             bottom: -12px;
             width: 22px;
             height: 12px;
-            background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')
+            background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png");
         }
     </style>
-    <link rel="stylesheet" type="text/css"
-          href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css'>
+    <!--마커 트레이서-->
+    <style>
+        .node {
+            position: absolute;
+            background-image: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/sign-info-64.png);
+            cursor: pointer;
+            width: 64px;
+            height: 64px;
+        }
 
+        .tooltip {
+            background-color: #fff;
+            position: absolute;
+            border: 2px solid #333;
+            font-size: 25px;
+            font-weight: bold;
+            padding: 3px 5px 0;
+            left: 65px;
+            top: 14px;
+            border-radius: 5px;
+            white-space: nowrap;
+            display: none;
+        }
+
+        .tracker {
+            position: absolute;
+            margin: -35px 0 0 -30px;
+            display: none;
+            cursor: pointer;
+            z-index: 3;
+        }
+
+        .icon {
+            position: absolute;
+            left: 6px;
+            top: 9px;
+            width: 48px;
+            height: 48px;
+            /*background-image: url(https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/2/plum.jpg);*/
+        }
+
+        .balloon {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-image: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/balloon.png);
+            -ms-transform-origin: 50% 34px;
+            -webkit-transform-origin: 50% 34px;
+            transform-origin: 50% 34px;
+        }
+    </style>
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="/css/profile-image-upload.css"/>
+
+    <!--말풍선-->
+    <style>
+        .speech-bubble {
+            position: relative;
+            background: #ffffff;
+            border-radius: .4em;
+        }
+
+        .speech-bubble:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border: 0.625em solid transparent;
+            border-top-color: #ffffff;
+            border-bottom: 0;
+            margin-left: -0.625em;
+            margin-bottom: -0.625em;
+        }
+    </style>
+
+<!-- 위치 컨트롤러-->
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        .radius_border {
+            border: 1px solid #919191;
+            border-radius: 70%;
+        }
+
+
+        .current_location_control {
+            position: absolute;
+            bottom: 70px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            overflow: hidden;
+            z-index: 1;
+            background-color: #f5f5f5;
+
+        }
+
+        .current_location_control span {
+            display: block;
+            width: 36px;
+            height: 40px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .current_location_control span img {
+            width: 30px;
+            height: 30px;
+            padding: 4px;
+            border: none;
+            box-sizing: content-box;
+        }
+
+        /*.custom_zoomcontrol span:first-child {*/
+        /*    border-bottom: 1px solid #bfbfbf;*/
+        /*}*/
+    </style>
 </head>
+
 <body>
-<div id="map" style="width:100vw;height:calc(100vh - 60px);"></div>
-<nav class="navbar fixed-bottom navbar-light navbar-fixed-bottom bg-faded justify-content-between flex-nowrap flex-row border bg-primary ">
+<!--내 위치 정보-->
+<form action="/members/position" method="post" name="userPosition" target="iframe1">
+    <!--위치-->
+    <input type="hidden" id="positionX" name="positionX">
+    <input type="hidden" id="positionY" name="positionY">
+</form>
+
+<iframe id="iframe1" name="iframe1" style="display:none"></iframe>
+
+<!--지도-->
+<div id="map" style="width: 100vw; height: calc(100vh - 60px); position:relative; overflow:hidden;">
+
+
+</div>
+<!-- 현재 위치로 이동시켜주는 컨트롤러 -->
+<div class="current_location_control radius_border">
+        <span onclick="setCurrentLocation()"><img src="https://mbti-image.s3.ap-northeast-2.amazonaws.com/map/current_location.png"
+                                      alt="현재위치"></span>
+</div>
+<!-- 네비게이션 바 -->
+<nav
+        class="navbar fixed-bottom navbar-light navbar-fixed-bottom bg-faded justify-content-between flex-nowrap flex-row border bg-primary"
+>
     <div class="container-fluid justify-content-center">
         <ul class="nav navbar-nav flex-row float-right nav-fill w-100">
-            <li class="nav-item"><a class="nav-link pr-3 text-white" href="/friends">친구</a></li>
-            <li class="nav-item"><a class="nav-link pr-3 text-white" href="/chatList">채팅</a></li>
-            <li class="nav-item "><a class="nav-link pr-3 disabled" href="/matching">매칭</a></li>
-            <li class="nav-item "><a class="nav-link pr-3 text-white" href="/">메뉴</a></li>
+            <li class="nav-item">
+                <a class="nav-link pr-3 text-white" href="/friends">친구</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link pr-3 text-white" href="/chatList">채팅</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link pr-3 disabled" href="/matching">매칭</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link pr-3 text-white" href="/">메뉴</a>
+            </li>
         </ul>
     </div>
 </nav>
 
-<script type="text/javascript"
-        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=	3647b3904ac7908c780ea13b0dc4c066"></script>
+<!--프로필 이미지-->
+<script src="/js/imageUploadPreview.js"></script>
+<!-- appKey -->
+<script
+        type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=	3647b3904ac7908c780ea13b0dc4c066"
+></script>
+
+<!-- 맵 초기화 -->
+<script>
+
+    var hongikuniv = {
+        "x": "37.5525192523979", "y": "126.924990619497 "
+    };
+
+    var kakaoPosition = {
+        "x": "33.450705", "y": "126.570677"
+    };
+
+    var userPosition = {
+        "x": "", "y": ""
+    };
+
+    //지도 이미지 해상도 낮춤
+    kakao.maps.disableHD();
+
+    var map = makeMap(kakaoPosition);
+
+    function makeMap(position) {
+        userPosition.x = position.x;
+        userPosition.y = position.y;
+        var mapContainer = document.getElementById("map"), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(position.x, position.y), // 지도의 중심좌표
+                level: 3, // 지도의 확대 레벨
+            };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        return map;
+    }
+</script>
+
+<!-- 단말의 현위치 좌표값 -->
+<script>
+
+
+    //유저 현재 위치 갱신
+    setPosition();
+
+    function setPosition() {
+        // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
+        if (navigator.geolocation) {
+            // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var lat = position.coords.latitude, // 위도
+                    lon = position.coords.longitude; // 경도
+
+                var locPosition = new kakao.maps.LatLng(lat, lon); //접속 위치
+                // var message = '<div style="padding:5px;">내 위치</div>'; // 인포윈도우에 표시될 내용입니다
+                //
+                // //유저 마커와 인포윈도우를 표시합니다
+                // displayUserMarker(locPosition, message);
+
+                // 지도 중심좌표를 접속위치로 변경합니다
+                map.setCenter(locPosition);
+
+                // 지도 중심좌표를 얻어옵니다
+                var latlng = map.getCenter();
+
+                userPosition.x = latlng.getLat();
+                userPosition.y = latlng.getLng();
+
+                console.log("현재 내 위치 :" + userPosition.x + "," + userPosition.y);
+
+                document.getElementById("positionX").setAttribute("value", lat);
+                document.getElementById("positionY").setAttribute("value", lon);
+                document.userPosition.submit();
+
+                // 근처 유저 json
+                // var url = "https://mbti-lovers.kro.kr:8080/matching/near/" + userPosition.x + "/" + userPosition.y;
+                // console.log(url);
+
+            });
+        }
+
+    }
+
+    // 지도에 내 위치 마커와 인포윈도우를 표시하는 함수입니다
+    function displayUserMarker(locPosition, message) {
+        // 마커를 생성합니다
+        var marker = new kakao.maps.Marker({
+            map: map,
+            position: locPosition,
+        });
+
+        var iwContent = message, // 인포윈도우에 표시할 내용
+            iwRemoveable = true;
+
+        // 인포윈도우를 생성합니다
+        var infowindow = new kakao.maps.InfoWindow({
+            content: iwContent,
+            removable: iwRemoveable,
+        });
+
+        // 인포윈도우를 마커위에 표시합니다
+        infowindow.open(map, marker);
+
+    }
+
+
+</script>
+
 <!--지도 영역 밖의 마커위치 추적하기-->
 <script>
     /**
@@ -128,26 +351,25 @@
      */
     function TooltipMarker(position, tooltipText) {
         this.position = position;
-        var node = this.node = document.createElement('div');
-        node.className = 'node';
+        var node = (this.node = document.createElement("div"));
+        node.className = "node";
 
-        var tooltip = document.createElement('div');
-        tooltip.className = 'tooltip',
-
+        var tooltip = document.createElement("div");
+        (tooltip.className = "tooltip"),
             tooltip.appendChild(document.createTextNode(tooltipText));
         node.appendChild(tooltip);
 
         // 툴팁 엘리먼트에 마우스 인터렉션에 따라 보임/숨김 기능을 하도록 이벤트를 등록합니다.
         node.onmouseover = function () {
-            tooltip.style.display = 'block';
+            tooltip.style.display = "block";
         };
         node.onmouseout = function () {
-            tooltip.style.display = 'none';
+            tooltip.style.display = "none";
         };
     }
 
     // AbstractOverlay 상속. 프로토타입 체인을 연결합니다.
-    TooltipMarker.prototype = new kakao.maps.AbstractOverlay;
+    TooltipMarker.prototype = new kakao.maps.AbstractOverlay();
 
     // AbstractOverlay의 필수 구현 메소드.
     // setMap(map)을 호출했을 경우에 수행됩니다.
@@ -181,8 +403,8 @@
         var height = this.node.offsetHeight;
 
         // 해당 위치의 정중앙에 위치하도록 top, left를 지정합니다.
-        this.node.style.left = (point.x - width / 2) + "px";
-        this.node.style.top = (point.y - height / 2) + "px";
+        this.node.style.left = point.x - width / 2 + "px";
+        this.node.style.top = point.y - height / 2 + "px";
     };
 
     // 좌표를 반환하는 메소드
@@ -194,14 +416,14 @@
      * 지도 영역 외부에 존재하는 마커를 추적하는 기능을 가진 객체입니다.
      * 클리핑 알고리즘을 사용하여 tracker의 좌표를 구하고 있습니다.
      */
-    function MarkerTracker(map, target) {
+    function MarkerTracker(map, marker, imageSrc) {
         // 클리핑을 위한 outcode
         var OUTCODE = {
             INSIDE: 0, // 0b0000
             TOP: 8, //0b1000
             RIGHT: 2, // 0b0010
             BOTTOM: 4, // 0b0100
-            LEFT: 1 // 0b0001
+            LEFT: 1, // 0b0001
         };
 
         // viewport 영역을 구하기 위한 buffer값
@@ -216,16 +438,29 @@
         var CLIP_BUFFER = 40;
 
         // trakcer 엘리먼트
-        var tracker = document.createElement('div');
-        tracker.className = 'tracker';
+        var tracker = document.createElement("div");
+        tracker.className = "tracker";
 
         // 내부 아이콘
-        var icon = document.createElement('div');
-        icon.className = 'icon';
+        var icon = document.createElement("div");
+        icon.className = "icon";
 
         // 외부에 있는 target의 위치에 따라 회전하는 말풍선 모양의 엘리먼트
-        var balloon = document.createElement('div');
-        balloon.className = 'balloon';
+        var balloon = document.createElement("div");
+        balloon.className = "balloon";
+
+        //임시 Css
+        var box = document.createElement("div");
+        box.className = "box";
+        box.style.borderRadius = "70%"
+
+        var profile = document.createElement("img");
+        profile.className = "profile";
+        profile.id = "preview-image";
+        profile.src = imageSrc
+        box.appendChild(profile);
+        icon.appendChild(box);
+        //임시추가
 
         tracker.appendChild(balloon);
         tracker.appendChild(icon);
@@ -234,7 +469,7 @@
 
         // traker를 클릭하면 target의 위치를 지도 중심으로 지정합니다.
         tracker.onclick = function () {
-            map.setCenter(target.getPosition());
+            map.setCenter(marker.getPosition());
             setVisible(false);
         };
 
@@ -249,12 +484,11 @@
             var extBounds = extendBounds(bounds, proj);
 
             // target이 확장된 영역에 속하는지 판단하고
-            if (extBounds.contain(target.getPosition())) {
+            if (extBounds.contain(marker.getPosition())) {
                 // 속하면 tracker를 숨깁니다.
                 setVisible(false);
             } else {
                 // target이 영역 밖에 있으면 계산을 시작합니다.
-
 
                 // 지도 bounds를 기준으로 클리핑할 top, right, bottom, left를 재계산합니다.
                 //
@@ -285,7 +519,7 @@
                 // 계산을 위해 좌표 변환 메소드를 사용하여 모두 화면 좌표로 변환시킵니다.
 
                 // TooltipMarker의 위치
-                var pos = proj.containerPointFromCoords(target.getPosition());
+                var pos = proj.containerPointFromCoords(marker.getPosition());
 
                 // 지도 중심의 위치
                 var center = proj.containerPointFromCoords(map.getCenter());
@@ -303,11 +537,18 @@
                 var left = sw.x + CLIP_BUFFER;
 
                 // 계산된 모든 좌표를 클리핑 로직에 넣어 좌표를 얻습니다.
-                var clipPosition = getClipPosition(top, right, bottom, left, center, pos);
+                var clipPosition = getClipPosition(
+                    top,
+                    right,
+                    bottom,
+                    left,
+                    center,
+                    pos
+                );
 
                 // 클리핑된 좌표를 tracker의 위치로 사용합니다.
-                tracker.style.top = clipPosition.y + 'px';
-                tracker.style.left = clipPosition.x + 'px';
+                tracker.style.top = clipPosition.y + "px";
+                tracker.style.left = clipPosition.x + "px";
 
                 // 말풍선의 회전각을 얻습니다.
                 var angle = getAngle(center, pos);
@@ -316,9 +557,15 @@
                 // 브라우저 종류에따라 표현되지 않을 수도 있습니다.
                 // https://caniuse.com/#feat=transforms2d
                 balloon.style.cssText +=
-                    '-ms-transform: rotate(' + angle + 'deg);' +
-                    '-webkit-transform: rotate(' + angle + 'deg);' +
-                    'transform: rotate(' + angle + 'deg);';
+                    "-ms-transform: rotate(" +
+                    angle +
+                    "deg);" +
+                    "-webkit-transform: rotate(" +
+                    angle +
+                    "deg);" +
+                    "transform: rotate(" +
+                    angle +
+                    "deg);";
 
                 // target이 영역 밖에 있을 경우 tracker를 노출합니다.
                 setVisible(true);
@@ -363,10 +610,10 @@
             // 그리고나서 다시 지도 좌표로 변환한 extBounds를 리턴합니다.
             // extBounds는 기존의 bounds에서 상하좌우 30px만큼 확장된 영역 객체입니다.
             return new kakao.maps.LatLngBounds(
-                proj.coordsFromPoint(sw), proj.coordsFromPoint(ne));
-
+                proj.coordsFromPoint(sw),
+                proj.coordsFromPoint(ne)
+            );
         }
-
 
         // Cohen–Sutherland clipping algorithm
         // 자세한 내용은 아래 위키에서...
@@ -403,16 +650,16 @@
                 }
 
                 if (code & OUTCODE.TOP) {
-                    ox = ox + (ix - ox) / (iy - oy) * (top - oy);
+                    ox = ox + ((ix - ox) / (iy - oy)) * (top - oy);
                     oy = top;
                 } else if (code & OUTCODE.RIGHT) {
-                    oy = oy + (iy - oy) / (ix - ox) * (right - ox);
+                    oy = oy + ((iy - oy) / (ix - ox)) * (right - ox);
                     ox = right;
                 } else if (code & OUTCODE.BOTTOM) {
-                    ox = ox + (ix - ox) / (iy - oy) * (bottom - oy);
+                    ox = ox + ((ix - ox) / (iy - oy)) * (bottom - oy);
                     oy = bottom;
                 } else if (code & OUTCODE.LEFT) {
-                    oy = oy + (iy - oy) / (ix - ox) * (left - ox);
+                    oy = oy + ((iy - oy) / (ix - ox)) * (left - ox);
                     ox = left;
                 }
 
@@ -427,14 +674,14 @@
         function getAngle(center, target) {
             var dx = target.x - center.x;
             var dy = center.y - target.y;
-            var deg = Math.atan2(dy, dx) * 180 / Math.PI;
+            var deg = (Math.atan2(dy, dx) * 180) / Math.PI;
 
             return ((-deg + 360) % 360 | 0) + 90;
         }
 
         // tracker의 보임/숨김을 지정하는 함수
         function setVisible(visible) {
-            tracker.style.display = visible ? 'block' : 'none';
+            tracker.style.display = visible ? "block" : "none";
         }
 
         // Map 객체의 'zoom_start' 이벤트 핸들러
@@ -444,108 +691,252 @@
 
         // target의 추적을 실행합니다.
         this.run = function () {
-            kakao.maps.event.addListener(map, 'zoom_start', hideTracker);
-            kakao.maps.event.addListener(map, 'zoom_changed', tracking);
-            kakao.maps.event.addListener(map, 'center_changed', tracking);
+            kakao.maps.event.addListener(map, "zoom_start", hideTracker);
+            kakao.maps.event.addListener(map, "zoom_changed", tracking);
+            kakao.maps.event.addListener(map, "center_changed", tracking);
             tracking();
         };
 
         // target의 추적을 중지합니다.
         this.stop = function () {
-            kakao.maps.event.removeListener(map, 'zoom_start', hideTracker);
-            kakao.maps.event.removeListener(map, 'zoom_changed', tracking);
-            kakao.maps.event.removeListener(map, 'center_changed', tracking);
+            kakao.maps.event.removeListener(map, "zoom_start", hideTracker);
+            kakao.maps.event.removeListener(map, "zoom_changed", tracking);
+            kakao.maps.event.removeListener(map, "center_changed", tracking);
             setVisible(false);
         };
     }
+</script>
+
+<!-- 마커 및 마커트레이서 생성 -->
+<script>
+
+    function createMarkerContent(imageSrc) {
+        var content = document.createElement('div');
+        content.className = "marker"
+        //마커 크기
+        content.style.height = "64px";
+        content.style.width = "64px";
+
+        var box = document.createElement("div");
+        box.className = "box";
+        box.style.borderRadius = "70%"
+
+        var img = document.createElement("img");
+        img.className = "profile";
+        img.id = "preview-image";
+        img.src = imageSrc;
+        box.appendChild(img);
+        content.appendChild(box);
+
+        return content;
+
+    }
+
+    function createMarker(markerPosition, markerContent) {
+
+        var marker = new kakao.maps.CustomOverlay({
+            map: map,
+            clickable: true,
+            position: markerPosition,
+            content: markerContent,
+        });
+
+        marker.setMap(map);
+        return marker;
+    }
+
+    function createTracer(marker, imageSrc) {
+        markerTracker = new MarkerTracker(map, marker, imageSrc);
+        markerTracker.run();
+    }
 
 
-    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-        mapOption = {
-            center: new kakao.maps.LatLng(37.402054, 127.1082099), // 지도의 중심좌표
-            level: 3 // 지도의 확대 레벨
+    function createSpeechBubbleContent(name) {
+        var content = document.createElement('div');
+        content.className = "speech-bubble"
+        content.innerHTML = name;
+        return content
+    }
+
+    function createSpeechBubbleOverlay(marker, id, content) {
+
+        var overlay = new kakao.maps.CustomOverlay({
+            yAnchor: 2.5,
+            content: content,
+            position: marker.getPosition()
+        });
+
+        return overlay;
+
+    }
+</script>
+
+<!--테스트용 마커 정보-->
+<script>
+    // var defImgSrc = "https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/1/James+Gilleard-The+Grand+Budapest+Hotel.png";// 마커이미지의 주소입니다
+    // var places = [
+    //     {
+    //         id: 1,
+    //         name: '카카오',
+    //         latlng: new kakao.maps.LatLng(33.450705, 126.570677),
+    //         imageSrc: defImgSrc
+    //     },
+    //     {
+    //         id: 2,
+    //         name: '생태연못',
+    //         latlng: new kakao.maps.LatLng(33.450936, 126.569477),
+    //         imageSrc: defImgSrc
+    //     },
+    //     {
+    //         id: 3,
+    //         name: '텃밭',
+    //         latlng: new kakao.maps.LatLng(33.450879, 126.569940),
+    //         imageSrc: defImgSrc
+    //     },
+    //     {
+    //         id: 4,
+    //         name: '근린공원',
+    //         latlng: new kakao.maps.LatLng(33.451393, 126.570738),
+    //         imageSrc: defImgSrc
+    //     },
+    //     {
+    //         id: 5,
+    //         name: '홍익대',
+    //         latlng: new kakao.maps.LatLng(hongikuniv.x, hongikuniv.y),
+    //         imageSrc: "https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/1/plum.jpg"// 마커이미지의 주소입니다
+    //     },
+    //     {
+    //         id: 6,
+    //         name: '야구장',
+    //         latlng: new kakao.maps.LatLng(37.54699, 127.09598),
+    //         imageSrc: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png"
+    //     }
+    //
+    // ];
+
+</script>
+<!--테스트용 마커생성-->
+<script>
+    // places.forEach(function (place) {
+    //     var id = place.id;
+    //     var position = place.latlng;
+    //     var name = place.name;
+    //     var imageSrc = place.imageSrc;
+    //
+    //     var markerContent = createMarkerContent(imageSrc);
+    //     var marker = createMarker(position, markerContent);
+    //     createTracer(marker, imageSrc);
+    //
+    //
+    //     var speechBubbleOverlay = createSpeechBubbleOverlay(marker, id, createSpeechBubbleContent(name));
+    //
+    //     speechBubbleOverlay.setMap(map);
+    //
+    //     //클릭시에만 유저정보 보임
+    //     // markerContent.addEventListener('click',function (event){
+    //     //     overlay.setMap(map);
+    //     // })
+    // });
+</script>
+
+<!--지도 중심좌표 정보 출력-->
+<script>
+    //지도의 중심좌표 변경시 그 좌표를 출력합니다
+    // 마우스 드래그로 지도 이동이 완료되었을 때 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
+    kakao.maps.event.addListener(map, 'dragend', function () {
+
+        // 지도 중심좌표를 얻어옵니다
+        var latlng = map.getCenter();
+
+        userPosition.x = latlng.getLat();
+        userPosition.y = latlng.getLng();
+
+        console.log("중심좌표 변경" + ": " + userPosition.x + "," + userPosition.y);
+        // getInfo(userPosition.x, userPosition.y);
+    });
+
+
+</script>
+<!--근처 유저 정보 가져오기-->
+<script>
+
+    var nearUserJson = null;
+
+    getNearUser();
+
+    function getNearUser() {
+
+        var request = new XMLHttpRequest();
+        request.open('GET', "matching/near/" + userPosition.x + "/" + userPosition.y, true);
+
+        request.onload = function () {
+            if (request.status >= 200 && request.status < 400) {
+                // Success!
+                nearUserJson = JSON.parse(request.responseText);
+                // console.log("현재 지역에서 가까운 유저 10명")
+                // console.log(nearUser);
+                makerNearUserMarker(nearUserJson);
+            } else {
+                // We reached our target server, but it returned an error
+
+            }
         };
-</script>
 
-<script>
+        request.onerror = function () {
+            // There was a connection error of some sort
+        };
 
-    // 지도를 생성합니다.
-    // // 본사
-    // var dkpos1 = new kakao.maps.LatLng(33.450707, 126.570678);
-    // // 판교 오피스
-    // var dkpos2 = new kakao.maps.LatLng(37.402054, 127.108209);
-    // // 고객 센터
-    // var dkpos3 = new kakao.maps.LatLng(37.402827, 127.107292);
-    //
-    // // 툴팁을 노출하는 마커를 생성합니다.
-    // var marker1 = new TooltipMarker(dkpos1, 'kakao 본사');
-    // var marker2 = new TooltipMarker(dkpos2, 'kakao 판교오피스');
-    // var marker3 = new TooltipMarker(dkpos3, 'kakao 고객센터');
-    // marker1.setMap(map);
-    // marker2.setMap(map);
-    // marker3.setMap(map);
-    //
-    // // MarkerTracker를 생성합니다.
-    // var markerTracker1 = new MarkerTracker(map, marker1);
-    // var markerTracker2 = new MarkerTracker(map, marker2);
-    // var markerTracker3 = new MarkerTracker(map, marker3);
-    //
-    // // marker의 추적을 시작합니다.
-    // markerTracker1.run();
-    // markerTracker2.run();
-    // markerTracker3.run();
+        request.send();
 
+        return nearUserJson;
+    }
 
 </script>
 
+
+
+
+<!-- 마커생성-->
 <script>
 
-    mapOption = {
-        center: new kakao.maps.LatLng(37.54699, 127.09598), // 지도의 중심좌표
-        level: 4 // 지도의 확대 레벨
-    };
+    function makerNearUserMarker(json){
+        console.log("가까운 유저 10명의 마커를 만듭니다.");
+        json.forEach(function (member) {
+            var uid = member.uid;
+            var position = new kakao.maps.LatLng(member.location.coordinates[0], member.location.coordinates[1]);
+            var name = member.name;
+            const mbti = member.mbti;
 
-    var map = new kakao.maps.Map(mapContainer, mapOption);
+            var imageSrc = S3url + uid + '/' + encodeURI(member.profileImage);
+            if (member.profileImage == "") {
+                imageSrc = defaultProfileImgPath;
+            }
 
-    var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png', // 마커이미지의 주소입니다
-        imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
-        imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+            // console.log(imageSrc);
 
-    // 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-    var content = '<div class="customoverlay">' +
-        '  <a href="http://localhost:8080/members/read/6">' +
-        '    <span class="title">김수정</span>' +
-        '  </a>' +
-        '</div>';
+            var markerContent = createMarkerContent(imageSrc);
+            var marker = createMarker(position, markerContent);
+            createTracer(marker, imageSrc);
 
-    // 커스텀 오버레이가 표시될 위치입니다
-    var position = new kakao.maps.LatLng(37.54699, 127.09598);
+            //말풍선 오버레이
+            var content = "[" + mbti + "]" + name;
+            var speechBubbleOverlay = createSpeechBubbleOverlay(marker, uid, createSpeechBubbleContent(content));
 
-    // 커스텀 오버레이를 생성합니다
-    var customOverlay = new kakao.maps.CustomOverlay({
-        map: map,
-        position: position,
-        content: content,
-        yAnchor: 1
-    });
+            speechBubbleOverlay.setMap(map);
 
+        });
+    }
 
-    // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
-    var markerPosition = new kakao.maps.LatLng(37.54699, 127.09598); // 마커가 표시될 위치입니다
+</script>
 
+<!-- 현재 위치 이동 컨트롤러-->
+<script>
 
-    // 마커를 생성합니다
-    var marker4 = new kakao.maps.Marker({
-        position: markerPosition,
-        image: markerImage // 마커이미지 설정
-    });
+    // 현재 위치 이동 컨트롤러에 사용
+    function setCurrentLocation() {
+        setPosition();
+    }
 
-    // 마커가 지도 위에 표시되도록 설정합니다
-    marker4.setMap(map);
-
-    var markerTracker4 = new MarkerTracker(map, marker4);
-    markerTracker4.run();
 
 </script>
 

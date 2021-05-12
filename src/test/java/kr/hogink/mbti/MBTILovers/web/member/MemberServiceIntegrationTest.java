@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -24,14 +26,29 @@ public class MemberServiceIntegrationTest {
     void 회원가입() {
         //given
         Member member = new Member();
+        String saveId = "testuser";
+        member.setUid(saveId);
         member.setName("테스트유저");
         //when
-        String saveId = memberService.join(member);
+        memberService.join(member);
         //then
         //assertj의 assertions
         Member findMember = memberService.findOneByUid(saveId).get();
         assertThat(member.getName()).isEqualTo(findMember.getName());
     }
 
+
+    @Test
+    void 가까운점() {
+
+        List<Member> nearPoint = memberRepository.findNearPoint(2);
+        System.out.println("######################################################################");
+
+        for (int i = 0; i < nearPoint.size(); i++) {
+            Member member = nearPoint.get(i);
+            System.out.println(member.getUid());
+
+        }
+    }
 
 }
