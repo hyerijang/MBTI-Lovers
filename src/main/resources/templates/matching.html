@@ -707,7 +707,6 @@
     }
 </script>
 
-
 <!-- 마커 및 마커트레이서 생성 -->
 <script>
 
@@ -861,7 +860,7 @@
 <!--근처 유저 정보 가져오기-->
 <script>
 
-    var nearUser = null;
+    var nearUserJson = null;
 
     getNearUser();
 
@@ -873,10 +872,10 @@
         request.onload = function () {
             if (request.status >= 200 && request.status < 400) {
                 // Success!
-                nearUser = JSON.parse(request.responseText);
+                nearUserJson = JSON.parse(request.responseText);
                 // console.log("현재 지역에서 가까운 유저 10명")
                 // console.log(nearUser);
-                makerNearUserMarker(nearUser);
+                makerNearUserMarker(nearUserJson);
             } else {
                 // We reached our target server, but it returned an error
 
@@ -889,7 +888,7 @@
 
         request.send();
 
-        return nearUser;
+        return nearUserJson;
     }
 
 </script>
@@ -900,9 +899,9 @@
 <!-- 마커생성-->
 <script>
 
-    function makerNearUserMarker(nearUser){
+    function makerNearUserMarker(json){
         console.log("가까운 유저 10명의 마커를 만듭니다.");
-        nearUser.forEach(function (member) {
+        json.forEach(function (member) {
             var uid = member.uid;
             var position = new kakao.maps.LatLng(member.location.coordinates[0], member.location.coordinates[1]);
             var name = member.name;

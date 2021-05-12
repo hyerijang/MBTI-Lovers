@@ -21,6 +21,8 @@ import static kr.hogink.mbti.MBTILovers.web.login.LoginType.USER_UID_COOKIE;
 public class MapController {
 
     private MemberService memberService;
+    private final int NUM_NEAR_USER = 10 ;
+
 
     public MapController(MemberService memberService) {
         this.memberService = memberService;
@@ -39,34 +41,22 @@ public class MapController {
         Double longitude = Double.parseDouble(positionY);
 
         Optional<Member> user = memberService.findOneByUid(cookieUid);
-        if (user.isPresent()) {
-            Member temp = user.get();
 
-            String pointWKT = String.format("POINT(%s %s)", latitude, longitude);
-            try {
-                Point point = (Point) new WKTReader().read(pointWKT);
-                temp.setLocation(point);
-                memberService.edit(temp);
-                log.info(positionX + " " + positionY);
-                log.info(cookieUid + "님의 현재 위치를 저장하였습니다.");
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
+        memberService.setPoint(user, latitude, longitude);
 
         return "redirect:/";
 
     }
 
-    @RequestMapping(value = {"/matching/near/{x}/{y}"}, method= RequestMethod.GET)
+    @RequestMapping(value = {"/matching/near/{x}/{y}"}, method = RequestMethod.GET)
     @ResponseBody()
-    public List<Member> getNearUser(@PathVariable String x, @PathVariable  String y) {
+    public List<Member> getNearUser(@PathVariable String x, @PathVariable String y) {
 
         log.info("근처유저 가져오기 x:" + x + " y:" + y);
         Double latitude = Double.parseDouble(x);
         Double longitude = Double.parseDouble(y);
 
-        List<Member> members = memberService.findNearUser(latitude, longitude, 10);
+        List<Member> members = memberService.findNearUser(latitude, longitude, NUM_NEAR_USER);
 
         return members;
 

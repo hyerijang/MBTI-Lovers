@@ -20,5 +20,5 @@ public interface MemberRepository {
     List<Member> findNearPoint(int number);
 
     @Query(value = "select * from member where location is not null order by ST_Distance(location, POINT(?1, ?2))  limit ?3", nativeQuery=true)
-    List<Member> findNearPoint(double x, double y, int number);
+    List<Member> findNearPoint(double x, double y, int n);
 }

@@ -4,7 +4,7 @@ import java.util.*;
 
 public class MemoryMemberRepository implements MemberRepository {
     @Override
-    public List<Member> findNearPoint(double x, double y, int number) {
+    public List<Member> findNearPoint(double x, double y, int n) {
         return null;
     }
 

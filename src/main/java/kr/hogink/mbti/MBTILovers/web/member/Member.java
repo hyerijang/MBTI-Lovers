@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @Setter
 @RequiredArgsConstructor
 @NoArgsConstructor
-
 public class Member {
     //    private static final long serialVersionUID = 1L;
     @Id
@@ -34,6 +33,5 @@ public class Member {
     @JsonDeserialize(contentUsing = GeometryDeserializer.class)
     @Column(name = "location")
     private Point location;
-
 
 }

@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface MemberService {
 
     String join(Member member);
+
     String edit(Member member);
 
     List<Member> findMembers();
@@ -17,6 +18,7 @@ public interface MemberService {
 
     void renewLastConnectTime(Member member);
 
-
     List<Member> findNearUser(double x, double y, int number);
+
+    void setPoint(Optional<Member> optMember, double latitude, double longitude);
 }
