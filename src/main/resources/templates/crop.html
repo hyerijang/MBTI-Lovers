@@ -74,6 +74,13 @@
     </div>
 </div>
 
+<form action="/testUpload" method="post" name="image" id="form">
+    <input type="hidden" id="base64" name="base64" value="123">
+    <!--    value는 s3업로드를 위한 임시 uid-->
+    <input type="hidden" name="uid" value="base64">
+
+    <button type="submit">전송</button>
+</form>
 <!--자바스크립트-->
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
 <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'></script>
@@ -127,16 +134,21 @@
             quality: 0.5
         }).then(function (resp) {
             $('#confirm-img').attr('src', resp);
+            $('#base64').attr('value', resp);
             $('.modal').modal('hide');
+
         });
 
         croppi.croppie('result', {
-            type: 'html',
+            type: 'blob',
             format: 'png',
             size: 'viewport',
             quality: 0.5
-        }).then(function (resp) {
-            console.log(resp);
+        }).then(function (blob) {
+            console.log("make blob file")
+            console.log(blob);
+            var blobUrl = URL.createObjectURL(blob);
+            console.log(blobUrl);
         });
     });
 
