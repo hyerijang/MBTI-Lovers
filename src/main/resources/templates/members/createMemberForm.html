@@ -16,7 +16,6 @@
     <link rel="stylesheet" href="/css/profile-image-upload.css"/>
 
 
-
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css">
     <style>
@@ -55,15 +54,7 @@
 </head>
 <body>
 
-<!--이미지 선택 버튼-->
-<div class='container-form'>
-    <input id='selectedFile' class="disp-none" type='file' accept=".png, .jpg, .jpeg, .svg">
-    <button id="upload-aphoto" class="btn-primary btn">Select image</button>
-</div>
-<!--결과물 미리보기-->
-<div class='container-image'>
-    <img id='confirm-img' src=''>
-</div>
+
 <!--이미지 자르기 창-->
 <div class="modal fade" id="imageModalContainer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-md modal-dialog-centered">
@@ -144,14 +135,15 @@
                         <!--프로필 이미지-->
                         <form action="/uploadProfileImage" method="post" enctype="multipart/form-data"
                               onsubmit="return handleFileSelect();" target="iframe1" id="form_imageUpload">
+                            <!-- 업로드하는 사람의 uid -->
                             <input id="uid_imageUpload" type="hidden" th:value="${uid}" name="uid_imageUpload"/>
                             <div class="form-group row">
                                 <label for="imageFile"
                                        class="col-md-4 col-form-label text-md-right">프로필이미지</label>
                                 <div class="col-md-6">
-                                    <!--파일 업로드-->
+                                    <!--파일 업로드 버튼-->
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="imageFile" accept="image/*"
+                                        <input type="file" class="custom-file-input" id="imageFile" accept=".png, .jpg, .jpeg, .svg"
                                                name="file" aria-describedby="customFileInput">
                                         <label class="custom-file-label" for="imageFile"
                                                style=" overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Select
@@ -161,6 +153,8 @@
                                     <div class="box box-margin">
                                         <img class="profile" id="preview-image">
                                     </div>
+
+
                                 </div>
 
                             </div>
@@ -197,17 +191,17 @@
 
 <script>
     $(document).on('click', '#upload-aphoto', function () {
-        document.getElementById('selectedFile').click();
+        document.getElementById('imageFile').click();
     });
 
-    $('#selectedFile').change(function () {
+    $('#imageFile').change(function () {
         if (this.files[0] == undefined)
             return;
         $('#imageModalContainer').modal('show');
         let reader = new FileReader();
         reader.addEventListener("load", function () {
             window.src = reader.result;
-            $('#selectedFile').val('');
+            $('#imageFile').val('');
         }, false);
         if (this.files[0]) {
             reader.readAsDataURL(this.files[0]);
@@ -243,19 +237,12 @@
             size: 'viewport',
             quality: 0.5
         }).then(function (resp) {
-            $('#confirm-img').attr('src', resp);
             $('#preview-image').attr('src', resp);
             $('.modal').modal('hide');
+
+            
         });
 
-        croppi.croppie('result', {
-            type: 'html',
-            format: 'png',
-            size: 'viewport',
-            quality: 0.5
-        }).then(function (resp) {
-            console.log(resp);
-        });
     });
 
 
