@@ -9,7 +9,9 @@ var uid;
 
 for (let i = 0; i < previewImages.length; i++) {
     let previewImage = previewImages.item(i);
-    uid = uidlist.item(i).value;
+
+    if (uidlist.item(i) != null)
+        uid = uidlist.item(i).value;
     let profileImgFileName = profileImgFileNameList.item(i).value;
 
     let profileImgPath = S3url + uid + '/' + encodeURI(profileImgFileName);
