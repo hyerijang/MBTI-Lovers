@@ -88,7 +88,7 @@
                     <div class="card-body">
                         <form id="my-form" name=" my-form
                         " action="/members/new" method="post"
-                              onsubmit="return handleFileSelect()">
+                              onsubmit="return base64Upload()">
                             <input type="hidden" id="uid" name="uid" th:value="${uid}">
                             <div class="form-group row">
                                 <label for="name" class="col-md-4 col-form-label text-md-right">이름</label>
@@ -133,32 +133,35 @@
                         </form>
 
                         <!--프로필 이미지-->
-                        <form action="/uploadProfileImage" method="post" enctype="multipart/form-data"
-                              onsubmit="return handleFileSelect();" target="iframe1" id="form_imageUpload">
-                            <!-- 업로드하는 사람의 uid -->
-                            <input id="uid_imageUpload" type="hidden" th:value="${uid}" name="uid_imageUpload"/>
-                            <div class="form-group row">
-                                <label for="imageFile"
-                                       class="col-md-4 col-form-label text-md-right">프로필이미지</label>
-                                <div class="col-md-6">
-                                    <!--파일 업로드 버튼-->
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="imageFile" accept=".png, .jpg, .jpeg, .svg"
-                                               name="file" aria-describedby="customFileInput">
-                                        <label class="custom-file-label" for="imageFile"
-                                               style=" overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Select
-                                            file</label>
-                                    </div>
-                                    <!--프리뷰-->
-                                    <div class="box box-margin">
-                                        <img class="profile" id="preview-image">
-                                    </div>
+                        <div class="form-group row">
+                            <label for="imageFile"
+                                   class="col-md-4 col-form-label text-md-right">프로필이미지</label>
+                            <div class="col-md-6">
+                                <!--파일 업로드 버튼-->
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="imageFile"
+                                           accept=".png, .jpg, .jpeg, .svg"
+                                           name="file" aria-describedby="customFileInput">
+                                    <label class="custom-file-label" for="imageFile"
+                                           style=" overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Select
+                                        file</label>
+                                </div>
 
+                                <form action="/base64Upload" method="post" name="image" id="base64form" target="iframe1">
+                                    <input type="hidden" id="base64" name="base64">
+                                    <input type="hidden" name="uid" th:value="${uid}">
+                                    <button type="submit">전송</button>
+                                </form>
 
+                                <!--프리뷰-->
+                                <div class="box box-margin">
+                                    <img class="profile" id="preview-image">
                                 </div>
 
                             </div>
-                        </form>
+
+                        </div>
+
 
                         <div class="col-md-6 offset-md-4">
                             <button type="submit" class="btn btn-primary" form="my-form">
@@ -175,6 +178,8 @@
     </div>
 
     <iframe id="iframe1" name="iframe1" style="display:none"></iframe>
+
+
 </main>
 
 <script src="/js/member/mbti.js"></script>
@@ -184,10 +189,8 @@
 <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/croppie/2.4.1/croppie.min.js'></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-<script src="/js/fileupload.js"></script>
 <script src="/js/imageSetter.js"></script>
 <script src="/js/imageUploadPreview.js"></script>
-
 
 <script>
     $(document).on('click', '#upload-aphoto', function () {
@@ -238,14 +241,24 @@
             quality: 0.5
         }).then(function (resp) {
             $('#preview-image').attr('src', resp);
+            $('#base64').attr('value', resp);
             $('.modal').modal('hide');
 
-            
         });
 
     });
 
 
+</script>
+<script>
+    function base64Upload(){
+        var base64 = document.getElementById("base64");
+        if(base64.value != null){
+            console.log("이미지파일 업로드");
+            document.getElementById("base64form").submit();
+            document.getElementById("profileImage").value = "thumbnail.png";
+        }
+    }
 </script>
 </body>
 </html>

@@ -45,7 +45,7 @@ public class S3Controller {
         return "redirect:/";
     }
 
-    @PostMapping("/testUpload")
+    @PostMapping("/base64Upload")
     public String uploadBase64(String base64, String uid)  {
 
         log.info("--------------------------------------");

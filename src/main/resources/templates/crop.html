@@ -74,11 +74,10 @@
     </div>
 </div>
 
-<form action="/testUpload" method="post" name="image" id="form">
+<form action="/base64Upload" method="post" name="image" id="form">
     <input type="hidden" id="base64" name="base64" value="123">
     <!--    value는 s3업로드를 위한 임시 uid-->
     <input type="hidden" name="uid" value="base64">
-
     <button type="submit">전송</button>
 </form>
 <!--자바스크립트-->
