@@ -258,7 +258,7 @@
     //지도 이미지 해상도 낮춤
     kakao.maps.disableHD();
 
-    var map = makeMap(kakaoPosition);
+    var map = makeMap(hongikuniv);
 
     function makeMap(position) {
         userPosition.x = position.x;
@@ -772,74 +772,6 @@
     }
 </script>
 
-<!--테스트용 마커 정보-->
-<script>
-    // var defImgSrc = "https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/1/James+Gilleard-The+Grand+Budapest+Hotel.png";// 마커이미지의 주소입니다
-    // var places = [
-    //     {
-    //         id: 1,
-    //         name: '카카오',
-    //         latlng: new kakao.maps.LatLng(33.450705, 126.570677),
-    //         imageSrc: defImgSrc
-    //     },
-    //     {
-    //         id: 2,
-    //         name: '생태연못',
-    //         latlng: new kakao.maps.LatLng(33.450936, 126.569477),
-    //         imageSrc: defImgSrc
-    //     },
-    //     {
-    //         id: 3,
-    //         name: '텃밭',
-    //         latlng: new kakao.maps.LatLng(33.450879, 126.569940),
-    //         imageSrc: defImgSrc
-    //     },
-    //     {
-    //         id: 4,
-    //         name: '근린공원',
-    //         latlng: new kakao.maps.LatLng(33.451393, 126.570738),
-    //         imageSrc: defImgSrc
-    //     },
-    //     {
-    //         id: 5,
-    //         name: '홍익대',
-    //         latlng: new kakao.maps.LatLng(hongikuniv.x, hongikuniv.y),
-    //         imageSrc: "https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/1/plum.jpg"// 마커이미지의 주소입니다
-    //     },
-    //     {
-    //         id: 6,
-    //         name: '야구장',
-    //         latlng: new kakao.maps.LatLng(37.54699, 127.09598),
-    //         imageSrc: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png"
-    //     }
-    //
-    // ];
-
-</script>
-<!--테스트용 마커생성-->
-<script>
-    // places.forEach(function (place) {
-    //     var id = place.id;
-    //     var position = place.latlng;
-    //     var name = place.name;
-    //     var imageSrc = place.imageSrc;
-    //
-    //     var markerContent = createMarkerContent(imageSrc);
-    //     var marker = createMarker(position, markerContent);
-    //     createTracer(marker, imageSrc);
-    //
-    //
-    //     var speechBubbleOverlay = createSpeechBubbleOverlay(marker, id, createSpeechBubbleContent(name));
-    //
-    //     speechBubbleOverlay.setMap(map);
-    //
-    //     //클릭시에만 유저정보 보임
-    //     // markerContent.addEventListener('click',function (event){
-    //     //     overlay.setMap(map);
-    //     // })
-    // });
-</script>
-
 <!--지도 중심좌표 정보 출력-->
 <script>
     //지도의 중심좌표 변경시 그 좌표를 출력합니다
@@ -894,10 +826,7 @@
 
 </script>
 
-
-
-
-<!-- 마커생성-->
+<!-- 근처 유저 정보로 마커생성-->
 <script>
 
     function makerNearUserMarker(json){
