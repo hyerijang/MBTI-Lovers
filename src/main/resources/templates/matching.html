@@ -202,7 +202,7 @@
         }
 
         .dim-layer .pop-layer {
-            display: block;
+            display: none;
         }
 
         a.btn-layerClose {
@@ -859,6 +859,7 @@
             content: markerContent,
         });
 
+
         marker.setMap(map);
         return marker;
     }
@@ -906,9 +907,13 @@
         var popConts = document.createElement("p")
         popConts.className = "pop-conts"
 
-        var p = document.createElement("p");
-        p.className = "ctxt mb20";
-        p.innerText = member.name;
+        var member_name = document.createElement("p");
+        member_name.className = "ctxt mb20";
+        member_name.innerText = member.name;
+
+        var member_mbti = document.createElement("p");
+        member_mbti.innerText = member.mbti;
+
 
         var btnR = document.createElement("div");
         btnR.className = "btn-r";
@@ -918,13 +923,13 @@
         a.innerText = "Close";
 
         // document.body.appendChild(dimLayer);
-        // dimLayer.appendChild(dimBg);
-
         dimLayer = document.getElementsByClassName("dim-layer")[0];
+        // dimLayer.appendChild(dimBg);
         dimLayer.appendChild(popLayer);
         popLayer.appendChild(popContainer);
         popContainer.appendChild(popConts);
-        popConts.appendChild(p);
+        popConts.appendChild(member_name);
+        popConts.appendChild(member_mbti);
         popConts.appendChild(btnR);
         btnR.appendChild(a);
 
@@ -1037,17 +1042,18 @@
 <script>
     $('.btn-popup').click(function () {
         var $href = $(this).attr('href');
-        console.log($href);
         layer_popup($href);
     });
 
     function layer_popup(el) {
 
-        var $el = $(el);		//레이어의 id를 $el 변수에 저장
-        var isDim = $el.prev().hasClass('dimBg');	//dimmed 레이어를 감지하기 위한 boolean 변수
+        var $el = $(el);		//열고자 하는 레이어의 id를 $el 변수에 저장
 
-        console.log(isDim);
-        isDim ? $('.dim-layer').fadeIn() : $el.fadeIn();
+        console.log("열고자 하는 레이어의 아이디:" + el);
+        //해당 팝업만 보이게 설정
+        console.log($el);
+        $el.css("display", "block");
+        $('.dim-layer').fadeIn();
 
         var $elWidth = ~~($el.outerWidth()),
             $elHeight = ~~($el.outerHeight()),
@@ -1065,11 +1071,13 @@
         }
 
         $el.find('a.btn-layerClose').click(function () {
-            isDim ? $('.dim-layer').fadeOut() : $el.fadeOut(); // 닫기 버튼을 클릭하면 레이어가 닫힌다.
+            $el.css("display", "none");
+            $('.dim-layer').fadeOut() // 닫기 버튼을 클릭하면 레이어가 닫힌다.
             return false;
         });
 
         $('.layer .dimBg').click(function () {
+            $el.css("display", "none");
             $('.dim-layer').fadeOut();
             return false;
         });
