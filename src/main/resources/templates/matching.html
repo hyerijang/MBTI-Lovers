@@ -283,29 +283,9 @@
 
 <iframe id="iframe1" name="iframe1" style="display:none"></iframe>
 
-<!--팝업 샘플-->
-<a href="#layer" class="btn-popup">딤처리 팝업</a>
-<a href="#layer-2" class="btn-popup">유저 2 팝업</a>
-
+<!--유저 정보 팝업-->
 <div class="dim-layer">
     <div class="dimBg"></div>
-    <div id="layer" class="pop-layer">
-        <div class="pop-container">
-            <div class="pop-conts">
-                <!--content //-->
-                <p class="ctxt mb20">Thank you.<br>
-                    Your registration was submitted successfully.<br>
-                    Selected invitees will be notified by e-mail on JANUARY 24th.<br><br>
-                    Hope to see you soon!
-                </p>
-
-                <div class="btn-r">
-                    <a href="#" class="btn-layerClose">Close</a>
-                </div>
-                <!--// content-->
-            </div>
-        </div>
-    </div>
 </div>
 
 <!--지도-->
@@ -828,9 +808,6 @@
         content.style.height = "64px";
         content.style.width = "64px";
 
-        var link = document.createElement("a");
-        link.href = "#layer-" + uid;
-        link.className = "btn-popup";
 
         var box = document.createElement("div");
         box.className = "box";
@@ -841,10 +818,15 @@
         img.className = "profile";
         img.id = "preview-image";
         img.src = imageSrc;
-        box.appendChild(img);
-        link.appendChild(box);
-        content.appendChild(link);
 
+        content.appendChild(box);
+        box.appendChild(img);
+
+        img.addEventListener('click', function(event){
+            //클릭 이벤트 발생 시 팝업 레이어 띄움
+            console.log("#layer-" + uid);
+            layer_popup("#layer-" + uid);
+        });
 
         return content;
 
