@@ -232,6 +232,7 @@
 </nav>
 
 <!--프로필 이미지-->
+<script src="/js/fileUpload/S3url.js"></script>
 <script src="/js/imageUploadPreview.js"></script>
 <!-- appKey -->
 <script
@@ -907,7 +908,7 @@
             var name = member.name;
             const mbti = member.mbti;
 
-            var imageSrc = S3url + uid + '/' + encodeURI(member.profileImage);
+            var imageSrc = S3url  + encodeURI(member.profileImage);
             if (member.profileImage == "") {
                 imageSrc = defaultProfileImgPath;
             }

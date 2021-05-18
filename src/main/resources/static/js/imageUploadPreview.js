@@ -1,6 +1,3 @@
-const S3url = 'https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/';
-const defaultProfileImgPath = S3url + 'defaultProfileImage.png';
-
 let previewImages = document.querySelectorAll("#preview-image");
 let uidlist = document.querySelectorAll("#uid");
 let profileImgFileNameList = document.querySelectorAll("#profileImage");
@@ -9,10 +6,12 @@ var uid;
 
 for (let i = 0; i < previewImages.length; i++) {
     let previewImage = previewImages.item(i);
-    uid = uidlist.item(i).value;
+
+    if (uidlist.item(i) != null)
+        uid = uidlist.item(i).value;
     let profileImgFileName = profileImgFileNameList.item(i).value;
 
-    let profileImgPath = S3url + uid + '/' + encodeURI(profileImgFileName);
+    let profileImgPath = S3url  + encodeURI(profileImgFileName);
     setMultiProfileImage(previewImage, profileImgPath);
 
 }

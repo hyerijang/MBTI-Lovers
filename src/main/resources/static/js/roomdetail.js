@@ -228,11 +228,8 @@ var url = location.href;
 history.pushState(state, title, url);
 
 
-var S3url = 'https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/';
-var defaultProfileImgPath = S3url + 'defaultProfileImage.png';
-
 function setProfileImage(previewImage, uid, profileImgFileName) {
-    var profileImgPath = S3url + uid + '/' + encodeURI(profileImgFileName);
+    var profileImgPath = S3url  + encodeURI(profileImgFileName);
     //기본 이미지
     previewImage.src = profileImgPath;
 
