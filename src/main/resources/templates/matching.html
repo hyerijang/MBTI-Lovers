@@ -139,7 +139,91 @@
         }
     </style>
 
-<!-- 위치 컨트롤러-->
+    <!--딤처리 팝업-->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin: 100px;
+        }
+
+        .pop-layer .pop-container {
+            padding: 20px 25px;
+        }
+
+        .pop-layer p.ctxt {
+            color: #666;
+            line-height: 25px;
+        }
+
+        .pop-layer .btn-r {
+            width: 100%;
+            margin: 10px 0 20px;
+            padding-top: 10px;
+            border-top: 1px solid #DDD;
+            text-align: right;
+        }
+
+        .pop-layer {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 410px;
+            height: auto;
+            background-color: #fff;
+            border: 5px solid #3571B5;
+            z-index: 10;
+        }
+
+        .dim-layer {
+            display: none;
+            position: fixed;
+            _position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+        }
+
+        .dim-layer .dimBg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            opacity: .5;
+            filter: alpha(opacity=50);
+        }
+
+        .dim-layer .pop-layer {
+            display: block;
+        }
+
+        a.btn-layerClose {
+            display: inline-block;
+            height: 25px;
+            padding: 0 14px 0;
+            border: 1px solid #304a8a;
+            background-color: #3f5a9d;
+            font-size: 13px;
+            color: #fff;
+            line-height: 25px;
+        }
+
+        a.btn-layerClose:hover {
+            border: 1px solid #091940;
+            background-color: #1f326a;
+            color: #fff;
+        }
+    </style>
+
+    <!-- 위치 컨트롤러-->
     <style>
         html, body {
             width: 100%;
@@ -199,6 +283,31 @@
 
 <iframe id="iframe1" name="iframe1" style="display:none"></iframe>
 
+<!--팝업 샘플-->
+<a href="#layer" class="btn-popup">딤처리 팝업</a>
+<a href="#layer-2" class="btn-popup">유저 2 팝업</a>
+
+<div class="dim-layer">
+    <div class="dimBg"></div>
+    <div id="layer" class="pop-layer">
+        <div class="pop-container">
+            <div class="pop-conts">
+                <!--content //-->
+                <p class="ctxt mb20">Thank you.<br>
+                    Your registration was submitted successfully.<br>
+                    Selected invitees will be notified by e-mail on JANUARY 24th.<br><br>
+                    Hope to see you soon!
+                </p>
+
+                <div class="btn-r">
+                    <a href="#" class="btn-layerClose">Close</a>
+                </div>
+                <!--// content-->
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--지도-->
 <div id="map" style="width: 100vw; height: calc(100vh - 60px); position:relative; overflow:hidden;">
 
@@ -206,8 +315,9 @@
 </div>
 <!-- 현재 위치로 이동시켜주는 컨트롤러 -->
 <div class="current_location_control radius_border">
-        <span onclick="setCurrentLocation()"><img src="https://mbti-image.s3.ap-northeast-2.amazonaws.com/map/current_location.png"
-                                      alt="현재위치"></span>
+        <span onclick="setCurrentLocation()"><img
+                src="https://mbti-image.s3.ap-northeast-2.amazonaws.com/map/current_location.png"
+                alt="현재위치"></span>
 </div>
 <!-- 네비게이션 바 -->
 <nav
@@ -711,23 +821,30 @@
 <!-- 마커 및 마커트레이서 생성 -->
 <script>
 
-    function createMarkerContent(imageSrc) {
+    function createMarkerContent(uid, imageSrc) {
         var content = document.createElement('div');
         content.className = "marker"
         //마커 크기
         content.style.height = "64px";
         content.style.width = "64px";
 
+        var link = document.createElement("a");
+        link.href = "#layer-" + uid;
+        link.className = "btn-popup";
+
         var box = document.createElement("div");
         box.className = "box";
         box.style.borderRadius = "70%"
+
 
         var img = document.createElement("img");
         img.className = "profile";
         img.id = "preview-image";
         img.src = imageSrc;
         box.appendChild(img);
-        content.appendChild(box);
+        link.appendChild(box);
+        content.appendChild(link);
+
 
         return content;
 
@@ -768,6 +885,49 @@
         });
 
         return overlay;
+
+    }
+
+    function createPopup(member) {
+
+        var dimLayer = document.createElement("div");
+        dimLayer.className = "dim-layer";
+
+        var dimBg = document.createElement("div");
+        dimBg.className = "dimBg";
+
+        var popLayer = document.createElement("div");
+        popLayer.className = "pop-layer";
+        popLayer.id = "layer-" + member.uid;
+
+        var popContainer = document.createElement("div");
+        popContainer.className = "pop-container";
+
+        var popConts = document.createElement("p")
+        popConts.className = "pop-conts"
+
+        var p = document.createElement("p");
+        p.className = "ctxt mb20";
+        p.innerText = member.name;
+
+        var btnR = document.createElement("div");
+        btnR.className = "btn-r";
+        var a = document.createElement("a");
+        a.href = "#";
+        a.className = "btn-layerClose";
+        a.innerText = "Close";
+
+        // document.body.appendChild(dimLayer);
+        // dimLayer.appendChild(dimBg);
+
+        dimLayer = document.getElementsByClassName("dim-layer")[0];
+        dimLayer.appendChild(popLayer);
+        popLayer.appendChild(popContainer);
+        popContainer.appendChild(popConts);
+        popConts.appendChild(p);
+        popConts.appendChild(btnR);
+        btnR.appendChild(a);
+
 
     }
 </script>
@@ -829,7 +989,7 @@
 <!-- 근처 유저 정보로 마커생성-->
 <script>
 
-    function makerNearUserMarker(json){
+    function makerNearUserMarker(json) {
         console.log("가까운 유저 10명의 마커를 만듭니다.");
         json.forEach(function (member) {
             var uid = member.uid;
@@ -837,22 +997,25 @@
             var name = member.name;
             const mbti = member.mbti;
 
-            var imageSrc = S3url  + encodeURI(member.profileImage);
+            var imageSrc = S3url + encodeURI(member.profileImage);
             if (member.profileImage == "") {
                 imageSrc = defaultProfileImgPath;
             }
 
             // console.log(imageSrc);
 
-            var markerContent = createMarkerContent(imageSrc);
+            var markerContent = createMarkerContent(uid, imageSrc);
             var marker = createMarker(position, markerContent);
             createTracer(marker, imageSrc);
+
 
             //말풍선 오버레이
             var content = "[" + mbti + "]" + name;
             var speechBubbleOverlay = createSpeechBubbleOverlay(marker, uid, createSpeechBubbleContent(content));
 
             speechBubbleOverlay.setMap(map);
+
+            createPopup(member);
 
         });
     }
@@ -868,6 +1031,50 @@
     }
 
 
+</script>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script>
+    $('.btn-popup').click(function () {
+        var $href = $(this).attr('href');
+        console.log($href);
+        layer_popup($href);
+    });
+
+    function layer_popup(el) {
+
+        var $el = $(el);		//레이어의 id를 $el 변수에 저장
+        var isDim = $el.prev().hasClass('dimBg');	//dimmed 레이어를 감지하기 위한 boolean 변수
+
+        console.log(isDim);
+        isDim ? $('.dim-layer').fadeIn() : $el.fadeIn();
+
+        var $elWidth = ~~($el.outerWidth()),
+            $elHeight = ~~($el.outerHeight()),
+            docWidth = $(document).width(),
+            docHeight = $(document).height();
+
+        // 화면의 중앙에 레이어를 띄운다.
+        if ($elHeight < docHeight || $elWidth < docWidth) {
+            $el.css({
+                marginTop: -$elHeight / 2,
+                marginLeft: -$elWidth / 2
+            })
+        } else {
+            $el.css({top: 0, left: 0});
+        }
+
+        $el.find('a.btn-layerClose').click(function () {
+            isDim ? $('.dim-layer').fadeOut() : $el.fadeOut(); // 닫기 버튼을 클릭하면 레이어가 닫힌다.
+            return false;
+        });
+
+        $('.layer .dimBg').click(function () {
+            $('.dim-layer').fadeOut();
+            return false;
+        });
+
+    }
 </script>
 
 
