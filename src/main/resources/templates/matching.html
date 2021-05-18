@@ -114,7 +114,16 @@
             type="text/css"
             href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     />
+<!-- 프로필 이미지 css-->
     <link rel="stylesheet" href="/css/profile-image-upload.css"/>
+    <!--프로필 이미지 hover-->
+    <style>
+        .profile:hover {
+            opacity:0.6;
+            color:#ffffff;
+
+        }
+    </style>
 
     <!--말풍선-->
     <style>
@@ -798,7 +807,7 @@
     }
 </script>
 
-<!-- 마커 및 마커트레이서 생성 -->
+<!-- 마커 및 마커트레이서 생성 함수 -->
 <script>
 
     function createMarkerContent(uid, imageSrc) {
@@ -973,7 +982,7 @@
 
 </script>
 
-<!-- 근처 유저 정보로 마커생성-->
+<!-- 근처 유저 정보 (json) 로 마커생성-->
 <script>
 
     function makerNearUserMarker(json) {
