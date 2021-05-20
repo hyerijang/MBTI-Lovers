@@ -40,11 +40,11 @@ public class MapController {
     }
 
     @PostMapping("/members/position")
-    public String setPosition(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid, String positionX, String positionY) {
+    public String setPosition(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid, String LocationX, String LocationY) {
 
-        log.info("[UserPosition] x:" + positionX + " y:" + positionY);
-        Double latitude = Double.parseDouble(positionX);
-        Double longitude = Double.parseDouble(positionY);
+        log.info("[userLocation] x:" + LocationX + " y:" + LocationY);
+        Double latitude = Double.parseDouble(LocationX);
+        Double longitude = Double.parseDouble(LocationY);
 
         Optional<Member> user = memberService.findOneByUid(cookieUid);
 
