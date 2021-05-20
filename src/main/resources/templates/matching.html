@@ -285,11 +285,13 @@
 <body>
 <!--내 uid-->
 <input type="hidden" id="uid" name="uid" th:value="${uid}">
+
+
 <!--내 위치 정보-->
 <form action="/members/position" method="post" name="userPosition" target="iframe1">
     <!--위치-->
-    <input type="hidden" id="positionX" name="positionX">
-    <input type="hidden" id="positionY" name="positionY">
+    <input type="hidden" id="positionX" name="positionX" th:value="${x}">
+    <input type="hidden" id="positionY" name="positionY" th:value="${y}">
 </form>
 
 <!--친구신청 폼-->
@@ -368,6 +370,10 @@
 <!-- 맵 초기화 -->
 <script>
 
+    var x = document.getElementById("positionX");
+    var y = document.getElementById("positionY");
+
+    console.log(x.value);
     var hongikuniv = {
         "x": "37.5525192523979", "y": "126.924990619497 "
     };
@@ -386,8 +392,10 @@
     var map = makeMap(hongikuniv);
 
     function makeMap(position) {
+
         userPosition.x = position.x;
         userPosition.y = position.y;
+
         var mapContainer = document.getElementById("map"), // 지도를 표시할 div
             mapOption = {
                 center: new kakao.maps.LatLng(position.x, position.y), // 지도의 중심좌표
@@ -425,10 +433,10 @@
         }
 
         function sucess(position) {
-            var lat = position.coords.latitude, // 위도
-                lon = position.coords.longitude; // 경도
+            userPosition.x = position.coords.latitude; // 위도
+            userPosition.y = position.coords.longitude; // 경도
 
-            var locPosition = new kakao.maps.LatLng(lat, lon); //접속 위치
+            var locPosition = new kakao.maps.LatLng(userPosition.x, userPosition.y); //접속 위치
             // var message = '<div style="padding:5px;">내 위치</div>'; // 인포윈도우에 표시될 내용입니다
             //
             // //유저 마커와 인포윈도우를 표시합니다
@@ -440,20 +448,35 @@
             // 지도 중심좌표를 얻어옵니다
             var latlng = map.getCenter();
 
-            userPosition.x = latlng.getLat();
-            userPosition.y = latlng.getLng();
+            console.log("현재 위치 저장 :" +  latlng.getLat() + "," +  latlng.getLng());
 
-            console.log("현재 위치를 저장합니다 :" + userPosition.x + "," + userPosition.y);
-
-            document.getElementById("positionX").setAttribute("value", lat);
-            document.getElementById("positionY").setAttribute("value", lon);
+            document.getElementById("positionX").setAttribute("value", latlng.getLat());
+            document.getElementById("positionY").setAttribute("value", latlng.getLng());
             document.userPosition.submit();
 
+
+            //근처유저 위치 정보 가져오기
+            getNearUser(userPosition.x,userPosition.y);
 
         }
 
         function error() {
+
+            if (x.value != "") {
+                console.log("기존 위치 정보 있음")
+                userPosition.x = x.value;
+                userPosition.y = y.value;
+
+                var locPosition = new kakao.maps.LatLng(userPosition.x, userPosition.y); //접속 위치
+                map.setCenter(locPosition);
+            } else {
+                console.log("기존 위치 정보 없음")
+            }
             layer_popup("#popup-layer-error-position");
+
+            //근처유저 위치 정보 가져오기
+            getNearUser(userPosition.x,userPosition.y);
+
         }
 
 
@@ -1031,12 +1054,10 @@
 
     var nearUserJson = null;
 
-    getNearUser();
-
-    function getNearUser() {
+    function getNearUser(x,y) {
 
         var request = new XMLHttpRequest();
-        request.open('GET', "matching/near/" + userPosition.x + "/" + userPosition.y, true);
+        request.open('GET', "matching/near/" + x + "/" + y, true);
 
         request.onload = function () {
             if (request.status >= 200 && request.status < 400) {

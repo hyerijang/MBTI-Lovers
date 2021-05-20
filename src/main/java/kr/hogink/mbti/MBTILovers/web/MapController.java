@@ -21,7 +21,7 @@ import static kr.hogink.mbti.MBTILovers.web.login.LoginType.USER_UID_COOKIE;
 public class MapController {
 
     private MemberService memberService;
-    private final int NUM_NEAR_USER = 10 ;
+    private final int NUM_NEAR_USER = 10;
 
 
     public MapController(MemberService memberService) {
@@ -30,7 +30,12 @@ public class MapController {
 
     @GetMapping("/matching")
     public String matching(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+        Optional<Member> member = memberService.findOneByUid(cookieUid);
         model.addAttribute("uid", cookieUid);
+        if (member.get().getLocation() != null) {
+            model.addAttribute("x", member.get().getLocation().getCoordinate().x);
+            model.addAttribute("y", member.get().getLocation().getCoordinate().y);
+        }
         return "matching";
     }
 
