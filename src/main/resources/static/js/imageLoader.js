@@ -1,3 +1,6 @@
+const S3url = 'https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/';
+const defaultProfileImgPath = S3url + 'defaultProfileImage.png';
+
 let previewImages = document.querySelectorAll("#preview-image");
 let uidlist = document.querySelectorAll("#uid");
 let profileImgFileNameList = document.querySelectorAll("#profileImage");

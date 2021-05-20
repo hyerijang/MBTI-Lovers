@@ -48,8 +48,7 @@ public class RoomController {
                 aTime = new Timestamp(System.currentTimeMillis());
             if (bTime == null)
                 bTime = new Timestamp(System.currentTimeMillis());
-            long diff = bTime.getTime() - aTime.getTime();
-            return (int) diff / 1000;
+            return bTime.compareTo(aTime);
         }
 
 

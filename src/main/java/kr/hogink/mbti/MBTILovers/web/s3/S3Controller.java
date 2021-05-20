@@ -20,12 +20,6 @@ import javax.imageio.ImageIO;
 @Log4j2
 public class S3Controller {
     private final S3Uploader s3Uploader;
-
-    @GetMapping("/file")
-    public String index() {
-        return "test";
-    }
-
     @PostMapping("/upload")
     @ResponseBody
     public String upload(@RequestParam("data") MultipartFile multipartFile) throws IOException {

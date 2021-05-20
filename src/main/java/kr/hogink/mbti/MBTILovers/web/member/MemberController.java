@@ -71,14 +71,15 @@ public class MemberController {
 
     @PostMapping("/members/edit")
     public String edit(MemberForm form, HttpSession session, HttpServletRequest request) {
-        Member member = new Member();
+
         String uid = (String) session.getAttribute(LoginType.NEW_USER_UID_SESSION);
         if (uid == null) {
             Cookie loginCookie = WebUtils.getCookie(request, LoginType.USER_UID_COOKIE);
             uid = loginCookie.getValue();
         }
 
-        member.setUid(uid);
+        Member member = memberService.findOneByUid(uid).get();
+
         member.setName(form.getName());
         member.setGender(form.getGender());
         member.setAge(form.getAge());
@@ -88,7 +89,8 @@ public class MemberController {
 
         memberService.edit(member);
         //세션정보 갱신
-        session.setAttribute(LoginType.USER_MEMBER_SESSION, memberService.findOneByUid(uid).get());
+        session.removeAttribute(LoginType.USER_MEMBER_SESSION);
+        session.setAttribute(LoginType.USER_MEMBER_SESSION, member);
         return "redirect:/";
     }
 

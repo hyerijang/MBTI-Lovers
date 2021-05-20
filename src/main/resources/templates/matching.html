@@ -109,12 +109,17 @@
             transform-origin: 50% 34px;
         }
     </style>
-    <link
-            rel="stylesheet"
-            type="text/css"
-            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-    />
+    <link rel="stylesheet" href="/css/bootstrap.css"/>
+    <!-- 프로필 이미지 css-->
     <link rel="stylesheet" href="/css/profile-image-upload.css"/>
+    <!--프로필 이미지 hover-->
+    <!--    <style>-->
+    <!--        .profile:hover {-->
+    <!--            opacity:0.6;-->
+    <!--            color:#ffffff;-->
+
+    <!--        }-->
+    <!--    </style>-->
 
     <!--말풍선-->
     <style>
@@ -139,7 +144,91 @@
         }
     </style>
 
-<!-- 위치 컨트롤러-->
+    <!--딤처리 팝업-->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin: 100px;
+        }
+
+        .pop-layer .pop-container {
+            padding: 20px 25px;
+        }
+
+        .pop-layer p.ctxt {
+            color: #666;
+            line-height: 25px;
+        }
+
+        .pop-layer .btn-r {
+            width: 100%;
+            margin: 10px 0 20px;
+            padding-top: 10px;
+            border-top: 1px solid #DDD;
+            text-align: right;
+        }
+
+        .pop-layer {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 410px;
+            height: auto;
+            background-color: #fff;
+            border: 5px solid #3571B5;
+            z-index: 10;
+        }
+
+        .dim-layer {
+            display: none;
+            position: fixed;
+            _position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+        }
+
+        .dim-layer .dimBg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            opacity: .5;
+            filter: alpha(opacity=50);
+        }
+
+        .dim-layer .pop-layer {
+            display: none;
+        }
+
+        a.btn-layerClose {
+            display: inline-block;
+            height: 25px;
+            padding: 0 14px 0;
+            border: 1px solid #304a8a;
+            background-color: #3f5a9d;
+            font-size: 13px;
+            color: #fff;
+            line-height: 25px;
+        }
+
+        a.btn-layerClose:hover {
+            border: 1px solid #091940;
+            background-color: #1f326a;
+            color: #fff;
+        }
+    </style>
+
+    <!-- 위치 컨트롤러-->
     <style>
         html, body {
             width: 100%;
@@ -190,14 +279,47 @@
 </head>
 
 <body>
+<!--내 uid-->
+<input type="hidden" id="uid" name="uid" th:value="${uid}">
+
+
 <!--내 위치 정보-->
-<form action="/members/position" method="post" name="userPosition" target="iframe1">
+<form action="/members/position" method="post" name="userLocation" target="iframe1">
     <!--위치-->
-    <input type="hidden" id="positionX" name="positionX">
-    <input type="hidden" id="positionY" name="positionY">
+    <input type="hidden" id="LocationX" name="LocationX" th:value="${x}">
+    <input type="hidden" id="LocationY" name="LocationY" th:value="${y}">
+</form>
+
+<!--친구신청 폼-->
+<form name="friendDTO" action="/friends/acceptRequest" method="post">
+    <input id="fid" type="hidden" name="fid"/>
 </form>
 
 <iframe id="iframe1" name="iframe1" style="display:none"></iframe>
+
+<!--팝업-->
+<div class="dim-layer">
+    <div class="dimBg"></div>
+
+    <div id="popup-layer-error-position" class="pop-layer">
+        <div class="pop-container">
+            <div class="pop-conts">
+                <!--content //-->
+                <p class="ctxt mb20 lead">Error </p>
+                <p class="ctxt mb20">
+                    위치정보를 가져올 수 없습니다.<br>
+                    위치 서비스가 켜져 있는지 확인해주세요.
+                </p>
+
+
+                <div class="btn-r">
+                    <a href="#" class="btn-layerClose">Close</a>
+                </div>
+                <!--// content-->
+            </div>
+        </div>
+    </div>
+</div>
 
 <!--지도-->
 <div id="map" style="width: 100vw; height: calc(100vh - 60px); position:relative; overflow:hidden;">
@@ -206,8 +328,9 @@
 </div>
 <!-- 현재 위치로 이동시켜주는 컨트롤러 -->
 <div class="current_location_control radius_border">
-        <span onclick="setCurrentLocation()"><img src="https://mbti-image.s3.ap-northeast-2.amazonaws.com/map/current_location.png"
-                                      alt="현재위치"></span>
+        <span onclick="setCurrentLocation()"><img
+                src="https://mbti-image.s3.ap-northeast-2.amazonaws.com/map/current_location.png"
+                alt="현재위치"></span>
 </div>
 <!-- 네비게이션 바 -->
 <nav
@@ -232,8 +355,8 @@
 </nav>
 
 <!--프로필 이미지-->
-<script src="/js/fileUpload/S3url.js"></script>
-<script src="/js/imageUploadPreview.js"></script>
+
+<script src="/js/imageLoader.js"></script>
 <!-- appKey -->
 <script
         type="text/javascript"
@@ -243,6 +366,10 @@
 <!-- 맵 초기화 -->
 <script>
 
+    var x = document.getElementById("LocationX");
+    var y = document.getElementById("LocationY");
+
+    console.log(x.value);
     var hongikuniv = {
         "x": "37.5525192523979", "y": "126.924990619497 "
     };
@@ -251,18 +378,20 @@
         "x": "33.450705", "y": "126.570677"
     };
 
-    var userPosition = {
+    var userLocation = {
         "x": "", "y": ""
     };
 
     //지도 이미지 해상도 낮춤
     kakao.maps.disableHD();
 
-    var map = makeMap(kakaoPosition);
+    var map = makeMap(hongikuniv);
 
     function makeMap(position) {
-        userPosition.x = position.x;
-        userPosition.y = position.y;
+
+        userLocation.x = position.x;
+        userLocation.y = position.y;
+
         var mapContainer = document.getElementById("map"), // 지도를 표시할 div
             mapOption = {
                 center: new kakao.maps.LatLng(position.x, position.y), // 지도의 중심좌표
@@ -278,45 +407,74 @@
 <!-- 단말의 현위치 좌표값 -->
 <script>
 
+    var uid = document.getElementById("uid").value;
+    // console.log("내 uid:" + uid);
 
     //유저 현재 위치 갱신
-    setPosition();
+    setLocation();
 
-    function setPosition() {
+
+    function setLocation() {
+        const options = {
+            enableHighAccuracy: true,
+            maximumAge: 30000,
+            timeout: 27000
+        };
+
+
         // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
         if (navigator.geolocation) {
             // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var lat = position.coords.latitude, // 위도
-                    lon = position.coords.longitude; // 경도
-
-                var locPosition = new kakao.maps.LatLng(lat, lon); //접속 위치
-                // var message = '<div style="padding:5px;">내 위치</div>'; // 인포윈도우에 표시될 내용입니다
-                //
-                // //유저 마커와 인포윈도우를 표시합니다
-                // displayUserMarker(locPosition, message);
-
-                // 지도 중심좌표를 접속위치로 변경합니다
-                map.setCenter(locPosition);
-
-                // 지도 중심좌표를 얻어옵니다
-                var latlng = map.getCenter();
-
-                userPosition.x = latlng.getLat();
-                userPosition.y = latlng.getLng();
-
-                console.log("현재 내 위치 :" + userPosition.x + "," + userPosition.y);
-
-                document.getElementById("positionX").setAttribute("value", lat);
-                document.getElementById("positionY").setAttribute("value", lon);
-                document.userPosition.submit();
-
-                // 근처 유저 json
-                // var url = "https://mbti-lovers.kro.kr:8080/matching/near/" + userPosition.x + "/" + userPosition.y;
-                // console.log(url);
-
-            });
+            navigator.geolocation.getCurrentPosition(success, error, options);
         }
+
+        function success(position) {
+            userLocation.x = position.coords.latitude; // 위도
+            userLocation.y = position.coords.longitude; // 경도
+
+            var locPosition = new kakao.maps.LatLng(userLocation.x, userLocation.y); //접속 위치
+            // var message = '<div style="padding:5px;">내 위치</div>'; // 인포윈도우에 표시될 내용입니다
+            //
+            // //유저 마커와 인포윈도우를 표시합니다
+            // displayUserMarker(locPosition, message);
+
+            // 지도 중심좌표를 접속위치로 변경합니다
+            map.setCenter(locPosition);
+
+            // 지도 중심좌표를 얻어옵니다
+            var latlng = map.getCenter();
+
+            console.log("현재 위치 저장 :" +  latlng.getLat() + "," +  latlng.getLng());
+
+            document.getElementById("LocationX").setAttribute("value", latlng.getLat());
+            document.getElementById("LocationY").setAttribute("value", latlng.getLng());
+            document.userLocation.submit();
+
+
+            //근처유저 위치 정보 가져오기
+            getNearUser(userLocation.x,userLocation.y);
+
+        }
+
+        function error() {
+
+            if (x.value != "") {
+                console.log("기존 위치 정보 있음")
+                userLocation.x = x.value;
+                userLocation.y = y.value;
+
+                var locPosition = new kakao.maps.LatLng(userLocation.x, userLocation.y); //접속 위치
+                map.setCenter(locPosition);
+            } else {
+                console.log("기존 위치 정보 없음")
+            }
+            layer_popup("#popup-layer-error-position");
+
+            //근처유저 위치 정보 가져오기
+            getNearUser(userLocation.x,userLocation.y);
+
+        }
+
 
     }
 
@@ -708,26 +866,35 @@
     }
 </script>
 
-<!-- 마커 및 마커트레이서 생성 -->
+<!-- 마커 및 마커트레이서 생성 함수 -->
 <script>
 
-    function createMarkerContent(imageSrc) {
+    function createMarkerContent(uid, imageSrc) {
         var content = document.createElement('div');
         content.className = "marker"
         //마커 크기
         content.style.height = "64px";
         content.style.width = "64px";
 
+
         var box = document.createElement("div");
         box.className = "box";
         box.style.borderRadius = "70%"
+
 
         var img = document.createElement("img");
         img.className = "profile";
         img.id = "preview-image";
         img.src = imageSrc;
-        box.appendChild(img);
+
         content.appendChild(box);
+        box.appendChild(img);
+
+        img.addEventListener('click', function (event) {
+            //클릭 이벤트 발생 시 팝업 레이어 띄움
+            console.log("#layer-" + uid);
+            layer_popup("#layer-" + uid);
+        });
 
         return content;
 
@@ -741,6 +908,7 @@
             position: markerPosition,
             content: markerContent,
         });
+
 
         marker.setMap(map);
         return marker;
@@ -770,74 +938,93 @@
         return overlay;
 
     }
-</script>
 
-<!--테스트용 마커 정보-->
-<script>
-    // var defImgSrc = "https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/1/James+Gilleard-The+Grand+Budapest+Hotel.png";// 마커이미지의 주소입니다
-    // var places = [
-    //     {
-    //         id: 1,
-    //         name: '카카오',
-    //         latlng: new kakao.maps.LatLng(33.450705, 126.570677),
-    //         imageSrc: defImgSrc
-    //     },
-    //     {
-    //         id: 2,
-    //         name: '생태연못',
-    //         latlng: new kakao.maps.LatLng(33.450936, 126.569477),
-    //         imageSrc: defImgSrc
-    //     },
-    //     {
-    //         id: 3,
-    //         name: '텃밭',
-    //         latlng: new kakao.maps.LatLng(33.450879, 126.569940),
-    //         imageSrc: defImgSrc
-    //     },
-    //     {
-    //         id: 4,
-    //         name: '근린공원',
-    //         latlng: new kakao.maps.LatLng(33.451393, 126.570738),
-    //         imageSrc: defImgSrc
-    //     },
-    //     {
-    //         id: 5,
-    //         name: '홍익대',
-    //         latlng: new kakao.maps.LatLng(hongikuniv.x, hongikuniv.y),
-    //         imageSrc: "https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/1/plum.jpg"// 마커이미지의 주소입니다
-    //     },
-    //     {
-    //         id: 6,
-    //         name: '야구장',
-    //         latlng: new kakao.maps.LatLng(37.54699, 127.09598),
-    //         imageSrc: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png"
-    //     }
-    //
-    // ];
+    //팝업 생성함수
+    function createPopup(member, imageSrc) {
 
-</script>
-<!--테스트용 마커생성-->
-<script>
-    // places.forEach(function (place) {
-    //     var id = place.id;
-    //     var position = place.latlng;
-    //     var name = place.name;
-    //     var imageSrc = place.imageSrc;
-    //
-    //     var markerContent = createMarkerContent(imageSrc);
-    //     var marker = createMarker(position, markerContent);
-    //     createTracer(marker, imageSrc);
-    //
-    //
-    //     var speechBubbleOverlay = createSpeechBubbleOverlay(marker, id, createSpeechBubbleContent(name));
-    //
-    //     speechBubbleOverlay.setMap(map);
-    //
-    //     //클릭시에만 유저정보 보임
-    //     // markerContent.addEventListener('click',function (event){
-    //     //     overlay.setMap(map);
-    //     // })
-    // });
+        var dimLayer = document.createElement("div");
+        dimLayer.className = "dim-layer";
+
+        var dimBg = document.createElement("div");
+        dimBg.className = "dimBg";
+
+        var popLayer = document.createElement("div");
+        popLayer.className = "pop-layer";
+        popLayer.id = "layer-" + member.uid;
+
+        var popContainer = document.createElement("div");
+        popContainer.className = "pop-container";
+
+        var popConts = document.createElement("p")
+        popConts.className = "pop-conts"
+
+        dimLayer = document.getElementsByClassName("dim-layer")[0];
+        dimLayer.appendChild(popLayer);
+        popLayer.appendChild(popContainer);
+        popContainer.appendChild(popConts);
+
+
+        var box = document.createElement("div");
+        box.className = "box";
+        box.style.borderRadius = "70%"
+
+
+        var img = document.createElement("img");
+        img.className = "profile";
+        img.id = "preview-image";
+        img.src = imageSrc;
+
+        popConts.appendChild(box);
+        box.appendChild(img);
+
+        var member_name = document.createElement("p");
+        member_name.className = "ctxt mb20 lead";
+        member_name.innerText = member.name;
+
+        var member_info = document.createElement("p");
+        member_info.innerText = member.mbti + "/" + member.gender + "/" + member.age + "세\n";
+
+        var member_stm = document.createElement("p");
+        member_stm.innerText = member.stateMessage;
+
+        popConts.appendChild(member_name);
+        popConts.appendChild(member_info);
+        popConts.appendChild(member_stm);
+
+
+        var btnR = document.createElement("div");
+        btnR.className = "btn-r";
+        popConts.appendChild(btnR);
+        //친구신청  버튼
+        //자기 자신의 프로필 볼때는 생성되지 않음
+        if (member.uid != uid) {
+            var aF = document.createElement("a");
+            aF.href = "#";
+            aF.onclick = function (event) {
+                console.log("친구신청");
+                var f = document.friendDTO; //폼 name
+                f.fid.value = member.uid;
+                f.action = "/friends/acceptRequest";//이동할 페이지
+                f.method = "post";//POST방식
+                f.submit();
+            }
+            aF.className = "btn-layerClose";
+            aF.style.float = "left";
+            aF.innerText = "친구신청";
+            btnR.appendChild(aF);
+
+        }
+
+
+        //닫기 버튼
+        var a = document.createElement("a");
+        a.href = "#";
+        a.className = "btn-layerClose";
+        a.innerText = "Close";
+        btnR.appendChild(a);
+    }
+
+
 </script>
 
 <!--지도 중심좌표 정보 출력-->
@@ -849,11 +1036,11 @@
         // 지도 중심좌표를 얻어옵니다
         var latlng = map.getCenter();
 
-        userPosition.x = latlng.getLat();
-        userPosition.y = latlng.getLng();
+        userLocation.x = latlng.getLat();
+        userLocation.y = latlng.getLng();
 
-        console.log("중심좌표 변경" + ": " + userPosition.x + "," + userPosition.y);
-        // getInfo(userPosition.x, userPosition.y);
+        console.log("중심좌표 변경" + ": " + userLocation.x + "," + userLocation.y);
+        // getInfo(userLocation.x, userLocation.y);
     });
 
 
@@ -863,12 +1050,10 @@
 
     var nearUserJson = null;
 
-    getNearUser();
-
-    function getNearUser() {
+    function getNearUser(x,y) {
 
         var request = new XMLHttpRequest();
-        request.open('GET', "matching/near/" + userPosition.x + "/" + userPosition.y, true);
+        request.open('GET', "matching/near/" + x + "/" + y, true);
 
         request.onload = function () {
             if (request.status >= 200 && request.status < 400) {
@@ -894,13 +1079,10 @@
 
 </script>
 
-
-
-
-<!-- 마커생성-->
+<!-- 근처 유저 정보 (json) 로 마커생성-->
 <script>
 
-    function makerNearUserMarker(json){
+    function makerNearUserMarker(json) {
         console.log("가까운 유저 10명의 마커를 만듭니다.");
         json.forEach(function (member) {
             var uid = member.uid;
@@ -908,22 +1090,25 @@
             var name = member.name;
             const mbti = member.mbti;
 
-            var imageSrc = S3url  + encodeURI(member.profileImage);
+            var imageSrc = S3url + encodeURI(member.profileImage);
             if (member.profileImage == "") {
                 imageSrc = defaultProfileImgPath;
             }
 
             // console.log(imageSrc);
 
-            var markerContent = createMarkerContent(imageSrc);
+            var markerContent = createMarkerContent(uid, imageSrc);
             var marker = createMarker(position, markerContent);
             createTracer(marker, imageSrc);
+
 
             //말풍선 오버레이
             var content = "[" + mbti + "]" + name;
             var speechBubbleOverlay = createSpeechBubbleOverlay(marker, uid, createSpeechBubbleContent(content));
 
             speechBubbleOverlay.setMap(map);
+
+            createPopup(member, imageSrc);
 
         });
     }
@@ -935,10 +1120,59 @@
 
     // 현재 위치 이동 컨트롤러에 사용
     function setCurrentLocation() {
-        setPosition();
+        setLocation();
     }
 
 
+</script>
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<!--유저 마커 클릭시  팝업 이벤트-->
+<script>
+    $('.btn-popup').click(function () {
+        var $href = $(this).attr('href');
+        layer_popup($href);
+    });
+
+    function layer_popup(el) {
+
+        var $el = $(el);		//열고자 하는 레이어의 id를 $el 변수에 저장
+
+        // console.log("열고자 하는 레이어의 아이디:" + el);
+        //해당 팝업만 보이게 설정
+        // console.log($el);
+        $el.css("display", "block");
+        $('.dim-layer').fadeIn();
+
+        var $elWidth = ~~($el.outerWidth()),
+            $elHeight = ~~($el.outerHeight()),
+            docWidth = $(document).width(),
+            docHeight = $(document).height();
+
+        // 화면의 중앙에 레이어를 띄운다.
+        if ($elHeight < docHeight || $elWidth < docWidth) {
+            $el.css({
+                marginTop: -$elHeight / 2,
+                marginLeft: -$elWidth / 2
+            })
+        } else {
+            $el.css({top: 0, left: 0});
+        }
+
+        $el.find('a.btn-layerClose').click(function () {
+            $el.css("display", "none");
+            $('.dim-layer').fadeOut() // 닫기 버튼을 클릭하면 레이어가 닫힌다.
+            return false;
+        });
+
+        $('.layer .dimBg').click(function () {
+            $el.css("display", "none");
+            $('.dim-layer').fadeOut();
+            return false;
+        });
+
+    }
 </script>
 
 

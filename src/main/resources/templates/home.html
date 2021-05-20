@@ -2,41 +2,23 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
-    <link rel="stylesheet" type="text/css"
-          href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css'>
-
+    <link rel="stylesheet" href="/css/bootstrap.css"/>
+    <title>메인</title>
 </head>
 
 <body style="padding-bottom: 100px">
 
 <div class="container">
-    <div><h1>MBTI-Lovers</h1>
 
-        <!--        로그인-->
-        <form th:if="${uid} == null" action="/user/loginPost" method="post">
-            <input type="text" name="uid" placeholder="파이어베이스uid">
-            <button type="submit">로그인</button>
-        </form>
-        </form>
-        <p th:if="${user} != null" th:text="${user.getName()}" style="background-color: #9fcdff">uid</p>
-
-        <p>
-            <a href="/user/logout">로그아웃</a>
-            <a href="/members">전체 유저</a>
-            <a href="/file">파일업로드</a>
-            <a href="/members/edit">회원정보수정</a>
-        </p>
-
-<!--        <p>디폴트 이미지</p>-->
-<!--        <img class="profile" id="preview-image"-->
-<!--             src="https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/defaultProfileImage.png">-->
-
-<!--        &lt;!&ndash;        프로필이미지&ndash;&gt;-->
-<!--        <p th:text="${user.getProfileImage()}">th </p>-->
-<!--        <img class="profile" id="preview-image"-->
-<!--             th:src="@{https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/{uid}/{filename} (uid =${user.getUid()} , filename=${user.getProfileImage()})}">-->
+    <h2>MBTI-Lovers</h2>
 
 
+    <div class="list-group">
+        <p class="list-group-item" th:if="${user} != null" th:text="${user.getName()}" style="background-color: #9fcdff">유저이름</p>
+        <a class="list-group-item" href="/members/edit">내 정보</a>
+        <a class="list-group-item" href="https://www.16personalities.com/ko/%EB%AC%B4%EB%A3%8C-%EC%84%B1%EA%B2%A9-%EC%9C%A0%ED%98%95-%EA%B2%80%EC%82%AC">MBTI 검사하기</a>
+        <a class="list-group-item" href="/members">전체 유저 목록</a>
+        <a class="list-group-item list-group-item-danger"href="/user/logout">로그아웃</a>
     </div>
 
 </div>
