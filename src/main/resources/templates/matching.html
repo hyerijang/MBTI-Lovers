@@ -114,16 +114,16 @@
             type="text/css"
             href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     />
-<!-- 프로필 이미지 css-->
+    <!-- 프로필 이미지 css-->
     <link rel="stylesheet" href="/css/profile-image-upload.css"/>
     <!--프로필 이미지 hover-->
-    <style>
-        .profile:hover {
-            opacity:0.6;
-            color:#ffffff;
+    <!--    <style>-->
+    <!--        .profile:hover {-->
+    <!--            opacity:0.6;-->
+    <!--            color:#ffffff;-->
 
-        }
-    </style>
+    <!--        }-->
+    <!--    </style>-->
 
     <!--말풍선-->
     <style>
@@ -283,11 +283,18 @@
 </head>
 
 <body>
+<!--내 uid-->
+<input type="hidden" id="uid" name="uid" th:value="${uid}">
 <!--내 위치 정보-->
 <form action="/members/position" method="post" name="userPosition" target="iframe1">
     <!--위치-->
     <input type="hidden" id="positionX" name="positionX">
     <input type="hidden" id="positionY" name="positionY">
+</form>
+
+<!--친구신청 폼-->
+<form name="friendDTO" action="/friends/acceptRequest" method="post">
+    <input id="fid" type="hidden" name="fid"/>
 </form>
 
 <iframe id="iframe1" name="iframe1" style="display:none"></iframe>
@@ -377,6 +384,8 @@
 <!-- 단말의 현위치 좌표값 -->
 <script>
 
+    var uid = document.getElementById("uid").value;
+    console.log("내 uid:" + uid);
 
     //유저 현재 위치 갱신
     setPosition();
@@ -404,7 +413,7 @@
                 userPosition.x = latlng.getLat();
                 userPosition.y = latlng.getLng();
 
-                console.log("현재 내 위치 :" + userPosition.x + "," + userPosition.y);
+                console.log("현재 위치를 저장합니다 :" + userPosition.x + "," + userPosition.y);
 
                 document.getElementById("positionX").setAttribute("value", lat);
                 document.getElementById("positionY").setAttribute("value", lon);
@@ -831,7 +840,7 @@
         content.appendChild(box);
         box.appendChild(img);
 
-        img.addEventListener('click', function(event){
+        img.addEventListener('click', function (event) {
             //클릭 이벤트 발생 시 팝업 레이어 띄움
             console.log("#layer-" + uid);
             layer_popup("#layer-" + uid);
@@ -880,7 +889,8 @@
 
     }
 
-    function createPopup(member) {
+    //팝업 생성함수
+    function createPopup(member, imageSrc) {
 
         var dimLayer = document.createElement("div");
         dimLayer.className = "dim-layer";
@@ -898,34 +908,73 @@
         var popConts = document.createElement("p")
         popConts.className = "pop-conts"
 
+        dimLayer = document.getElementsByClassName("dim-layer")[0];
+        dimLayer.appendChild(popLayer);
+        popLayer.appendChild(popContainer);
+        popContainer.appendChild(popConts);
+
+
+        var box = document.createElement("div");
+        box.className = "box";
+        box.style.borderRadius = "70%"
+
+
+        var img = document.createElement("img");
+        img.className = "profile";
+        img.id = "preview-image";
+        img.src = imageSrc;
+
+        popConts.appendChild(box);
+        box.appendChild(img);
+
         var member_name = document.createElement("p");
-        member_name.className = "ctxt mb20";
+        member_name.className = "ctxt mb20 lead";
         member_name.innerText = member.name;
 
-        var member_mbti = document.createElement("p");
-        member_mbti.innerText = member.mbti;
+        var member_info = document.createElement("p");
+        member_info.innerText = member.mbti + "/" + member.gender + "/" + member.age + "세\n";
+
+        var member_stm = document.createElement("p");
+        member_stm.innerText = member.stateMessage;
+
+        popConts.appendChild(member_name);
+        popConts.appendChild(member_info);
+        popConts.appendChild(member_stm);
 
 
         var btnR = document.createElement("div");
         btnR.className = "btn-r";
+        popConts.appendChild(btnR);
+        //친구신청  버튼
+        //자기 자신의 프로필 볼때는 생성되지 않음
+        if (member.uid != uid) {
+            var aF = document.createElement("a");
+            aF.href = "#";
+            aF.onclick = function (event) {
+                console.log("친구신청");
+                var f = document.friendDTO; //폼 name
+                f.fid.value = member.uid;
+                f.action = "/friends/acceptRequest";//이동할 페이지
+                f.method = "post";//POST방식
+                f.submit();
+            }
+            aF.className = "btn-layerClose";
+            aF.style.float = "left";
+            aF.innerText = "친구신청";
+            btnR.appendChild(aF);
+
+        }
+
+
+        //닫기 버튼
         var a = document.createElement("a");
         a.href = "#";
         a.className = "btn-layerClose";
         a.innerText = "Close";
-
-        // document.body.appendChild(dimLayer);
-        dimLayer = document.getElementsByClassName("dim-layer")[0];
-        // dimLayer.appendChild(dimBg);
-        dimLayer.appendChild(popLayer);
-        popLayer.appendChild(popContainer);
-        popContainer.appendChild(popConts);
-        popConts.appendChild(member_name);
-        popConts.appendChild(member_mbti);
-        popConts.appendChild(btnR);
         btnR.appendChild(a);
-
-
     }
+
+
 </script>
 
 <!--지도 중심좌표 정보 출력-->
@@ -1011,7 +1060,7 @@
 
             speechBubbleOverlay.setMap(map);
 
-            createPopup(member);
+            createPopup(member, imageSrc);
 
         });
     }
@@ -1029,7 +1078,9 @@
 
 </script>
 
+
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<!--유저 마커 클릭시  팝업 이벤트-->
 <script>
     $('.btn-popup').click(function () {
         var $href = $(this).attr('href');

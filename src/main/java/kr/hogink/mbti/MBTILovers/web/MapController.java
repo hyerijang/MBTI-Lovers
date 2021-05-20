@@ -29,7 +29,8 @@ public class MapController {
     }
 
     @GetMapping("/matching")
-    public String matching() {
+    public String matching(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+        model.addAttribute("uid", cookieUid);
         return "matching";
     }
 
