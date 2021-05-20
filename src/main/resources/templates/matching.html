@@ -299,9 +299,28 @@
 
 <iframe id="iframe1" name="iframe1" style="display:none"></iframe>
 
-<!--유저 정보 팝업-->
+<!--팝업-->
 <div class="dim-layer">
     <div class="dimBg"></div>
+
+    <div id="popup-layer-error-position" class="pop-layer">
+        <div class="pop-container">
+            <div class="pop-conts">
+                <!--content //-->
+                <p class="ctxt mb20 lead">Error </p>
+                <p class="ctxt mb20">
+                    위치정보를 가져올 수 없습니다.<br>
+                    위치 서비스가 켜져 있는지 확인해주세요.
+                </p>
+
+
+                <div class="btn-r">
+                    <a href="#" class="btn-layerClose">Close</a>
+                </div>
+                <!--// content-->
+            </div>
+        </div>
+    </div>
 </div>
 
 <!--지도-->
@@ -385,46 +404,58 @@
 <script>
 
     var uid = document.getElementById("uid").value;
-    console.log("내 uid:" + uid);
+    // console.log("내 uid:" + uid);
 
     //유저 현재 위치 갱신
     setPosition();
 
+
     function setPosition() {
+        const options = {
+            enableHighAccuracy: true,
+            maximumAge: 30000,
+            timeout: 27000
+        };
+
+
         // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
         if (navigator.geolocation) {
             // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var lat = position.coords.latitude, // 위도
-                    lon = position.coords.longitude; // 경도
-
-                var locPosition = new kakao.maps.LatLng(lat, lon); //접속 위치
-                // var message = '<div style="padding:5px;">내 위치</div>'; // 인포윈도우에 표시될 내용입니다
-                //
-                // //유저 마커와 인포윈도우를 표시합니다
-                // displayUserMarker(locPosition, message);
-
-                // 지도 중심좌표를 접속위치로 변경합니다
-                map.setCenter(locPosition);
-
-                // 지도 중심좌표를 얻어옵니다
-                var latlng = map.getCenter();
-
-                userPosition.x = latlng.getLat();
-                userPosition.y = latlng.getLng();
-
-                console.log("현재 위치를 저장합니다 :" + userPosition.x + "," + userPosition.y);
-
-                document.getElementById("positionX").setAttribute("value", lat);
-                document.getElementById("positionY").setAttribute("value", lon);
-                document.userPosition.submit();
-
-                // 근처 유저 json
-                // var url = "https://mbti-lovers.kro.kr:8080/matching/near/" + userPosition.x + "/" + userPosition.y;
-                // console.log(url);
-
-            });
+            navigator.geolocation.getCurrentPosition(sucess, error, options);
         }
+
+        function sucess(position) {
+            var lat = position.coords.latitude, // 위도
+                lon = position.coords.longitude; // 경도
+
+            var locPosition = new kakao.maps.LatLng(lat, lon); //접속 위치
+            // var message = '<div style="padding:5px;">내 위치</div>'; // 인포윈도우에 표시될 내용입니다
+            //
+            // //유저 마커와 인포윈도우를 표시합니다
+            // displayUserMarker(locPosition, message);
+
+            // 지도 중심좌표를 접속위치로 변경합니다
+            map.setCenter(locPosition);
+
+            // 지도 중심좌표를 얻어옵니다
+            var latlng = map.getCenter();
+
+            userPosition.x = latlng.getLat();
+            userPosition.y = latlng.getLng();
+
+            console.log("현재 위치를 저장합니다 :" + userPosition.x + "," + userPosition.y);
+
+            document.getElementById("positionX").setAttribute("value", lat);
+            document.getElementById("positionY").setAttribute("value", lon);
+            document.userPosition.submit();
+
+
+        }
+
+        function error() {
+            layer_popup("#popup-layer-error-position");
+        }
+
 
     }
 
@@ -1091,9 +1122,9 @@
 
         var $el = $(el);		//열고자 하는 레이어의 id를 $el 변수에 저장
 
-        console.log("열고자 하는 레이어의 아이디:" + el);
+        // console.log("열고자 하는 레이어의 아이디:" + el);
         //해당 팝업만 보이게 설정
-        console.log($el);
+        // console.log($el);
         $el.css("display", "block");
         $('.dim-layer').fadeIn();
 
