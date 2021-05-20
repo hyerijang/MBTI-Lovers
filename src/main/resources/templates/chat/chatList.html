@@ -3,34 +3,32 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
     <link rel="stylesheet" href="/css/bootstrap.css"/>
+    <title>채팅 목록</title>
 </head>
 <body>
 
 <div class="container">
     <h2>채팅 목록</h2>
     <div>
-        <table border="1">
+        <table class="table table-hover" border="1">
             <thead>
             <tr>
-                <th>rid</th>
-                <th>상대방이름</th>
-                <th>마지막메세지</th>
-                <th>마지막시간</th>
+<!--                <th>rid</th>-->
+                <th style="width: 16.66%">이름</th>
+                <th style="width: 50%">마지막메세지</th>
+                <th style="width: 16.66%">마지막시간</th>
 
             </tr>
             </thead>
             <tbody>
-            <tr th:each="room : ${rooms}">
-                <td th:text="${room.getRoom().getRid()}"></td>
+            <tr th:each="room : ${rooms}" th:onclick="'location.href=\''+ @{/chat/enter/{rid} (rid = ${room.getRoom().getRid()})} + '\''">
+<!--                <td th:text="${room.getRoom().getRid()}"></td>-->
                 <td th:text="${room.getFriendMember().getName()}"></td>
                 <td th:text="${room.getRoom().getLastSentContent()}"></td>
-                <td th:text="${room.getRoom().getLastSentTimeAt()}"></td>
-                <td>
-                    <button class="btn btn-primary" th:href=" @{/chat/enter/{rid} (rid = ${room.getRoom().getRid()})}"
-                            th:onclick="'location.href=\''+ @{/chat/enter/{rid} (rid = ${room.getRoom().getRid()})} + '\''">
-                        입장
-                    </button>
-                </td>
+                <td th:if ="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yyyy.MM.dd')} == ${#dates.format(#dates.createNow(), 'yyyy.MM.dd')}" th:text="${#dates.format(room.getRoom().getLastSentTimeAt(), 'a K:mm')}"></td>
+                <td th:if="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yyyy')} == ${#dates.format(#dates.createNow(), 'yyyy')}" th:unless="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yyyy.MM.dd')} == ${#dates.format(#dates.createNow(), 'yyyy.MM.dd')}"  th:text="${#dates.format(room.getRoom().getLastSentTimeAt(), 'M월 dd일')}"></td>
+                <td th:unless="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yyyy')} == ${#dates.format(#dates.createNow(), 'yyyy')}"  th:text="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yy.M.dd')}"></td>
+
             </tr>
             </tbody>
         </table>
