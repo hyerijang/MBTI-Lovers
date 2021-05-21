@@ -2,6 +2,8 @@ package kr.hongik.mbti;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,7 +16,18 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 import org.apache.http.util.EncodingUtils;
 
@@ -34,7 +47,18 @@ public class webViewActivity extends Activity {
         String postData = "uid=" + intent.getStringExtra("uid");
 
         wv = findViewById(R.id.wv);
-        wv.setWebViewClient(new WebViewClient());
+        wv.setWebViewClient(new WebViewClient(){
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                if (url.equalsIgnoreCase("https://mbti-lovers.kro.kr:8080/matching")) {
+                    Log.i(TAG, "매칭 시작");
+                    turnGpsLocationOn();  // 위치 체크
+                }
+
+                super.onPageStarted(view, url, favicon);
+            }
+        });
         wv.postUrl(myUrlAddress, EncodingUtils.getBytes(postData, "BASE64"));
 
         setWebView(wv);
@@ -101,12 +125,15 @@ public class webViewActivity extends Activity {
             } else {
                 mFilePathCallback.onReceiveValue(new Uri[]{data.getData()});
             }
+
             mFilePathCallback = null;
+        } else if (data != null) {
+
         } else {
             mFilePathCallback.onReceiveValue(null);
         }
     }
-    
+
 
     //    웹뷰에서 뒤로가기 했을 때 히스토리가 남아있을경우 그 전 페이지로
     private long backBtnTime = 0;
@@ -126,6 +153,46 @@ public class webViewActivity extends Activity {
             backBtnTime = curTime;
             Toast.makeText(this, "한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+    public void turnGpsLocationOn() {
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(5000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
+        SettingsClient client = LocationServices.getSettingsClient(this);
+        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+
+        task.addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                // All location settings are satisfied. The client can initialize
+                // location requests here.
+                // ...
+            }
+        });
+
+        task.addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ResolvableApiException) {
+                    // Location settings are not satisfied, but this can be fixed
+                    // by showing the user a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+                        ResolvableApiException resolvable = (ResolvableApiException) e;
+                        resolvable.startResolutionForResult(webViewActivity.this,
+                                0x1);
+                    } catch (IntentSender.SendIntentException sendEx) {
+                        // Ignore the error.
+                    }
+                }
+            }
+        });
     }
 
 }
