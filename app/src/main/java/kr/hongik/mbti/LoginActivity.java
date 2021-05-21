@@ -32,7 +32,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 
@@ -47,8 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     //result 상수
     private static final int GG_SIGN_IN = 900;
     private static final int FB_SIGN_IN = 64206;
-    //    private static String homeUrl = "http://52.78.50.239:8080"; //webServer
-    private static String homeUrl = "http://192.168.35.8:8080"; //Test용 로컬 경로
+    private static String DomainUrl = "https://mbti-lovers.kro.kr:8080";
     final String TAG = LoginActivity.class.getName();
     // 버튼
     private SignInButton btn_login_google;
@@ -221,7 +219,7 @@ public class LoginActivity extends AppCompatActivity {
         if (uid != null) {
             Toast.makeText(LoginActivity.this, uid + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
             Intent i = new Intent(getApplicationContext(), webViewActivity.class);
-            i.putExtra("myurl", homeUrl + "/user/loginPost");
+            i.putExtra("myurl", DomainUrl + "/user/loginPost");
             i.putExtra("uid", uid);
             startActivity(i);
             finish();
