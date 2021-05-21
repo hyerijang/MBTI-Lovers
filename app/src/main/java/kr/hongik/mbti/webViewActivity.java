@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.webkit.GeolocationPermissions;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -21,6 +22,7 @@ public class webViewActivity extends Activity {
     private WebView wv;
     private WebSettings settings; //웹뷰세팅
     private ValueCallback mFilePathCallback;
+    private static final String TAG = "webView";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +62,14 @@ public class webViewActivity extends Activity {
         settings.setAppCacheEnabled(false); //앱 내부 캐시 사용 안함
         settings.setDomStorageEnabled(true); //로컬스토리지 사용 허용
         settings.setAllowFileAccess(true);//웹뷰에서 파일 액세스 활성화
-        setWebViewFileUpload();
+        settings.setGeolocationEnabled(true);//위치 허용
+        setWebChromeClient();
+
     }
 
-    public void setWebViewFileUpload() {
+    public void setWebChromeClient() {
         wv.setWebChromeClient(new WebChromeClient() {
+            //파일업로드
             @Override
             public boolean onShowFileChooser(WebView webView, ValueCallback filePathCallback, FileChooserParams fileChooserParams) {
                 mFilePathCallback = filePathCallback;
@@ -76,20 +81,27 @@ public class webViewActivity extends Activity {
                 startActivityForResult(intent, 0);
                 return true;
             }
+
+            //gps
+            @Override
+            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+                super.onGeolocationPermissionsShowPrompt(origin, callback);
+                callback.invoke(origin, true, false);
+            }
         });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         Log.e("resultCode:: ", String.valueOf(resultCode));
-        if(requestCode == 0 && resultCode == Activity.RESULT_OK){
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mFilePathCallback.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(resultCode, data));
-            }else{
+            } else {
                 mFilePathCallback.onReceiveValue(new Uri[]{data.getData()});
             }
             mFilePathCallback = null;
-        }else{
+        } else {
             mFilePathCallback.onReceiveValue(null);
         }
     }
