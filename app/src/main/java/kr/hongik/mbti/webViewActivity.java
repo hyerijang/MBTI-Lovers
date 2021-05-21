@@ -12,6 +12,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -105,6 +106,28 @@ public class webViewActivity extends Activity {
             mFilePathCallback.onReceiveValue(null);
         }
     }
+    
+
+    //    웹뷰에서 뒤로가기 했을 때 히스토리가 남아있을경우 그 전 페이지로
+    private long backBtnTime = 0;
+
+    @Override
+    public void onBackPressed() {
+        long curTime = System.currentTimeMillis();
+        long gapTime = curTime - backBtnTime;
+        //메인페이지에서 뒤로가기 누르면 바로 종료
+        if (wv.getUrl().equalsIgnoreCase("https://mbti-lovers.kro.kr:8080/")) {
+            super.onBackPressed();
+        } else if (wv.canGoBack()) {
+            wv.goBack();
+        } else if (0 <= gapTime && 2000 >= gapTime) {
+            super.onBackPressed();
+        } else {
+            backBtnTime = curTime;
+            Toast.makeText(this, "한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
 
 
