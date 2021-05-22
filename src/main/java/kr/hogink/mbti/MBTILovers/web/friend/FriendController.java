@@ -1,10 +1,14 @@
 package kr.hogink.mbti.MBTILovers.web.friend;
 
+import kr.hogink.mbti.MBTILovers.web.chat.room.Room;
+import kr.hogink.mbti.MBTILovers.web.chat.room.RoomController;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,8 +29,11 @@ public class FriendController {
     @GetMapping(value = "/friends")
     public String list(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
         List<Friend> friends = friendService.findAllByUid(cookieUid);
-        if (friends != null)
-            model.addAttribute("friends", friends);
+        if (!friends.isEmpty()) {
+            Collections.sort(friends, FriendController::compare);
+
+        }
+        model.addAttribute("friends", friends);
         return "friend/friendsList";
     }
 
@@ -57,4 +64,13 @@ public class FriendController {
         friend.setRelation(FRIEND);
         return friend;
     }
+
+    private static int compare(Friend a, Friend b) {
+        //오름차순 정렬
+        String nameA = a.getFriendMember().getName();
+        String nameB = b.getFriendMember().getName();
+        return nameA.compareTo(nameB);
+
+    }
+
 }
