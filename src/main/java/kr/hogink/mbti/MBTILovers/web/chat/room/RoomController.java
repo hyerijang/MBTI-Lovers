@@ -115,7 +115,6 @@ public class RoomController {
 
         //room 정보
         model.addAttribute("rid", room.getRid());
-        model.addAttribute("name", room.getRid() + "번 채팅방");
         model.addAttribute("sender", user.getName());
         model.addAttribute("senderUid", user.getUid());
 
@@ -124,14 +123,14 @@ public class RoomController {
         String fid = null;
         if (friendMember.isPresent()) {
             fid = friendMember.get().getFid();
+            String fname = memberService.findOneByUid(fid).get().getName();
             model.addAttribute("fid", fid);
+            model.addAttribute("fname", fname);
+
             model.addAttribute("f_profileImage", memberService.findOneByUid(fid).get().getProfileImage());
         }
 
-        log.info("------------------------------------------");
-        log.info("rid:" + room.getRid());
-        log.info("uid:" + user.getUid());
-        log.info("fid :" + fid);
+        log.info(room.getRid() + "번 채팅방에 " + user.getUid() + "님 입장");
 
         return "chat/roomdetail";
 

@@ -34,12 +34,13 @@
 <input type="hidden" id="senderUid" th:value="${senderUid}"/>
 <!--친구 정보-->
 <input type="hidden" id="fid" th:value="${fid}"/>
+<input type="hidden" id="fname" th:value="${fname}"/>
 <input type="hidden" id="f_profileImage" class="form-control" name="f_profileImage" th:value="${f_profileImage}">
 
 <div class="page card card-bordered" id="username-page">
     <div class="card-header">
         <h4 class="card-title">
-            <p th:text="${name}" id="name" style="font-weight: bold"/>
+            <p th:text="${fname}" id="name" style="font-weight: bold"/>
         </h4>
         <a class="btn btn-xs btn-secondary" href="#" data-abc="true"
         >Let's Chat App</a
