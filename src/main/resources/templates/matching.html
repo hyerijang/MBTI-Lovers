@@ -1090,7 +1090,8 @@
             var name = member.name;
             const mbti = member.mbti;
 
-            var imageSrc = S3url + encodeURI(member.profileImage);
+            var imageSrc = getprofileImgPath(member.profileImage);
+
             if (member.profileImage == "") {
                 imageSrc = defaultProfileImgPath;
             }
