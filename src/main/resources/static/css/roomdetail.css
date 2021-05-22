@@ -319,3 +319,7 @@ p.meta-time {
     padding-left: 20px;
     font-weight: bold;
 }
+
+.date-text{
+    text-align: center;
+}

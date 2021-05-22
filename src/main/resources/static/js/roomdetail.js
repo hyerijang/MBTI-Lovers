@@ -115,15 +115,56 @@ function onMessageReceived(payload) {
 }
 
 var lastSender = null;
-var mei;
+var index;
+var lastMessageLocalDate = "";//이전에 읽은 메세지의 날짜
+var lastMessageTime = ""; //이전에 읽은 메세지의 시분
 
 function printMessage(message) {
     var messageElement;
     var mediaBody;
     var metaElement;
-    if (lastSender == message.sender) {
+
+
+    var date = new Date(message.sentTimeAt);
+    var messageLocalDate = date.toLocaleDateString().trim();
+
+
+    //날짜 표시 선
+    if (messageLocalDate !== lastMessageLocalDate) {
+        messageElement = document.createElement("div");
+        messageElement.classList.add("media", "media-meta-day"); // 임시 적용 css
+        messageArea.appendChild(messageElement);
+
+        mediaBody = document.createElement("div");
+        mediaBody.classList.add("media-body");
+        messageElement.appendChild(mediaBody);
+
+        var textElement = document.createElement("p");
+        mediaBody.appendChild(textElement);
+
+        var messageText = document.createElement("p");
+        messageText.classList.add("date-text");
+
+        var todayLocalDate = new Date().toLocaleDateString().trim();
+        if (messageLocalDate == todayLocalDate)
+            messageText.innerText = "오늘";
+        else
+            messageText.innerText = messageLocalDate;
+
+        textElement.appendChild(messageText);
+        //시간 및 발신자 갱신
+        lastMessageLocalDate = messageLocalDate;
+        lastSender = null;
+    }
+
+
+    var strArray = date.toLocaleTimeString().replace(/:\d+ /, ' ').split(':');
+    var messageTime = strArray[0] + ":" + strArray[1];
+
+
+    if (lastSender == message.sender && lastMessageTime == messageTime) {
         messageElement = messageArea.lastChild;
-        mediaBody = messageElement.childNodes[mei - 1];
+        mediaBody = messageElement.childNodes[index - 1];
         metaElement = mediaBody.lastChild;
 
     } else {
@@ -155,39 +196,32 @@ function printMessage(message) {
         //메타태그(시간) 생성
         metaElement = document.createElement("p");
         metaElement.classList.add("meta-time");
-        metaElement.textContent = "메타태그";
+        metaElement.textContent = messageTime;
         mediaBody.appendChild(metaElement);
 
-        mei = messageElement.childNodes.length;
+        index = messageElement.childNodes.length;
     }
 
 
-    if (message.type === "JOIN") {
-        messageElement.classList.add("media", "media-meta-day"); // 임시 적용 css
-        message.content = message.sender + "님이 들어왔습니다.";
-    } else if (message.type === "LEAVE") {
-        messageElement.classList.add("media", "media-meta-day"); // 임시 적용 css
-        message.content = message.sender + "님이 나갔습니다.";
+    if (userUid === message.senderUid) {
+        //메세지를 보낸 사람이 나인 경우
+        messageElement.classList.add("media", "media-chat", "media-chat-reverse");
     } else {
-        if (userUid === message.senderUid) {
-            //메세지를 보낸 사람이 나인 경우
-            messageElement.classList.add("media", "media-chat", "media-chat-reverse");
-        } else {
-            //상대방이 보낸 메세지의 경우
-            messageElement.classList.add("media", "media-chat");
-        }
+        //상대방이 보낸 메세지의 경우
+        messageElement.classList.add("media", "media-chat");
     }
-
 
     var textElement = document.createElement("p");
     var messageText = document.createTextNode(message.content);
     textElement.appendChild(messageText);
-    mediaBody.insertBefore(textElement,metaElement);
+    mediaBody.insertBefore(textElement, metaElement);
 
     //스크롤 범위
     messageArea.scrollTop = messageArea.scrollHeight;
     //마지막 발신자 설정
     lastSender = message.sender;
+    lastMessageLocalDate = messageLocalDate;
+    lastMessageTime = messageTime;
 }
 
 function getAvatarColor(messageSender) {
