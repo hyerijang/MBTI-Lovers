@@ -3,29 +3,9 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
-    <link rel="stylesheet" type="text/css"
-          href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css'>
-
-    <style>
-        .box {
-            box-sizing: border-box;
-            width: 100%;
-            padding-bottom: 100%;
-            /*height: 100%;*/
-            border-radius: 30%;
-            overflow: hidden;
-            position: relative; /* If you want text inside of it */
-            /*margin: 25px;*/
-        }
-
-        .profile {
-            position: absolute; /* If you want text inside of it */
-            box-sizing: border-box;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/css/profile-image-upload.css"/>
+    <title>친구 목록</title>
 </head>
 
 <body>
@@ -33,10 +13,9 @@
 <div class="container">
     <h2>친구 목록</h2>
     <div>
-        <table border="1" id="myTable">
-            <thead>
+        <table class="table table-hover" border="1" id="myTable">
+            <thead style="display:none; ">
             <tr>
-                <!--                <th>FID</th>-->
                 <th>프로필 사진</th>
                 <th>이름</th>
                 <th>mbti</th>
@@ -45,24 +24,22 @@
             </tr>
             </thead>
             <tbody>
-
-
             <tr th:each="friend : ${friends}">
                 <input type="hidden" id="uid" th:value="${friend.friendMember.getUid()}">
                 <input type="hidden" id="profileImage" th:value="${friend.friendMember.getProfileImage()}">
-                <td>
-                    <div class="box" style="background: #BDBDBD;">
+                <td style="width: 15%">
+                    <div class="box">
                         <img class="profile" id="preview-image">
                     </div>
                 </td>
-                <td th:text="${friend.friendMember.getName()}"></td>
-                <td th:text="${friend.friendMember.getMbti()}"></td>
-                <td th:text="${friend.friendMember.getStateMessage()}"></td>
+                <td style="width: 20%" th:text="${friend.friendMember.getName()}"></td>
+                <td style="width: 10%" th:text="${friend.friendMember.getMbti()}"></td>
+                <td style="width: 35%" th:text="${friend.friendMember.getStateMessage()}"></td>
                 <form name="roomDTO" action="/room" method="post">
                     <input id="fid" type="hidden" th:value="${friend.fid}" name="fid"/>
                     <td>
                         <button type="submit" class="btn btn-primary">
-                            채팅하기
+                            채팅
                         </button>
                     </td>
                 </form>
@@ -84,9 +61,10 @@
     </div>
 </nav>
 
+
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
 <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js'></script>
-<script src="/js/friendImagePrewiew.js"></script>
+<script src="/js/imageLoader.js"></script>
 
 </body>
 </html>

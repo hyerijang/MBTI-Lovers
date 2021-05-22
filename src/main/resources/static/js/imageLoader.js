@@ -9,15 +9,17 @@ var uid;
 
 for (let i = 0; i < previewImages.length; i++) {
     let previewImage = previewImages.item(i);
-    uid = uidlist.item(i).value;
+
+    if (uidlist.item(i) != null)
+        uid = uidlist.item(i).value;
     let profileImgFileName = profileImgFileNameList.item(i).value;
 
-    let profileImgPath = S3url + uid + '/' + encodeURI(profileImgFileName);
-    setFriendProfileImage(previewImage, profileImgPath);
+    let profileImgPath = S3url  + encodeURI(profileImgFileName);
+    setMultiProfileImage(previewImage, profileImgPath);
 
 }
 
-function setFriendProfileImage(previewImage, profileImgPath) {
+function setMultiProfileImage(previewImage, profileImgPath) {
 
     //기본 이미지
     previewImage.src = profileImgPath;

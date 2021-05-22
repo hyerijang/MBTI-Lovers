@@ -10222,3 +10222,12 @@ a.text-dark:hover, a.text-dark:focus {
   }
 }
 /*# sourceMappingURL=bootstrap.css.map */
+
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+  background-color: #56ac8a !important;
+  border-color: #576071 ;!important;
+}
+
+.bg-primary {
+  background-color: #56ac8a  !important;
+}

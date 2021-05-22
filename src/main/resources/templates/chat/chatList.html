@@ -2,37 +2,44 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
-    <link rel="stylesheet" type="text/css"
-          href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css'>
-
+    <link rel="stylesheet" href="/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/css/profile-image-upload.css"/>
+    <title>채팅 목록</title>
 </head>
 <body>
 
 <div class="container">
     <h2>채팅 목록</h2>
     <div>
-        <table border="1">
-            <thead>
+        <table class="table table-hover" border="1">
+            <thead style="display: none">
             <tr>
-                <th>rid</th>
-                <th>상대방이름</th>
+                <th>사진</th>
+                <th>이름</th>
                 <th>마지막메세지</th>
                 <th>마지막시간</th>
-
             </tr>
             </thead>
             <tbody>
-            <tr th:each="room : ${rooms}">
-                <td th:text="${room.getRoom().getRid()}"></td>
-                <td th:text="${room.getFriendMember().getName()}"></td>
-                <td th:text="${room.getRoom().getLastSentContent()}"></td>
-                <td th:text="${room.getRoom().getLastSentTimeAt()}"></td>
-                <td>
-                    <button class="btn btn-primary" th:href=" @{/chat/enter/{rid} (rid = ${room.getRoom().getRid()})}"
-                            th:onclick="'location.href=\''+ @{/chat/enter/{rid} (rid = ${room.getRoom().getRid()})} + '\''">
-                        입장
-                    </button>
+            <tr th:each="room : ${rooms}"
+                th:onclick="'location.href=\''+ @{/chat/enter/{rid} (rid = ${room.getRoom().getRid()})} + '\''">
+                <input type="hidden" id="uid" th:value="${room.getFriendMember().getUid()}">
+                <input type="hidden" id="profileImage" th:value="${room.getFriendMember().getProfileImage()}">
+                <td style="width: 15%">
+                    <div class="box">
+                        <img class="profile" id="preview-image">
+                    </div>
                 </td>
+                <td style="width: 20%" th:text="${room.getFriendMember().getName()}"></td>
+                <td style="width: 40%" th:text="${room.getRoom().getLastSentContent()}"></td>
+                <td th:if="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yyyy.MM.dd')} == ${#dates.format(#dates.createNow(), 'yyyy.MM.dd')}"
+                    th:text="${#dates.format(room.getRoom().getLastSentTimeAt(), 'a K:mm')}"></td>
+                <td th:if="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yyyy')} == ${#dates.format(#dates.createNow(), 'yyyy')}"
+                    th:unless="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yyyy.MM.dd')} == ${#dates.format(#dates.createNow(), 'yyyy.MM.dd')}"
+                    th:text="${#dates.format(room.getRoom().getLastSentTimeAt(), 'M월 dd일')}"></td>
+                <td th:unless="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yyyy')} == ${#dates.format(#dates.createNow(), 'yyyy')}"
+                    th:text="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yy.M.dd')}"></td>
+
             </tr>
             </tbody>
         </table>
@@ -62,5 +69,7 @@
         }
     };
 </script>
+
+<script src="/js/imageLoader.js"></script>
 </body>
 </html>

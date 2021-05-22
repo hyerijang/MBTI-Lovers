@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap.css"/>
 
     <link rel="stylesheet" href="/css/profile-image-upload.css"/>
 
@@ -21,8 +21,9 @@
     </style>
 </head>
 <body>
-<input hidden id="user_gender" th:value="${user.getGender()}">
-<input hidden id="user_mbti" th:value="${user.getMbti()}">
+<input hidden id="user_gender" th:value="${member.getGender()}">
+<input hidden id="user_mbti" th:value="${member.getMbti()}">
+<input id="uid" type="hidden" th:value="${uid}" name="uid"/>
 
 <main class="my-form">
     <div class="cotainer">
@@ -31,13 +32,13 @@
                 <div class="card">
                     <div class="card-header">회원정보</div>
                     <div class="card-body">
-                        <form id="my-form" name=" my-form" >
-                            <input id="uid" type="hidden" th:value="${user.getUid()}" name="uid"/>
+                        <form id="my-form" name=" my-form">
+
                             <div class="form-group row">
                                 <label for="name" class="col-md-4 col-form-label text-md-right">이름</label>
                                 <div class="col-md-6">
                                     <input type="text" id="name" class="form-control" name="name"
-                                           th:value="${user.getName()}">
+                                           th:value="${member.getName()}">
                                 </div>
                             </div>
 
@@ -46,7 +47,7 @@
                                 <label for="gender" class="col-md-4 col-form-label text-md-right">성별</label>
                                 <div class="col-md-6">
                                     <select class="form-control" id="gender" name="gender"
-                                            th:value="${user.getGender()}"></select>
+                                            th:value="${member.getGender()}"></select>
                                 </div>
                             </div>
 
@@ -55,7 +56,7 @@
                                 <label for="age" class="col-md-4 col-form-label text-md-right">나이</label>
                                 <div class="col-md-6">
                                     <input type="Number" id="age" class="form-control" min="20" max="99" name="age"
-                                           th:value="${user.getAge()}">
+                                           th:value="${member.getAge()}">
                                 </div>
                             </div>
 
@@ -70,19 +71,19 @@
                                 <label for="stateMessage" class="col-md-4 col-form-label text-md-right">상태메세지</label>
                                 <div class="col-md-6">
                                     <input type="text" id="stateMessage" name="stateMessage" class="form-control"
-                                           th:value="${user.getStateMessage()}">
+                                           th:value="${member.getStateMessage()}">
                                 </div>
                             </div>
 
                             <input type="hidden" id="profileImage" class="form-control" name="profileImage"
-                                   th:value="${user.getProfileImage()}">
+                                   th:value="${member.getProfileImage()}">
 
                         </form>
 
                         <!--                        프로필 이미지-->
                         <form action="/uploadProfileImage" method="post" enctype="multipart/form-data"
                               onsubmit="return handleFileSelect();" target="iframe1" id="form_imageUpload">
-                            <input id="uid_imageUpload" type="hidden" th:value="${user.getUid()}"
+                            <input id="uid_imageUpload" type="hidden" th:value="${member.getUid()}"
                                    name="uid_imageUpload"/>
                             <div class="form-group row">
                                 <label for="imageFile"
@@ -107,7 +108,7 @@
 
                         <div class="col-md-6 offset-md-4">
                             <form name="friendDTO" action="/friends/acceptRequest" method="post">
-                                <input id="fid" type="hidden" th:value="${user.getUid()}" name="fid"/>
+                                <input id="fid" type="hidden" th:value="${member.getUid()}" name="fid"/>
                                 <td>
                                     <button type="submit" class="btn btn-primary">
                                         친구신청
@@ -116,7 +117,6 @@
                             </form>
                         </div>
                     </div>
-
 
 
                 </div>
@@ -136,9 +136,26 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
 <script src="/js/fileupload.js"></script>
-<script src="/js/imagePreview.js"></script>
+<script src="/js/imagefilePreview.js"></script>
+<script src="/js/imageLoader.js"></script>
 <script>
+
+    //자신의 정보를 보는 경우 친구신청 버튼 없앰
+    var fid = document.getElementById("fid").value;
+    var uid = document.getElementById("uid").value;
+
+    console.log(fid);
+    console.log(uid);
+
+    if (fid == uid) {
+        console.log("자신과는 친구신청 불가. 친구신청 버튼 숨김")
+        document.getElementsByTagName("button")[0].style.display = "none";
+
+    }
+
+    <!-- 모든 input을 disable로 설정-->
     var array_inputTag = document.getElementsByTagName("input");
 
     for (var i = 0; i < array_inputTag.length; i++) {
@@ -151,11 +168,12 @@
         array_selectTag[i].disabled = true;
     }
 
-    //친구신청용 input만 허용
+    //예외) 친구신청용 input만 허용
     var friendRequetInput = document.getElementById("fid");
     friendRequetInput.disabled = false;
 
 </script>
+
 
 </body>
 </html>

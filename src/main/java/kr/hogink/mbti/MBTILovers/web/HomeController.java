@@ -24,8 +24,5 @@ public class HomeController {
     }
 
 
-    @GetMapping("/matching")
-    public String matching() {
-        return "matching";
-    }
+
 }

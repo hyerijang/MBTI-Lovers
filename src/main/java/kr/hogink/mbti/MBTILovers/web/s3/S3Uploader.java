@@ -11,11 +11,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.Optional;
 
 
@@ -65,16 +69,38 @@ public class S3Uploader {
 
     public String uploadProfileImage(MultipartFile multipartFile, String dirName, String uid) throws IOException {
         File uploadFile = convert(multipartFile).orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
+
+        //생성할 썸네일파일의 경로, 로컬 저장
+        File thumb_file_name = new File(multipartFile.getOriginalFilename());
+        File thumb_file = thumb_file_name.getAbsoluteFile();
+
         return uploadProfileImage(uploadFile, dirName, uid);
     }
 
-    private String uploadProfileImage(File uploadFile, String dirName, String uid) {
-        String fileName = dirName + "/" + uid + "/" + uploadFile.getName();
+    public String uploadProfileImage(File uploadFile, String dirName, String uid) {
+        String fileName = dirName + "/" + uploadFile.getName();
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile);
         return uploadImageUrl;
     }
 
+
+    public File convertBase64ToPng(String base64 , String fileName) {
+        String base64Data = base64.split(",")[1];
+        byte[] decodedBytes = Base64.getDecoder().decode(base64Data);
+        ByteArrayInputStream bis = new ByteArrayInputStream(decodedBytes);
+        BufferedImage image = null;
+        File outputFile = null;
+        try {
+            image = ImageIO.read(bis);
+            outputFile = new File(fileName +".png");
+            ImageIO.write(image, "png", outputFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        log.info(outputFile.getPath());
+        return outputFile;
+    }
 
 }
 

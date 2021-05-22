@@ -1,11 +1,16 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
+import org.locationtech.jts.geom.Point;
+import org.n52.jackson.datatype.jts.GeometryDeserializer;
+import org.n52.jackson.datatype.jts.GeometrySerializer;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
-
 
 @Entity
 @Getter
@@ -24,6 +29,9 @@ public class Member {
     private String stateMessage;
     private String profileImage;
     private LocalDateTime connectedTimeAt;
-
+    @JsonSerialize(using = GeometrySerializer.class)
+    @JsonDeserialize(contentUsing = GeometryDeserializer.class)
+    @Column(name = "location")
+    private Point location;
 
 }

@@ -1,5 +1,9 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
+import lombok.extern.log4j.Log4j2;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +14,7 @@ import java.util.UUID;
 
 @Transactional
 @Service
+@Log4j2
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
@@ -27,8 +32,6 @@ public class MemberServiceImpl implements MemberService {
         validateUid(member);
         //같은 UID인 중복회원 x
         validateDuplicateMember(member);
-        //프로필 이미지로 기본이미지 세팅
-        setDefaultProfileImage(member);
         //현재시각 저장
         setLastConnectTime(member);
         memberRepository.save(member);
@@ -39,10 +42,6 @@ public class MemberServiceImpl implements MemberService {
     public String edit(Member member) {
         //UID 검증
         validateUid(member);
-        //같은 UID인 중복회원 x
-//        validateDuplicateMember(member);
-        //프로필 이미지로 기본이미지 세팅
-        setDefaultProfileImage(member);
         //현재시각 저장
         setLastConnectTime(member);
         memberRepository.save(member);
@@ -50,9 +49,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private void validateUid(Member member) {
-        //uid가 비어있으면 임시 uid 발급
+        //uid가 비어있으면 예외 던짐
         if (member.getUid() == null) {
-//            member.setUid(UUID.randomUUID().toString());
             throw new IllegalStateException("member uid가 null 입니다.");
         }
     }
@@ -65,13 +63,6 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-    private void setDefaultProfileImage(Member member) {
-
-        String defaultFileName = "defaultProfileImage.png";
-        if(member.getProfileImage() == null)
-            member.setProfileImage(defaultFileName);
-
-    }
 
     public void setLastConnectTime(Member member) {
         member.setConnectedTimeAt(LocalDateTime.now());
@@ -97,4 +88,33 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
+    @Override
+    public List<Member> findNearUser(double x, double y, int number) {
+        List<Member> nearPoint = memberRepository.findNearPoint(x,y,number);
+        System.out.println("######################################################################");
+        for (int i = 0; i < nearPoint.size(); i++) {
+            Member member = nearPoint.get(i);
+            System.out.println(member.getUid());
+        }
+        System.out.println("######################################################################");
+        return nearPoint;
+    }
+
+    @Override
+    public void setPoint(Optional<Member> optMember, double latitude, double longitude) {
+        if (optMember.isPresent()) {
+            Member member = optMember.get();
+
+            //위치좌표 Point로 변환
+            String pointWKT = String.format("POINT(%s %s)", latitude, longitude);
+            try {
+                Point point = (Point) new WKTReader().read(pointWKT);
+                member.setLocation(point);
+                edit(member);
+                log.info(latitude + " " + longitude);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

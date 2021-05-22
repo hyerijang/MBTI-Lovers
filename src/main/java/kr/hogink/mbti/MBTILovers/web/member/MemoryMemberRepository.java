@@ -1,10 +1,17 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
-import org.springframework.stereotype.Repository;
-
 import java.util.*;
 
 public class MemoryMemberRepository implements MemberRepository {
+    @Override
+    public List<Member> findNearPoint(double x, double y, int n) {
+        return null;
+    }
+
+    @Override
+    public List<Member> findNearPoint(int number) {
+        return null;
+    }
 
     private static final Map<String, Member> store = new HashMap<>();
     private static long sequence = 0L;
@@ -38,5 +45,6 @@ public class MemoryMemberRepository implements MemberRepository {
     public void clearStore() {
         store.clear();
     }
+
 
 }
