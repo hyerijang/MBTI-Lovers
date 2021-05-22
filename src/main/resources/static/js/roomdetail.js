@@ -115,23 +115,28 @@ function onMessageReceived(payload) {
 }
 
 var lastSender = null;
+var mei;
 
 function printMessage(message) {
     var messageElement;
     var mediaBody;
-    if (lastSender != message.sender || lastSender == null) {
+    var metaElement;
+    if (lastSender == message.sender) {
+        messageElement = messageArea.lastChild;
+        mediaBody = messageElement.childNodes[mei - 1];
+        metaElement = mediaBody.lastChild;
+
+    } else {
         //새로운 그룹 생성
         messageElement = document.createElement("div");
-        messageArea.appendChild(messageElement);
-
         //상대방이 보낸 메세지의 경우 이름과 프로필 사진 표시
         if (userUid !== message.senderUid) {
             //이름
-            var avatarElement = document.createElement("i");
+            var nameElement = document.createElement("p");
             var avatarText = document.createTextNode(message.sender);
-            avatarElement.appendChild(avatarText);
-            avatarElement.style["background-color"] = getAvatarColor(message.sender);
-            messageElement.appendChild(avatarElement);
+            nameElement.appendChild(avatarText);
+            nameElement.classList.add("sender-name");
+            messageArea.appendChild(nameElement);
 
             //프로필 이미지
             var imageElement = document.createElement("img");
@@ -139,15 +144,22 @@ function printMessage(message) {
             setProfileImage(imageElement, fid, profileImgFileName);
             messageElement.appendChild(imageElement);
         }
-        //메세지 텍스트 모음
+        messageArea.appendChild(messageElement);
+
+
+        //미디어바디 (메세지 텍스트 모음) 생성
         mediaBody = document.createElement("div");
         mediaBody.classList.add("media-body");
         messageElement.appendChild(mediaBody);
-    } else {
-        messageElement = messageArea.lastChild;
-        mediaBody = messageElement.lastChild;
-    }
 
+        //메타태그(시간) 생성
+        metaElement = document.createElement("p");
+        metaElement.classList.add("meta-time");
+        metaElement.textContent = "메타태그";
+        mediaBody.appendChild(metaElement);
+
+        mei = messageElement.childNodes.length;
+    }
 
 
     if (message.type === "JOIN") {
@@ -170,8 +182,8 @@ function printMessage(message) {
     var textElement = document.createElement("p");
     var messageText = document.createTextNode(message.content);
     textElement.appendChild(messageText);
-    mediaBody.appendChild(textElement);
-    
+    mediaBody.insertBefore(textElement,metaElement);
+
     //스크롤 범위
     messageArea.scrollTop = messageArea.scrollHeight;
     //마지막 발신자 설정
