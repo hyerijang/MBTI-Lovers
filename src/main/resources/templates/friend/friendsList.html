@@ -72,11 +72,36 @@
             height: 100px;
         }
     </style>
+
+    <!--딤처리 팝업-->
+    <link rel="stylesheet" href="/css/popup/layerPopup.css"/>
+
 </head>
 
 <body>
 
-<div class="container">
+<!--팝업-->
+<div class="dim-layer">
+    <div class="dimBg"></div>
+
+    <div id="popup-layer-error-position" class="pop-layer">
+        <div class="pop-container">
+            <div class="pop-conts">
+                <!--content //-->
+                <p class="ctxt mb20 lead">친구유저없음</p>
+                <p class="ctxt mb20">
+                    친구가 된 유저가 없습니다.<br>
+                    매칭을 통해 새로운 친구들을 만나보세요.
+                </p>
+                <div class="btn-r">
+                    <a href="#" class="btn-layerClose">Close</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="position: relative">
     <h2>친구 목록</h2>
     <div>
         <table class="table table-hover" border="1" id="myTable">
@@ -138,10 +163,16 @@
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
 <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js'></script>
 <script src="/js/imageLoader.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<!--유저 마커 클릭시  팝업 이벤트-->
+<script src="/js/popup/layerPopup.js"></script>
+
+<script th:if="${friends.size()} == 0">
+    layer_popup("#popup-layer-error-position");
+</script>
 
 <script>
-
-    <!-- 모든 input을 disable로 설정-->
+    <!--상태메세지 내용 없는경우 말풍선 색상 투명-->
     var array_stateMessage = document.getElementsByClassName("stateMessage");
 
     for (var i = 0; i < array_stateMessage.length; i++) {
