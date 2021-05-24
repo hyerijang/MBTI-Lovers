@@ -31,9 +31,6 @@ public class FriendController {
         }
         model.addAttribute("friends", friends);
 
-        Optional<Member> user = memberService.findOneByUid(cookieUid);
-        if (user.isPresent())
-            model.addAttribute("user", user.get());
         return "friend/friendsList";
     }
 

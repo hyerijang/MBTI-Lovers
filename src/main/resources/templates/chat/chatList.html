@@ -35,6 +35,7 @@
     .name {
         float: left;
         color: rebeccapurple;
+        margin-bottom: 7px;
 
     }
 
@@ -60,10 +61,11 @@
 
     .image {
         position: static;
+        width: 70px;
     }
 
-    .fixtd {
-        width: 120px;
+    .td_img {
+        width: 100px;
         position: relative;
     }
 
@@ -99,7 +101,7 @@
                 th:onclick="'location.href=\''+ @{/chat/enter/{rid} (rid = ${room.getRoom().getRid()})} + '\''">
                 <input type="hidden" id="uid" th:value="${room.getFriendMember().getUid()}">
                 <input type="hidden" id="profileImage" th:value="${room.getFriendMember().getProfileImage()}">
-                <td class="fixtd">
+                <td class="td_img">
                     <div class="image">
                         <div class="box">
                             <img class="profile" id="preview-image">

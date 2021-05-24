@@ -88,6 +88,8 @@ public class RoomController {
                 friend.setRoom(room);
                 friendService.saveFriend(friend);
             }
+            else
+                log.info("이미 생성된 방이 존재합니다.");
             return "redirect:/chat/enter/" + friend.getRoom().getRid();
         }
 

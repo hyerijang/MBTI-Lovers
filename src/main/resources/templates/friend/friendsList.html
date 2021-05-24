@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/css/profile-image-upload.css"/>
     <title>친구 목록</title>
     <style>
+
         td {
             border: 0px;
         }
@@ -32,7 +33,8 @@
         .name {
             float: left;
             color: rebeccapurple;
-
+            margin-bottom: 7px;
+            font-weight: bold;
         }
 
         .mbti {
@@ -44,33 +46,26 @@
         }
 
         .stateMessage {
-
             float: left;
             clear: left;
             padding: 6px 10px;
             margin: 1px 20px;
-            background-color: #e7e7e7;
+            background-color: rgba(231, 231, 231, 0);
             border-radius: 3px;
             width: auto;
             height: auto;
+            color: #4d5259;
         }
 
         .image {
-            position: static;
+            width: 60px;
         }
 
-        .fixtd {
-            width: 120px;
-        }
-
-        .fixtd_btn {
-            width: 90px;
-        }
-
-        .btn-chat {
+        .td_img {
+            width: 100px;
             position: relative;
-            height: 100px;
         }
+
     </style>
 
     <!--딤처리 팝업-->
@@ -112,11 +107,12 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="friend : ${friends}">
+            <tr th:each="friend : ${friends}"
+                th:onclick="'location.href=\''+ @{/members/read/{fid} (fid = ${friend.friendMember.getUid()})} + '\''">
                 <input type="hidden" id="uid" th:value="${friend.friendMember.getUid()}">
                 <input type="hidden" id="profileImage" th:value="${friend.friendMember.getProfileImage()}">
 
-                <td class="fixtd">
+                <td class="td_img">
                     <div class="image">
                         <div class="box">
                             <img class="profile" id="preview-image">
@@ -124,7 +120,7 @@
                     </div>
                 </td>
 
-                <td class>
+                <td>
                     <div class="h-container">
                         <p class="item name" th:text="${friend.friendMember.getName()}"></p>
                         <p class="item mbti" th:text="${friend.friendMember.getMbti()}"></p>
@@ -133,14 +129,6 @@
                     <p class="stateMessage" th:text="${friend.friendMember.getStateMessage()}"></p>
                 </td>
 
-                <form name="roomDTO" action="/room" method="post">
-                    <input id="fid" type="hidden" th:value="${friend.fid}" name="fid"/>
-                    <td class="fixtd_btn">
-                        <button type="submit" class="btn btn-primary btn-chat">
-                            채팅
-                        </button>
-                    </td>
-                </form>
             </tr>
             </tbody>
         </table>
