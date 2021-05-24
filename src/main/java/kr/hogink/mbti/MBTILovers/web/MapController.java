@@ -3,6 +3,7 @@ package kr.hogink.mbti.MBTILovers.web;
 
 import kr.hogink.mbti.MBTILovers.web.member.Member;
 import kr.hogink.mbti.MBTILovers.web.member.MemberService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
@@ -18,16 +19,13 @@ import static kr.hogink.mbti.MBTILovers.web.login.LoginType.USER_UID_COOKIE;
 
 @Log4j2
 @Controller
+@RequiredArgsConstructor
 public class MapController {
 
-    private MemberService memberService;
+    private final MemberService memberService;
+
     private final int NUM_NEAR_USER = 10;
-
-
-    public MapController(MemberService memberService) {
-        this.memberService = memberService;
-    }
-
+    
     @GetMapping("/matching")
     public String matching(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
         Optional<Member> member = memberService.findOneByUid(cookieUid);

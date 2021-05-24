@@ -1,6 +1,7 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
 import kr.hogink.mbti.MBTILovers.web.login.LoginType;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,13 +22,9 @@ import static kr.hogink.mbti.MBTILovers.web.login.LoginType.USER_UID_COOKIE;
 
 @Controller
 @Log4j2
+@RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
-
-    @Autowired
-    public MemberController(MemberService memberService) {
-        this.memberService = memberService;
-    }
 
     @GetMapping(value = "/members/new")
     public String createFrom(Model model, HttpSession session) {

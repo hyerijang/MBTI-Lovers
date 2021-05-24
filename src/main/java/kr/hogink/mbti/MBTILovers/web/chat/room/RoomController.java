@@ -5,16 +5,14 @@ import kr.hogink.mbti.MBTILovers.web.friend.FriendService;
 import kr.hogink.mbti.MBTILovers.web.login.LoginType;
 import kr.hogink.mbti.MBTILovers.web.member.Member;
 import kr.hogink.mbti.MBTILovers.web.member.MemberService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,19 +21,14 @@ import static kr.hogink.mbti.MBTILovers.web.login.LoginType.USER_UID_COOKIE;
 @Controller
 @SessionAttributes(LoginType.USER_MEMBER_SESSION)
 @Log4j2
+@RequiredArgsConstructor
 public class RoomController {
 
 
-    FriendService friendService;
-    RoomService roomService;
-    MemberService memberService;
+    private final FriendService friendService;
+    private final  RoomService roomService;
+    private final MemberService memberService;
 
-
-    public RoomController(FriendService friendService, RoomService roomService, MemberService memberService) {
-        this.friendService = friendService;
-        this.roomService = roomService;
-        this.memberService = memberService;
-    }
 
     private static int compare(Friend a, Friend b) {
         Room roomA = a.getRoom();
@@ -67,16 +60,13 @@ public class RoomController {
         if (!roomMappingList.isEmpty()) {
             //리스트에서 제외
             roomMappingList.removeIf(friend -> {
+                //보낸 메세지가 없는 경우 삭제
                 if (friend.getRoom() == null) {
                     //room이 생성되지 않은 경우 삭제
                     return true;
-                } else if (friend.getRoom().getLastSentTimeAt() == null) {
-                    //보낸 메세지가 없는 경우 삭제
-                    return true;
-                }
-                return false;
+                } else return friend.getRoom().getLastSentTimeAt() == null;
             });
-            Collections.sort(roomMappingList, RoomController::compare);
+            roomMappingList.sort(RoomController::compare);
 
         }
 
@@ -101,7 +91,8 @@ public class RoomController {
             return "redirect:/chat/enter/" + friend.getRoom().getRid();
         }
 
-        return "채팅방 입장 실패";
+        log.error("채팅방 생성 실패");
+        return "redirect:/";
     }
 
 
@@ -143,8 +134,7 @@ public class RoomController {
             String friendUid = f.get().getFid();
             return memberService.findOneByUid(friendUid).get().getName();
         } else {
-            IllegalStateException e = new IllegalStateException("친구 정보가 없습니다.");
-            throw e;
+            throw new IllegalStateException("친구 정보가 없습니다.");
         }
 
     }
