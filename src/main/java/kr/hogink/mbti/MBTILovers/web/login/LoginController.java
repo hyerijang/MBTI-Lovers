@@ -2,6 +2,7 @@ package kr.hogink.mbti.MBTILovers.web.login;
 
 import kr.hogink.mbti.MBTILovers.web.member.Member;
 import kr.hogink.mbti.MBTILovers.web.member.MemberService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,17 +17,12 @@ import java.util.Optional;
 
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/user")
 public class LoginController {
 
     private final MemberService memberService;
     private final LoginService loginService;
-
-    public LoginController(MemberService memberService, LoginService loginService) {
-        this.memberService = memberService;
-        this.loginService = loginService;
-    }
-
 
     //로그인 페이지
     @RequestMapping(value = "/login", method = RequestMethod.GET)

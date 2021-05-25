@@ -6,7 +6,7 @@
             content="width=device-width, initial-scale=1.0, minimum-scale=1.0"
     />
 
-    <title>Spring Boot WebSocket Chat Application</title>
+    <title th:text="'채팅-'+${fname}">채팅방</title>
 
     <!-- 부트스트랩 css 사용 -->
     <link rel="stylesheet" href="/css/bootstrap.css"/>
@@ -34,12 +34,13 @@
 <input type="hidden" id="senderUid" th:value="${senderUid}"/>
 <!--친구 정보-->
 <input type="hidden" id="fid" th:value="${fid}"/>
+<input type="hidden" id="fname" th:value="${fname}"/>
 <input type="hidden" id="f_profileImage" class="form-control" name="f_profileImage" th:value="${f_profileImage}">
 
 <div class="page card card-bordered" id="username-page">
     <div class="card-header">
         <h4 class="card-title">
-            <p th:text="${name}" id="name" style="font-weight: bold"/>
+            <p th:text="${fname}" id="name" style="font-weight: bold"/>
         </h4>
         <a class="btn btn-xs btn-secondary" href="#" data-abc="true"
         >Let's Chat App</a
@@ -61,12 +62,6 @@
     <!-- 채팅 입력 레이아웃 -->
     <form id="messageForm" name="messageForm">
         <div class="publisher bt-1 border-light">
-            <img
-                    class="avatar avatar-xs"
-                    src="https://img.icons8.com/color/36/000000/administrator-male.png"
-                    alt="..."
-            />
-
             <input
                     class="form-control publisher-input"
                     type="text"

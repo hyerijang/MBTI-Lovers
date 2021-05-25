@@ -6,43 +6,129 @@
     <link rel="stylesheet" href="/css/bootstrap.css"/>
     <link rel="stylesheet" href="/css/profile-image-upload.css"/>
     <title>친구 목록</title>
+    <style>
+
+        td {
+            border: 0px;
+        }
+
+        .info {
+            position: relative;
+        }
+
+        .h-container:after {
+            clear: both;
+            display: block;
+            content: ''
+        }
+
+        .h-container .item {
+            float: left;
+            height: fit-content;
+            padding: 0px 10px;
+            text-align: left;
+            border-right: 1px solid #ddd;
+        }
+
+        .name {
+            float: left;
+            color: rebeccapurple;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        .mbti {
+            float: left;
+            position: relative;
+            margin: 0px 0;
+            color: #761a1a;
+
+        }
+
+        .stateMessage {
+            float: left;
+            clear: left;
+            padding: 6px 10px;
+            margin: 1px 20px;
+            background-color: rgba(231, 231, 231, 0);
+            border-radius: 3px;
+            width: auto;
+            height: auto;
+            color: #4d5259;
+        }
+
+        .image {
+            width: 60px;
+        }
+
+        .td_img {
+            width: 100px;
+            position: relative;
+        }
+
+    </style>
+
+    <!--딤처리 팝업-->
+    <link rel="stylesheet" href="/css/popup/layerPopup.css"/>
+
 </head>
 
 <body>
 
-<div class="container">
+<!--팝업-->
+<div class="dim-layer">
+    <div class="dimBg"></div>
+
+    <div id="popup-layer-error-position" class="pop-layer">
+        <div class="pop-container">
+            <div class="pop-conts">
+                <!--content //-->
+                <p class="ctxt mb20 lead">친구유저없음</p>
+                <p class="ctxt mb20">
+                    친구가 된 유저가 없습니다.<br>
+                    매칭을 통해 새로운 친구들을 만나보세요.
+                </p>
+                <div class="btn-r">
+                    <a href="#" class="btn-layerClose">Close</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="position: relative">
     <h2>친구 목록</h2>
     <div>
         <table class="table table-hover" border="1" id="myTable">
             <thead style="display:none; ">
             <tr>
-                <th>프로필 사진</th>
+                <th>사진</th>
                 <th>이름</th>
-                <th>mbti</th>
-                <th>상태메세지</th>
-                <th>채팅하기</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="friend : ${friends}">
+            <tr th:each="friend : ${friends}"
+                th:onclick="'location.href=\''+ @{/members/read/{fid} (fid = ${friend.friendMember.getUid()})} + '\''">
                 <input type="hidden" id="uid" th:value="${friend.friendMember.getUid()}">
                 <input type="hidden" id="profileImage" th:value="${friend.friendMember.getProfileImage()}">
-                <td style="width: 15%">
-                    <div class="box">
-                        <img class="profile" id="preview-image">
+
+                <td class="td_img">
+                    <div class="image">
+                        <div class="box">
+                            <img class="profile" id="preview-image">
+                        </div>
                     </div>
                 </td>
-                <td style="width: 20%" th:text="${friend.friendMember.getName()}"></td>
-                <td style="width: 10%" th:text="${friend.friendMember.getMbti()}"></td>
-                <td style="width: 35%" th:text="${friend.friendMember.getStateMessage()}"></td>
-                <form name="roomDTO" action="/room" method="post">
-                    <input id="fid" type="hidden" th:value="${friend.fid}" name="fid"/>
-                    <td>
-                        <button type="submit" class="btn btn-primary">
-                            채팅
-                        </button>
-                    </td>
-                </form>
+
+                <td>
+                    <div class="h-container">
+                        <p class="item name" th:text="${friend.friendMember.getName()}"></p>
+                        <p class="item mbti" th:text="${friend.friendMember.getMbti()}"></p>
+
+                    </div>
+                    <p class="stateMessage" th:text="${friend.friendMember.getStateMessage()}"></p>
+                </td>
+
             </tr>
             </tbody>
         </table>
@@ -65,6 +151,22 @@
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
 <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js'></script>
 <script src="/js/imageLoader.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<!--유저 마커 클릭시  팝업 이벤트-->
+<script src="/js/popup/layerPopup.js"></script>
 
+<script th:if="${friends.size()} == 0">
+    layer_popup("#popup-layer-error-position");
+</script>
+
+<script>
+    <!--상태메세지 내용 없는경우 말풍선 색상 투명-->
+    var array_stateMessage = document.getElementsByClassName("stateMessage");
+
+    for (var i = 0; i < array_stateMessage.length; i++) {
+        if (array_stateMessage[i].textContent == "")
+            array_stateMessage[i].style.backgroundColor = "#FFFFFF00";
+    }
+</script>
 </body>
 </html>

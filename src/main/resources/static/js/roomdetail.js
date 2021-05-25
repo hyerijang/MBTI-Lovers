@@ -23,10 +23,12 @@ var colors = [
 
 //메세지 정보
 var rid = document.querySelector("#rid").value.trim();
-var sender = document.querySelector("#sender").value.trim();
-var senderUid = document.querySelector("#senderUid").value.trim();
+var userName = document.querySelector("#sender").value.trim();
+var userUid = document.querySelector("#senderUid").value.trim();
 var currentTime = new Date().getTime();
 
+//상대방 이름
+var fname = document.getElementById("fname").value;
 
 //상대방 프로필 이미지
 var profileImgFileName = document.getElementById("f_profileImage").value;
@@ -37,18 +39,12 @@ var fid = document.getElementById("fid").value;
 window.onload = connect();
 var messageRef;
 
-function clearChatData() {
-    //로컬스토리지 삭제
-    localStorage.clear();
-    console.log("로컬스토리지 삭제")
-}
 
 function connect() {
 
-    // clearChatData();
     LoadAllMessageFromFirebase();
 
-    if (sender) {
+    if (userName) {
         usernamePage.classList.add("hidden");
         chatPage.classList.remove("hidden");
 
@@ -64,22 +60,11 @@ function onConnected() {
     // room 입장
     stompClient.subscribe("/sub/chat/room/" + rid, onMessageReceived);
     setCurrentTime();
-    // stompClient.send(
-    //     "/pub/chat.sendMessage",
-    //     {},
-    //     JSON.stringify({
-    //         rid: rid,
-    //         type: "JOIN",
-    //         sender: sender,
-    //         senderUid: senderUid,
-    //         sentTimeAt: currentTime
-    //     })
-    // );
 }
 
 function onError(error) {
-    // connectingElement.textContent = "Could not connect to WebSocket server. Please refresh this page to try again!";
-    // connectingElement.style.color = "red";
+    connectingElement.textContent = "Could not connect to WebSocket server. Please refresh this page to try again!";
+    connectingElement.style.color = "red";
 }
 
 //메세지 전송
@@ -91,8 +76,8 @@ function sendMessage(event) {
             rid: rid,
             type: "CHAT",
             content: messageInput.value,
-            sender: sender,
-            senderUid: senderUid,
+            sender: userName,
+            senderUid: userUid,
             sentTimeAt: currentTime
         };
         stompClient.send("/pub/chat.sendMessage", {}, JSON.stringify(chatMessage));
@@ -114,64 +99,121 @@ function onMessageReceived(payload) {
 
 }
 
+var lastSender = null;
+var index;
+var lastMessageLocalDate = "";//이전에 읽은 메세지의 날짜
+var lastMessageTime = ""; //이전에 읽은 메세지의 시분
+
 function printMessage(message) {
-    // console.log(message);
+    var messageElement;
+    var mediaBody;
+    var metaElement;
 
-    var messageElement = document.createElement("div");
 
-    var mediaBody = document.createElement("div");
-    mediaBody.classList.add("media-body");
+    var date = new Date(message.sentTimeAt);
+    var messageLocalDate = date.toLocaleDateString().trim();
 
-    if (message.type === "JOIN") {
+
+    //날짜 표시 선
+    if (messageLocalDate !== lastMessageLocalDate) {
+        messageElement = document.createElement("div");
         messageElement.classList.add("media", "media-meta-day"); // 임시 적용 css
-        message.content = message.sender + "님이 들어왔습니다.";
-    } else if (message.type === "LEAVE") {
-        messageElement.classList.add("media", "media-meta-day"); // 임시 적용 css
-        message.content = message.sender + "님이 나갔습니다.";
-    } else if (senderUid === message.senderUid) {
+        messageArea.appendChild(messageElement);
+
+        mediaBody = document.createElement("div");
+        mediaBody.classList.add("media-body");
+        messageElement.appendChild(mediaBody);
+
+        var textElement = document.createElement("p");
+        mediaBody.appendChild(textElement);
+
+        var messageText = document.createElement("p");
+        messageText.classList.add("date-text");
+
+        var todayLocalDate = new Date().toLocaleDateString().trim();
+        if (messageLocalDate == todayLocalDate)
+            messageText.innerText = "오늘";
+        else
+            messageText.innerText = messageLocalDate;
+
+        textElement.appendChild(messageText);
+        //시간 및 발신자 갱신
+        lastMessageLocalDate = messageLocalDate;
+        lastSender = null;
+    }
+
+
+    var strArray = date.toLocaleTimeString().replace(/:\d+ /, ' ').split(':');
+    var messageTime = strArray[0] + ":" + strArray[1];
+
+
+    if (lastSender == message.sender && lastMessageTime == messageTime) {
+        messageElement = messageArea.lastChild;
+        mediaBody = messageElement.childNodes[index - 1];
+        metaElement = mediaBody.lastChild;
+
+    } else {
+        //새로운 그룹 생성
+        messageElement = document.createElement("div");
+        //상대방이 보낸 메세지의 경우 이름과 프로필 사진 표시
+        if (userUid !== message.senderUid) {
+            //이름
+            var nameElement = document.createElement("p");
+            var avatarText = document.createTextNode(fname);
+            nameElement.appendChild(avatarText);
+            nameElement.classList.add("sender-name");
+            messageArea.appendChild(nameElement);
+
+            //프로필 이미지
+            var imageElement = document.createElement("img");
+            imageElement.classList.add("avatar");
+            setProfileImage(imageElement, fid, profileImgFileName);
+            messageElement.appendChild(imageElement);
+        }
+        messageArea.appendChild(messageElement);
+
+
+        //미디어바디 (텍스트 그룹) 생성
+        mediaBody = document.createElement("div");
+        mediaBody.classList.add("media-body");
+        messageElement.appendChild(mediaBody);
+
+        //메타태그(시간) 생성
+        metaElement = document.createElement("p");
+        metaElement.classList.add("meta-time");
+        metaElement.textContent = messageTime;
+        mediaBody.appendChild(metaElement);
+
+        index = messageElement.childNodes.length;
+    }
+
+
+    if (userUid === message.senderUid) {
         //메세지를 보낸 사람이 나인 경우
         messageElement.classList.add("media", "media-chat", "media-chat-reverse");
     } else {
-        //다른 사람이 보낸 메세지의 경우
+        //상대방이 보낸 메세지의 경우
         messageElement.classList.add("media", "media-chat");
-
-        //이름
-        var avatarElement = document.createElement("i");
-        var avatarText = document.createTextNode(message.sender);
-        avatarElement.appendChild(avatarText);
-        avatarElement.style["background-color"] = getAvatarColor(message.sender);
-        messageElement.appendChild(avatarElement);
-
-        //프로필 이미지
-        var imageElement = document.createElement("img");
-        imageElement.classList.add("avatar");
-        setProfileImage(imageElement, fid, profileImgFileName);
-        messageElement.appendChild(imageElement);
     }
 
     var textElement = document.createElement("p");
     var messageText = document.createTextNode(message.content);
     textElement.appendChild(messageText);
+    mediaBody.insertBefore(textElement, metaElement);
 
-    messageElement.appendChild(mediaBody);
-    mediaBody.appendChild(textElement);
-
-    messageArea.appendChild(messageElement);
+    //스크롤 범위
     messageArea.scrollTop = messageArea.scrollHeight;
-
+    //마지막 발신자 설정
+    lastSender = message.sender;
+    lastMessageLocalDate = messageLocalDate;
+    lastMessageTime = messageTime;
 }
 
-function getAvatarColor(messageSender) {
-    var hash = 0;
-    for (var i = 0; i < messageSender.length; i++) {
-        hash = 31 * hash + messageSender.charCodeAt(i);
-    }
-    var index = Math.abs(hash % colors.length);
-    return colors[index];
-}
+//
+// 메세지 저장 관련
+//
 
 messageForm.addEventListener("submit", sendMessage, true);
-
 
 function SaveToFirebase(chatMessage) {
 
@@ -218,7 +260,6 @@ function LoadlastMessageFromFirebase() {
 
 function setCurrentTime() {
     currentTime = new Date().getTime();
-
 }
 
 var state = null;
@@ -227,9 +268,8 @@ var url = location.href;
 
 history.pushState(state, title, url);
 
-
 function setProfileImage(previewImage, uid, profileImgFileName) {
-    var profileImgPath = S3url  + encodeURI(profileImgFileName);
+    var profileImgPath = S3url + encodeURI(profileImgFileName);
     //기본 이미지
     previewImage.src = profileImgPath;
 

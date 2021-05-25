@@ -18,6 +18,20 @@
         .custom-file {
             display: none;
         }
+
+        .fixtd_btn {
+            width: 100%;
+            height: 50px;
+            position: relative;
+
+        }
+
+        .btn-chat {
+            text-align: right;
+            position: absolute;
+            right: 10px;
+            bottom: 0;
+        }
     </style>
 </head>
 <body>
@@ -106,14 +120,14 @@
                             </div>
                         </form>
 
-                        <div class="col-md-6 offset-md-4">
-                            <form name="friendDTO" action="/friends/acceptRequest" method="post">
+
+                        <div class="fixtd_btn">
+                            <form name="roomDTO" action="/room" method="post">
                                 <input id="fid" type="hidden" th:value="${member.getUid()}" name="fid"/>
-                                <td>
-                                    <button type="submit" class="btn btn-primary">
-                                        친구신청
-                                    </button>
-                                </td>
+                                <button type="submit" class="btn btn-primary btn-chat">
+                                    1:1 채팅
+                                </button>
+
                             </form>
                         </div>
                     </div>
