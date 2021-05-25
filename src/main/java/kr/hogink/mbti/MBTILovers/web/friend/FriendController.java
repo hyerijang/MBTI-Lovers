@@ -38,29 +38,18 @@ public class FriendController {
     @PostMapping("/friends/acceptRequest")
     public String Accept(FriendDTO friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
 
-        log.info("친구추가");
+        log.info("친구 수락");
         log.info("나 : " + cookieUid);
         log.info("상대방 : " + friendDTO.getFid());
-        Friend friend = getFriend(cookieUid, friendDTO.getFid());
+        Friend friend = friendService.getFriend(cookieUid, friendDTO.getFid());
+        //관계를 "친구"로 설정
+        friend.setRelation(FRIEND);
         friendService.saveFriend(friend);
 
         return "redirect:/friends";
     }
 
-    public Friend getFriend(String uid, String fid) {
 
-        Optional<Friend> f = friendService.getFriendInfo(uid, fid);
-
-        //이미 존재하는 친구
-        if (f.isPresent())
-            return f.get();
-
-        Friend friend = new Friend();
-        friend.setUid(uid);
-        friend.setFid(fid);
-        friend.setRelation(FRIEND);
-        return friend;
-    }
 
     private static int compare(Friend a, Friend b) {
         //오름차순 정렬

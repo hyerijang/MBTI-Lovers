@@ -19,4 +19,6 @@ public interface FriendService {
 
     Optional<Friend> getFriendName(String uid, Room room);
 
+    Friend getFriend(String uid, String fid);
+
 }

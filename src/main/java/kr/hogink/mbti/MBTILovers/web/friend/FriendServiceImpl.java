@@ -2,6 +2,7 @@ package kr.hogink.mbti.MBTILovers.web.friend;
 
 import kr.hogink.mbti.MBTILovers.web.chat.room.Room;
 import kr.hogink.mbti.MBTILovers.web.member.MemberRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +11,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Log4j2
 public class FriendServiceImpl implements FriendService {
 
     private final FriendRepository friendRepository;
@@ -46,6 +48,21 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public Optional<Friend> getFriendName(String uid, Room room) {
         return friendRepository.findOneByUidAndRoom(uid, room);
+    }
+
+
+    @Override
+    public Friend getFriend(String uid, String fid) {
+        Optional<Friend> f = getFriendInfo(uid, fid);
+        //이미 존재하는 관계
+        if (f.isPresent())
+            return f.get();
+
+        log.info("새로운 프렌드 객체를 생성합니다.");
+        Friend friend = new Friend();
+        friend.setUid(uid);
+        friend.setFid(fid);
+        return friend;
     }
 
     Friend reverseFriend(Friend friend) {
