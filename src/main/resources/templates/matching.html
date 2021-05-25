@@ -211,7 +211,7 @@
 </form>
 
 <!--친구신청 폼-->
-<form name="friendDTO" action="/friends/acceptRequest" method="post">
+<form name="friendDTO" action="/friends/request" method="post">
     <input id="fid" type="hidden" name="fid"/>
 </form>
 
@@ -902,7 +902,7 @@
                 console.log("친구신청");
                 var f = document.friendDTO; //폼 name
                 f.fid.value = member.uid;
-                f.action = "/friends/acceptRequest";//이동할 페이지
+                f.action = "/friends/request";//이동할 페이지
                 f.method = "post";//POST방식
                 f.submit();
             }

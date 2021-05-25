@@ -28,7 +28,11 @@ public class Friend {
 
     public enum RelationType {
 
-        FRIEND("친구");
+        FRIEND("친구"),
+        REQUEST("신청"),
+        RECEIVED_REQUEST("신청받음"),
+        BLOCK("차단"),
+        BLOCKED("차단됨");
 
         private final String title;
 

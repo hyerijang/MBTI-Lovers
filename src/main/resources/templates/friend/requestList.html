@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
     <link rel="stylesheet" href="/css/bootstrap.css"/>
     <link rel="stylesheet" href="/css/profile-image-upload.css"/>
-    <title>친구 목록</title>
+    <title>친구 목록 - 보낸 친구 신청</title>
     <style>
 
         td {
@@ -75,35 +75,14 @@
 
 <body>
 
-<!--팝업-->
-<div class="dim-layer">
-    <div class="dimBg"></div>
-
-    <div id="popup-layer-error-position" class="pop-layer">
-        <div class="pop-container">
-            <div class="pop-conts">
-                <!--content //-->
-                <p class="ctxt mb20 lead">친구유저없음</p>
-                <p class="ctxt mb20">
-                    친구가 된 유저가 없습니다.<br>
-                    매칭을 통해 새로운 친구들을 만나보세요.
-                </p>
-                <div class="btn-r">
-                    <a href="#" class="btn-layerClose">Close</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="container" style="position: relative">
     <h2>친구 목록</h2>
     <nav class="navbar navbar-light  bg-faded justify-content-between flex-nowrap flex-row border bg-primary ">
         <div class="container-fluid justify-content-center">
             <ul class="nav navbar-nav flex-row float-right nav-fill w-100">
-                <li class="nav-item"><a class="nav-link pr-3 disabled" href="/friends">내 친구</a></li>
+                <li class="nav-item"><a class="nav-link pr-3 text-white" href="/friends">내 친구</a></li>
                 <li class="nav-item"><a class="nav-link pr-3 text-white" href="/friends/received">받은 친구 신청</a></li>
-                <li class="nav-item "><a class="nav-link pr-3 text-white" href="/friends/request">보낸 친구 신청</a></li>
+                <li class="nav-item "><a class="nav-link pr-3 disabled" href="/friends/request">보낸 친구 신청</a></li>
             </ul>
         </div>
     </nav>

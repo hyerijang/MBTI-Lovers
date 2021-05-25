@@ -1,7 +1,5 @@
 package kr.hogink.mbti.MBTILovers.web.friend;
 
-import kr.hogink.mbti.MBTILovers.web.member.Member;
-import kr.hogink.mbti.MBTILovers.web.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -10,9 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
-import static kr.hogink.mbti.MBTILovers.web.friend.Friend.RelationType.FRIEND;
+import static kr.hogink.mbti.MBTILovers.web.friend.Friend.RelationType.*;
 import static kr.hogink.mbti.MBTILovers.web.login.LoginType.USER_UID_COOKIE;
 
 @Log4j2
@@ -21,11 +18,10 @@ import static kr.hogink.mbti.MBTILovers.web.login.LoginType.USER_UID_COOKIE;
 public class FriendController {
 
     private final FriendService friendService;
-    private final MemberService memberService;
 
     @GetMapping(value = "/friends")
     public String list(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
-        List<Friend> friends = friendService.findAllByUid(cookieUid);
+        List<Friend> friends = friendService.getListRelationFriend(cookieUid);
         if (!friends.isEmpty()) {
             Collections.sort(friends, FriendController::compare);
         }
@@ -34,13 +30,33 @@ public class FriendController {
         return "friend/friendsList";
     }
 
+    @GetMapping(value = "/friends/request")
+    public String requestList(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+        List<Friend> friends = friendService.getListRelationRequest(cookieUid);
+        if (!friends.isEmpty()) {
+            Collections.sort(friends, FriendController::compare);
+        }
+        model.addAttribute("friends", friends);
+
+        return "friend/requestList";
+    }
+
+    @GetMapping(value = "/friends/received")
+    public String receivedList(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+        List<Friend> friends = friendService.getListRelationReceived(cookieUid);
+        if (!friends.isEmpty()) {
+            Collections.sort(friends, FriendController::compare);
+        }
+        model.addAttribute("friends", friends);
+
+        return "friend/receivedList";
+    }
+
     // 친구 수락
     @PostMapping("/friends/acceptRequest")
-    public String Accept(FriendDTO friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+    public String accept(FriendDTO friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
 
-        log.info("친구 수락");
-        log.info("나 : " + cookieUid);
-        log.info("상대방 : " + friendDTO.getFid());
+        log.info("친구 수락" + "나 : " + cookieUid + "상대방 : " + friendDTO.getFid());
         Friend friend = friendService.getFriend(cookieUid, friendDTO.getFid());
         //관계를 "친구"로 설정
         friend.setRelation(FRIEND);
@@ -49,6 +65,40 @@ public class FriendController {
         return "redirect:/friends";
     }
 
+
+    // 친구 신청 취소
+    @PostMapping("/friends/cancelRequest")
+    public String cancel(FriendDTO friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+        log.info("친구 신청 취소" + "나 : " + cookieUid + "상대방 : " + friendDTO.getFid());
+        friendService.cancelRequest(cookieUid, friendDTO.getFid());
+        return "redirect:/friends";
+    }
+
+    // 친구 차단
+    @PostMapping("/friends/block")
+    public String block(FriendDTO friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+
+        log.info("친구 차단" + "나 : " + cookieUid + "상대방 : " + friendDTO.getFid());
+        Friend friend = friendService.getFriend(cookieUid, friendDTO.getFid());
+        //관계를 "차단"으로 설정
+        friend.setRelation(BLOCK);
+        friendService.saveFriend(friend);
+
+        return "redirect:/friends";
+    }
+
+    // 친구 신청
+    @PostMapping("/friends/request")
+    public String request(FriendDTO friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+
+        log.info("친구 신청" + "나 : " + cookieUid + "상대방 : " + friendDTO.getFid());
+        Friend friend = friendService.getFriend(cookieUid, friendDTO.getFid());
+        //관계를 "친구 신청"로 설정
+        friend.setRelation(REQUEST);
+        friendService.saveFriend(friend);
+
+        return "redirect:/friends";
+    }
 
 
     private static int compare(Friend a, Friend b) {
