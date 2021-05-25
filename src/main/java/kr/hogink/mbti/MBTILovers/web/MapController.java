@@ -52,14 +52,26 @@ public class MapController {
 
     @RequestMapping(value = {"/matching/near/{lat}/{lng}"}, method = RequestMethod.GET)
     @ResponseBody()
-    public List<Member> getNearUser(@PathVariable String lat, @PathVariable String lng) {
+    public List<Member> getNearUser(@PathVariable String lat, @PathVariable String lng, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
 
         log.info("getNearUser ( " + "lat:" + lat + " lng:" + lng +")" );
         Double latitude = Double.parseDouble(lat); // 위도
         Double longitude = Double.parseDouble(lng); // 경도
 
         List<Member> members = memberService.findNearUser(latitude, longitude, NUM_NEAR_USER);
+        return members;
 
+    }
+
+    @RequestMapping(value = {"/matching/nearNotFriend/{lat}/{lng}"}, method = RequestMethod.GET)
+    @ResponseBody()
+    public List<Member> getNearUserNotFriend(@PathVariable String lat, @PathVariable String lng, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+
+        log.info("getNearUser ( " + "lat:" + lat + " lng:" + lng +")" );
+        Double latitude = Double.parseDouble(lat); // 위도
+        Double longitude = Double.parseDouble(lng); // 경도
+
+        List<Member> members = memberService.findNearUserNotFriend(latitude, longitude, NUM_NEAR_USER,cookieUid);
         return members;
 
     }

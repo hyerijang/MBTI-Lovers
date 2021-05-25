@@ -198,9 +198,11 @@
 </head>
 
 <body>
+<!--옵션-->
+<!--<label><input type="checkbox" name="option" value="friend" id="chk_friend"> 친구 포함</label>-->
+
 <!--내 uid-->
 <input type="hidden" id="uid" name="uid" th:value="${uid}">
-
 
 <!--내 위치 정보-->
 <form action="/members/position" method="post" name="userLocation" target="iframe1">
@@ -311,7 +313,7 @@
         geoLocation.longitude = position.longitude;
         geoLocation.latitude = position.latitude;
 
-        console.log("지도생성:"+geoLocation.longitude + " "+ geoLocation.latitude);
+        console.log("지도생성:" + geoLocation.longitude + " " + geoLocation.latitude);
 
         var mapContainer = document.getElementById("map"), // 지도를 표시할 div
             mapOption = {
@@ -380,7 +382,7 @@
                 console.log("기존 위치 정보로 지리 정보를 대체합니다.")
                 geoLocation.latitude = currentLat.value;
                 geoLocation.longitude = currentLng.value;
-                console.log("기존 위치 :"+geoLocation.longitude + " "+ geoLocation.latitude);
+                console.log("기존 위치 :" + geoLocation.longitude + " " + geoLocation.latitude);
 
                 var locPosition = new kakao.maps.LatLng(geoLocation.latitude, geoLocation.longitude); //접속 위치
                 map.setCenter(locPosition);
@@ -951,7 +953,13 @@
     function getNearUser(x, y) {
 
         var request = new XMLHttpRequest();
-        request.open('GET', "matching/near/" + x + "/" + y, true);
+
+        var option_friend = document.getElementById("chk_friend");
+
+        if (option_friend.checked)
+            request.open('GET', "matching/near/" + x + "/" + y, true);
+        else
+            request.open('GET', "matching/nearNotFriend/" + x + "/" + y, true);
 
         request.onload = function () {
             if (request.status >= 200 && request.status < 400) {

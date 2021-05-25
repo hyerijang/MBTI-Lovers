@@ -91,12 +91,20 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<Member> findNearUser(double x, double y, int number) {
         List<Member> nearPoint = memberRepository.findNearPoint(x,y,number);
-//        System.out.println("######################################################################");
-//        for (int i = 0; i < nearPoint.size(); i++) {
-//            Member member = nearPoint.get(i);
-//            System.out.println(member.getUid());
-//        }
-//        System.out.println("######################################################################");
+        return nearPoint;
+    }
+
+    /**
+     * 인근 유저를 찾아주는 함수입니다. 친구인 유저와 차단된 유저는 표시되지 않습니다.
+     * @param y
+     * @param x
+     * @param number
+     * @param uid
+     * @return
+     */
+    @Override
+    public List<Member> findNearUserNotFriend(double y, double x, int number, String uid) {
+        List<Member> nearPoint = memberRepository.findNearPointNotFriend(x,y,number,uid);
         return nearPoint;
     }
 
