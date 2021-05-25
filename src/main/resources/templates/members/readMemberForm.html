@@ -164,6 +164,13 @@
                                 </button>
                             </form>
 
+                            <form name="friendDTO" action="/friends/cancelBlock" method="post">
+                                <input type="hidden" th:value="${member.getUid()}" name="fid" class="submit_input"/>
+                                <button type="submit" class="btn btn-primary btn-right btn_none" id="btn_cancel_block">
+                                    차단 취소
+                                </button>
+                            </form>
+
                         </div>
                     </div>
 
@@ -235,6 +242,8 @@
         document.getElementById("btn_accept").style.display = "block";
     } else if (relation == "REQUEST") {
         document.getElementById("btn_cancel").style.display = "block";
+    }else if (relation == "BLOCK") {
+        document.getElementById("btn_cancel_block").style.display = "block";
     }
 
 </script>

@@ -32,7 +32,8 @@ public class Friend {
         REQUEST("신청"),
         RECEIVED_REQUEST("신청받음"),
         BLOCK("차단"),
-        BLOCKED("차단됨");
+        BLOCKED("차단됨"),
+        NONE("아무 관계 아님");
 
         private final String title;
 

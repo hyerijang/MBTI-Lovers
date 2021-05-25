@@ -89,20 +89,27 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public void cancelRequest(String uid, String fid) {
+    public <T> List<T> getListRelationBlock(String uid) {
+        return friendRepository.findAllByUidAndRelation(uid, BLOCK);
+    }
+
+    @Override
+    public void removeRecord(String uid, String fid) {
         Optional<Friend> friend = friendRepository.findOneByUidAndFid(uid, fid);
         if (friend.isPresent()) {
             if (friend.get().getRelation() == REQUEST) {
-                log.info("친구 신청 기록을 삭제합니다.");
-                friendRepository.deleteByUidAndFid(uid,fid);
+                log.info("해당 기록을 삭제합니다.");
+                friendRepository.deleteByUidAndFid(uid, fid);
 
                 Optional<Friend> opponent = friendRepository.findOneByUidAndFid(fid, uid);
                 if (opponent.isPresent())
-                    friendRepository.deleteByUidAndFid(fid,uid);
+                    friendRepository.deleteByUidAndFid(fid, uid);
             }
         }
 
     }
+
+
 
     Friend reverseFriend(Friend friend) {
         Friend opponent = new Friend();
@@ -121,6 +128,9 @@ public class FriendServiceImpl implements FriendService {
         } else if (friend.getRelation() == BLOCK) {
             log.info("친구 차단");
             opponent.setRelation(BLOCKED);
+        } else if (friend.getRelation() == NONE) {
+            log.info("친구 차단 취소");
+            opponent.setRelation(NONE);
         }
         return opponent;
     }

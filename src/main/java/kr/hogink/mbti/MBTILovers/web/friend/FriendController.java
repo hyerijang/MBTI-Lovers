@@ -52,6 +52,17 @@ public class FriendController {
         return "friend/receivedList";
     }
 
+    @GetMapping(value = "/friends/block")
+    public String blockList(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+        List<Friend> friends = friendService.getListRelationBlock(cookieUid);
+        if (!friends.isEmpty()) {
+            Collections.sort(friends, FriendController::compare);
+        }
+        model.addAttribute("friends", friends);
+
+        return "friend/blockList";
+    }
+
     // 친구 수락
     @PostMapping("/friends/acceptRequest")
     public String accept(FriendDTO friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
@@ -66,11 +77,24 @@ public class FriendController {
     }
 
 
+    // 친구 신청
+    @PostMapping("/friends/request")
+    public String request(FriendDTO friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+
+        log.info("친구 신청" + "나 : " + cookieUid + "상대방 : " + friendDTO.getFid());
+        Friend friend = friendService.getFriend(cookieUid, friendDTO.getFid());
+        //관계를 "친구 신청"로 설정
+        friend.setRelation(REQUEST);
+        friendService.saveFriend(friend);
+
+        return "redirect:/friends";
+    }
+
     // 친구 신청 취소
     @PostMapping("/friends/cancelRequest")
     public String cancel(FriendDTO friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
         log.info("친구 신청 취소" + "나 : " + cookieUid + "상대방 : " + friendDTO.getFid());
-        friendService.cancelRequest(cookieUid, friendDTO.getFid());
+        friendService.removeRecord(cookieUid, friendDTO.getFid());
         return "redirect:/friends";
     }
 
@@ -87,16 +111,18 @@ public class FriendController {
         return "redirect:/friends";
     }
 
-    // 친구 신청
-    @PostMapping("/friends/request")
-    public String request(FriendDTO friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+    //차단 취소
+    @PostMapping("/friends/cancelBlock")
+    public String cancelBlock(FriendDTO friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
 
-        log.info("친구 신청" + "나 : " + cookieUid + "상대방 : " + friendDTO.getFid());
+        log.info("친구 차단 취소" + "나 : " + cookieUid + "상대방 : " + friendDTO.getFid());
         Friend friend = friendService.getFriend(cookieUid, friendDTO.getFid());
-        //관계를 "친구 신청"로 설정
-        friend.setRelation(REQUEST);
+        //채팅내역 없는 경우 삭제
+        if (friend.getRoom() == null) {
+            friendService.removeRecord(cookieUid, friendDTO.getFid());
+        }
+        friend.setRelation(NONE);
         friendService.saveFriend(friend);
-
         return "redirect:/friends";
     }
 
