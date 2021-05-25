@@ -18,7 +18,7 @@ public interface MemberService {
 
     void renewLastConnectTime(Member member);
 
-    List<Member> findNearUser(double x, double y, int number);
+    List<Member> findNearUser(double y, double x, int number);
 
     void setPoint(Optional<Member> optMember, double latitude, double longitude);
 }
