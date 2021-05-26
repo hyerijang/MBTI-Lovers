@@ -3,6 +3,8 @@ package kr.hongik.mbti;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -32,7 +34,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import org.apache.http.util.EncodingUtils;
 
-public class webViewActivity extends Activity {
+public class WebViewActivity extends Activity {
 
     private WebView wv;
     private WebSettings settings; //웹뷰세팅
@@ -80,6 +82,8 @@ public class webViewActivity extends Activity {
 
         setWebView(wv);
 
+        // 블루스택 4 데모를 위한 설정, 앱을 세로 화면으로 고정 - 블루스택4가 아닌경우 없어도 정상 작동함
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     public void onResume() {
@@ -152,6 +156,11 @@ public class webViewActivity extends Activity {
         }
     }
 
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
 
     //    웹뷰에서 뒤로가기 했을 때 히스토리가 남아있을경우 그 전 페이지로
     private long backBtnTime = 0;
@@ -203,7 +212,7 @@ public class webViewActivity extends Activity {
                         // Show the dialog by calling startResolutionForResult(),
                         // and check the result in onActivityResult().
                         ResolvableApiException resolvable = (ResolvableApiException) e;
-                        resolvable.startResolutionForResult(webViewActivity.this,
+                        resolvable.startResolutionForResult(WebViewActivity.this,
                                 0x1);
                     } catch (IntentSender.SendIntentException sendEx) {
                         // Ignore the error.
