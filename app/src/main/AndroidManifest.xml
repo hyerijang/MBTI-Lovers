@@ -34,7 +34,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MBTI"
         android:usesCleartextTraffic="true">
-        <activity android:name=".webViewActivity"></activity>
+        <activity
+            android:name=".webViewActivity"
+            android:configChanges="screenSize|orientation"></activity>
         <activity android:name=".FriendList.FriendListActivity" />
         <activity android:name=".Member.MyprofileActivity" />
         <activity android:name=".Search.SearchingPersonActivity" />

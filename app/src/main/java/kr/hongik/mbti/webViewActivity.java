@@ -3,6 +3,8 @@ package kr.hongik.mbti;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -80,6 +82,8 @@ public class webViewActivity extends Activity {
 
         setWebView(wv);
 
+        // 블루스택 4 데모를 위한 설정, 앱을 세로 화면으로 고정 - 블루스택4가 아닌경우 없어도 정상 작동함
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     public void onResume() {
@@ -150,6 +154,11 @@ public class webViewActivity extends Activity {
         } else {
             mFilePathCallback.onReceiveValue(null);
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
 
