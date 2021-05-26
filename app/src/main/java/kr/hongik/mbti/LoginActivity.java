@@ -226,7 +226,7 @@ public class LoginActivity extends AppCompatActivity {
 //                                Toast.makeText(LoginActivity.this, "모든 권한 허용", Toast.LENGTH_SHORT).show();
                                 if (uid != null) {
 //                                    Toast.makeText(LoginActivity.this, uid + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
-                                    Intent i = new Intent(getApplicationContext(), webViewActivity.class);
+                                    Intent i = new Intent(getApplicationContext(), WebViewActivity.class);
                                     i.putExtra("myurl", DomainUrl + "/user/loginPost");
                                     i.putExtra("uid", uid);
                                     startActivity(i);
@@ -242,7 +242,7 @@ public class LoginActivity extends AppCompatActivity {
                             showSettingsDialog(); // 권한 거부시 앱 정보 설정 페이지를 띄우기 위한 임의 메소드
                             if (uid != null) {
 //                                Toast.makeText(LoginActivity.this, uid + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
-                                Intent i = new Intent(getApplicationContext(), webViewActivity.class);
+                                Intent i = new Intent(getApplicationContext(), WebViewActivity.class);
                                 i.putExtra("myurl", DomainUrl + "/user/loginPost");
                                 i.putExtra("uid", uid);
                                 startActivity(i);
