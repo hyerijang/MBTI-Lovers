@@ -2,6 +2,7 @@ package kr.hogink.mbti.MBTILovers.web;
 
 import kr.hogink.mbti.MBTILovers.web.login.LoginType;
 import kr.hogink.mbti.MBTILovers.web.member.Member;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 @SessionAttributes(LoginType.USER_MEMBER_SESSION)
+@Log4j2
 public class HomeController {
     @GetMapping("/")
     public String home(Model model, @ModelAttribute(LoginType.USER_MEMBER_SESSION) Member member) {
@@ -23,6 +25,11 @@ public class HomeController {
         return "home";
     }
 
+    @GetMapping("/favicon.ico")
+    public String favicon() {
+        log.warn("/favicon.ico 로 접근");
+        return "redirect:/";
+    }
 
 
 }
