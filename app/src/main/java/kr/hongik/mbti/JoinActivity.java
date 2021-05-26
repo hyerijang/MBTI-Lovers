@@ -22,6 +22,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import kr.hongik.mbti.Member.MemberInfo;
+import kr.hongik.mbti.Member.ProfileImage;
+
 public class JoinActivity extends AppCompatActivity {
 
     private final int GET_GALLERY_IMAGE = 200;

@@ -1,8 +1,7 @@
-package kr.hongik.mbti;
+package kr.hongik.mbti.Member;
 
 import androidx.annotation.NonNull;
 
-import android.Manifest;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

@@ -24,6 +24,7 @@
 
         android:gravity="center"
         android:text="MBTI 연애해"
+        android:textColor="@color/mbti_green_200"
         android:textSize="50dp">
 
     </TextView>

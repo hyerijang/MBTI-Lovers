@@ -1,16 +1,19 @@
 package kr.hongik.mbti;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.AccessToken;
@@ -32,26 +35,34 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+
+import java.util.List;
+
 
 /**
  * class LoginActivity
+ *
  * @author 장혜리
  */
 
 public class LoginActivity extends AppCompatActivity {
 
+    //result 상수
+    private static final int GG_SIGN_IN = 900;
+    private static final int FB_SIGN_IN = 64206;
+    private static String DomainUrl = "https://mbti-lovers.kro.kr:8080";
     final String TAG = LoginActivity.class.getName();
 
     // 버튼
     private SignInButton btn_login_google;
     private LoginButton btn_login_facebook;
-
-    //result 상수
-    private static final int RC_SIGN_IN = 900;
-
-    private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth fbAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private CallbackManager mCallbackManager;
 
@@ -62,10 +73,11 @@ public class LoginActivity extends AppCompatActivity {
 
         setLoginButton();
 
-        checkPermission();
+        //권한 허가
+        checkPer();
 
         //1.파이어베이스 인증 객체 선언
-        mFirebaseAuth= FirebaseAuth.getInstance();
+        fbAuth = FirebaseAuth.getInstance();
 
         //2.Google Sign In 설정
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -80,10 +92,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //Create a new instance of GoogleSignInClient
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, RC_SIGN_IN);
+                startActivityForResult(signInIntent, GG_SIGN_IN);
             }
         });
-
 
 
         //3.facebook login 설정
@@ -111,41 +122,37 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseUser currentUser  = mFirebaseAuth.getCurrentUser();
-        checkUser(currentUser);
+
+        if (fbAuth.getCurrentUser() != null)
+            startWebViewActivity(fbAuth.getCurrentUser().getUid());
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //페이스북 로그인
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
-
         // 구글 로그인
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == GG_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 // 로그인 성공
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
+                handleGoogleAccessToken(account);
+
             } catch (ApiException e) {
-
+                e.printStackTrace();
             }
-        }
 
+        } else if (requestCode == FB_SIGN_IN) {
+            //페이스북 로그인
+            mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        }
 
     }
 
-
-    /**
-     * google Token으로 firebase 로그인
-     * 공식 문서를 바탕으로 변형하였습니다. 자세한 사항은 공식 문서를 참조바랍니다.
-     * @param acct
-     */
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    private void handleGoogleAccessToken(GoogleSignInAccount acct) {
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mFirebaseAuth.signInWithCredential(credential)
+        fbAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -154,7 +161,8 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithGoogle:success");
                             // 토큰 얻은 후 google 로그아웃
                             mGoogleSignInClient.signOut();
-                            checkUser(mFirebaseAuth.getCurrentUser());
+                            //화면 전환
+                            startWebViewActivity(fbAuth.getCurrentUser().getUid());
                         } else {
                             // 로그인 실패
                             Log.w(TAG, "signInWithGoogle:failure", task.getException());
@@ -165,15 +173,9 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-
-    /**
-     * facebook Token으로 firebase 로그인
-     * 공식 문서를 바탕으로 변형하였습니다. 자세한 사항은 공식 문서를 참조바랍니다.
-     * @param token
-     */
     private void handleFacebookAccessToken(AccessToken token) {
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        mFirebaseAuth.signInWithCredential(credential)
+        fbAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -182,7 +184,8 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithFacebook:success");
                             // 토큰 얻은 후 Facebook 로그아웃
                             LoginManager.getInstance().logOut();
-                            checkUser(mFirebaseAuth.getCurrentUser());
+                            // 화면 전환
+                            startWebViewActivity(fbAuth.getCurrentUser().getUid());
                         } else {
                             // 로그인 실패
                             Log.w(TAG, "signInWithFacebook:failure", task.getException());
@@ -193,58 +196,124 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
     /**
-     * firebae 유저 확인 및 화면 전환
-     * @param user
+     * 로그인 버튼 text 변경
      */
-    public void checkUser(FirebaseUser user) {
-        if (user != null) {
-            Toast.makeText(LoginActivity.this, mFirebaseAuth.getUid() + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
-            myStartActivity(MainActivity.class);
-            finish();
-        }
-
-    }
-
-    private void myStartActivity(Class c) {
-        Intent intent = new Intent(this, c);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
-
-
-    /**
-     * 외부저장소 권한허가, 거부 시 프로필 이미지 이용에 문제 있을 수 있음
-     */
-    private void checkPermission()    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                    || checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    //Toast.makeText(this, "외부 저장소 사용을 위한 읽기/쓰기 권한을 요청합니다", Toast.LENGTH_SHORT).show();
-                }
-
-                requestPermissions(new String[]
-                                {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},
-                        2);
-
-            } 
-        }
-    }
-
-
-    /**
-     *  로그인 버튼 text 변경
-     */
-    private void setLoginButton(){
+    private void setLoginButton() {
 
         btn_login_google = findViewById(R.id.btn_google_login);
-        TextView textView = (TextView)btn_login_google.getChildAt(0);
+        TextView textView = (TextView) btn_login_google.getChildAt(0);
         textView.setText(getString(R.string.sing_in_google));
 
         btn_login_facebook = (LoginButton) findViewById(R.id.btn_facebook_login);
         btn_login_facebook.setLoginText(getString(R.string.sing_in_facebook));
 
     }
+
+    public void startWebViewActivity(String uid) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Dexter.withActivity(this)
+                    .withPermissions(
+                            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION)   // 위치
+                    .withListener(new MultiplePermissionsListener() {
+                        @Override
+                        public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) { // 권한 여부를 다 묻고 실행되는 메소드
+                            // check if all permissions are granted
+                            if (multiplePermissionsReport.areAllPermissionsGranted()) {
+//                                Toast.makeText(LoginActivity.this, "모든 권한 허용", Toast.LENGTH_SHORT).show();
+                                if (uid != null) {
+//                                    Toast.makeText(LoginActivity.this, uid + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
+                                    Intent i = new Intent(getApplicationContext(), webViewActivity.class);
+                                    i.putExtra("myurl", DomainUrl + "/user/loginPost");
+                                    i.putExtra("uid", uid);
+                                    startActivity(i);
+                                    finish();
+                                }
+                            }
+
+                        }// onPermissionsChecked()..
+
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) { // 이전 권한 여부를 거부한 권한이 있으면 실행되는 메소드
+                            Toast.makeText(LoginActivity.this, "허가 되지 않은 권한이 있습니다. 권한을 확인해주세요.", Toast.LENGTH_LONG).show();        // 거부한 권한 이름이 저장된 list
+                            showSettingsDialog(); // 권한 거부시 앱 정보 설정 페이지를 띄우기 위한 임의 메소드
+                            if (uid != null) {
+//                                Toast.makeText(LoginActivity.this, uid + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
+                                Intent i = new Intent(getApplicationContext(), webViewActivity.class);
+                                i.putExtra("myurl", DomainUrl + "/user/loginPost");
+                                i.putExtra("uid", uid);
+                                startActivity(i);
+                                finish();
+                            }
+                        }// onPermissionRationaleShouldBeShown()..
+                    })
+                    .check();
+        }
+
+
+    }
+
+
+    // 만약 권한을 거절했을 경우,  다이얼로그 띄우기 위한 임의 메소드
+    private void showSettingsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+        builder.setTitle("Need Permissions");
+        builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.");
+        builder.setPositiveButton("GOTO SETTINGS", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                openSettings(); // 어플리케이션 정보 설정 페이지 띄움.
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+    }// showSettingsDialog()..
+
+    // 어플리케이션 정보 설정 페이지
+    private void openSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+        startActivityForResult(intent, 101);
+    }// openSettings()..
+
+
+    void checkPer() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Dexter.withActivity(this)
+                    .withPermissions(
+                            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION)   // 위치
+                    .withListener(new MultiplePermissionsListener() {
+                        @Override
+                        public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) { // 권한 여부를 다 묻고 실행되는 메소드
+                            // check if all permissions are granted
+                            if (multiplePermissionsReport.areAllPermissionsGranted()) {
+                                Toast.makeText(LoginActivity.this, "모든 권한 허용", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }// onPermissionsChecked()..
+
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) { // 이전 권한 여부를 거부한 권한이 있으면 실행되는 메소드
+                            Toast.makeText(LoginActivity.this, "허가 되지 않은 권한이 있습니다. 권한을 확인해주세요.", Toast.LENGTH_LONG).show();
+                            showSettingsDialog(); // 권한 거부시 앱 정보 설정 페이지를 띄우기 위한 임의 메소드
+                        }// onPermissionRationaleShouldBeShown()..
+                    })
+                    .check();
+        }
+
+    }
+
 }
