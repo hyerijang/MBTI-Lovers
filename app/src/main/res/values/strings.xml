@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MBTI</string>
+    <string name="app_name">MBTI연애해</string>
     <string name="failed_login">로그인 실패</string>
     <string name="facebook_app_id">2849097925414116</string>
     <string name="fb_login_protocol_scheme">fb2849097925414116</string>
