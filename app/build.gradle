@@ -83,6 +83,12 @@ dependencies {
     //noinspection GradleCompatible
     implementation 'com.android.support:support-v4:28.0.0'
 
+    //권한
+    implementation 'com.karumi:dexter:6.1.0'
+
+    //구글 위치 서비스
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
