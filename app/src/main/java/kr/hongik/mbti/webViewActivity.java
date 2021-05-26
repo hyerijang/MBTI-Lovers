@@ -28,6 +28,7 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.apache.http.util.EncodingUtils;
 
@@ -38,16 +39,31 @@ public class webViewActivity extends Activity {
     private ValueCallback mFilePathCallback;
     private static final String TAG = "webView";
 
+    FirebaseAuth mfirebaseAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mfirebaseAuth = FirebaseAuth.getInstance();
+
         setContentView(R.layout.activity_web_view);
         Intent intent = getIntent();
         String myUrlAddress = intent.getStringExtra("myurl");
         String postData = "uid=" + intent.getStringExtra("uid");
 
         wv = findViewById(R.id.wv);
-        wv.setWebViewClient(new WebViewClient(){
+        wv.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url.equalsIgnoreCase("https://mbti-lovers.kro.kr:8080/user/logout")) {
+                    Log.i(TAG, "로그아웃");
+                    logout(mfirebaseAuth);
+                    myStartActivity(LoginActivity.class);
+                    finish();
+                }
+                return super.shouldOverrideUrlLoading(view, url);
+            }
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -56,12 +72,14 @@ public class webViewActivity extends Activity {
                     turnGpsLocationOn();  // 위치 체크
                 }
 
+
                 super.onPageStarted(view, url, favicon);
             }
         });
         wv.postUrl(myUrlAddress, EncodingUtils.getBytes(postData, "BASE64"));
 
         setWebView(wv);
+
     }
 
     public void onResume() {
@@ -79,7 +97,7 @@ public class webViewActivity extends Activity {
         settings = wv.getSettings();
         settings.setJavaScriptEnabled(true); // 웹페이지 자바스크립트 허용 여부
         settings.setDomStorageEnabled(true); // 로컬저장소 허용 여부
-        settings.setJavaScriptCanOpenWindowsAutomatically(true); //팝업창 허영
+        settings.setJavaScriptCanOpenWindowsAutomatically(true); //팝업창 허용
         settings.setLoadsImagesAutomatically(true); //웹뷰가 앱의 이미지 리소스 로드
 //        settings.setUseWideViewPort(true); //wide viewport 사용
         settings.setSupportZoom(false); //zoom 비허용
@@ -193,6 +211,21 @@ public class webViewActivity extends Activity {
                 }
             }
         });
+    }
+
+    private void myStartActivity(Class c) {
+        Intent intent = new Intent(this, c);
+        startActivityForResult(intent, 1);
+    }
+
+    public void logout(FirebaseAuth mFirebaseAuth) {
+
+        if (mFirebaseAuth.getCurrentUser() != null) {
+
+//            Toast.makeText(webViewActivity.this, mFirebaseAuth.getUid() + "님이 로그아웃하셨습니다", Toast.LENGTH_SHORT).show();
+            mFirebaseAuth.signOut();
+
+        }
     }
 
 }

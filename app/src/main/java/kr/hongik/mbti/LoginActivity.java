@@ -300,7 +300,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) { // 권한 여부를 다 묻고 실행되는 메소드
                             // check if all permissions are granted
                             if (multiplePermissionsReport.areAllPermissionsGranted()) {
-                                Toast.makeText(LoginActivity.this, "모든 권한 허용", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(LoginActivity.this, "모든 권한 허용", Toast.LENGTH_SHORT).show();
                             }
 
                         }// onPermissionsChecked()..
