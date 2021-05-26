@@ -34,7 +34,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import org.apache.http.util.EncodingUtils;
 
-public class webViewActivity extends Activity {
+public class WebViewActivity extends Activity {
 
     private WebView wv;
     private WebSettings settings; //웹뷰세팅
@@ -212,7 +212,7 @@ public class webViewActivity extends Activity {
                         // Show the dialog by calling startResolutionForResult(),
                         // and check the result in onActivityResult().
                         ResolvableApiException resolvable = (ResolvableApiException) e;
-                        resolvable.startResolutionForResult(webViewActivity.this,
+                        resolvable.startResolutionForResult(WebViewActivity.this,
                                 0x1);
                     } catch (IntentSender.SendIntentException sendEx) {
                         // Ignore the error.
