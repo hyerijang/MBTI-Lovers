@@ -1,6 +1,9 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
+import kr.hogink.mbti.MBTILovers.web.friend.Friend;
+import kr.hogink.mbti.MBTILovers.web.friend.FriendService;
 import kr.hogink.mbti.MBTILovers.web.login.LoginType;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,13 +24,10 @@ import static kr.hogink.mbti.MBTILovers.web.login.LoginType.USER_UID_COOKIE;
 
 @Controller
 @Log4j2
+@RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
-
-    @Autowired
-    public MemberController(MemberService memberService) {
-        this.memberService = memberService;
-    }
+    private final FriendService friendService;
 
     @GetMapping(value = "/members/new")
     public String createFrom(Model model, HttpSession session) {
@@ -100,6 +100,11 @@ public class MemberController {
         if (member.isPresent()) {
             model.addAttribute("uid", cookieUid);
             model.addAttribute("member", member.get());
+
+            Friend friend = friendService.getFriend(cookieUid, fid);
+            if (friend != null) {
+                model.addAttribute("relation",friend.getRelation());
+            }
             return "members/readMemberForm.html";
         }
         log.warn("존재하지 않는 유저입니다.");

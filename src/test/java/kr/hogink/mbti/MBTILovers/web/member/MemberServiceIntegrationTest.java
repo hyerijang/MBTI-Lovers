@@ -38,17 +38,17 @@ public class MemberServiceIntegrationTest {
     }
 
 
-    @Test
-    void 가까운점() {
-
-        List<Member> nearPoint = memberRepository.findNearPoint(2);
-        System.out.println("######################################################################");
-
-        for (int i = 0; i < nearPoint.size(); i++) {
-            Member member = nearPoint.get(i);
-            System.out.println(member.getUid());
-
-        }
-    }
+//    @Test
+//    void 특정_좌표에_가까운_멤버_리스트() {
+//
+//        List<Member> nearPoint = memberRepository.findNearPoint(39.1, 127.2, 2);
+//        System.out.println("######################################################################");
+//
+//        for (int i = 0; i < nearPoint.size(); i++) {
+//            Member member = nearPoint.get(i);
+//            System.out.println(member.getUid());
+//
+//        }
+//    }
 
 }

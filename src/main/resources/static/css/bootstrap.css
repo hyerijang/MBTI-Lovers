@@ -33,6 +33,8 @@
   --breakpoint-xl: 1200px;
   --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  /*메인컬러*/
+  --main-bg-color: #56ac8a ;
 }
 
 *,
@@ -10223,11 +10225,12 @@ a.text-dark:hover, a.text-dark:focus {
 }
 /*# sourceMappingURL=bootstrap.css.map */
 
+/*추가*/
 .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
-  background-color: #56ac8a !important;
-  border-color: #576071 ;!important;
+  background-color: var(--main-bg-color) !important;
+  border-color: gray !important;
 }
 
 .bg-primary {
-  background-color: #56ac8a  !important;
+  background-color: var(--main-bg-color)  !important;
 }

@@ -8,6 +8,82 @@
 </head>
 <body>
 
+
+<style>
+    td {
+        border: 0px;
+    }
+
+    .info {
+        position: relative;
+    }
+
+    .h-container:after {
+        clear: both;
+        display: block;
+        content: ''
+    }
+
+    .h-container .item {
+        float: left;
+        height: fit-content;
+        padding: 0px 10px;
+        text-align: left;
+        border-right: 1px solid #ddd;
+    }
+
+    .name {
+        float: left;
+        color: rebeccapurple;
+        margin-bottom: 7px;
+
+    }
+
+    .mbti {
+        float: left;
+        position: relative;
+        margin: 0px 0;
+        color: #761a1a;
+
+    }
+
+    .message {
+
+        float: left;
+        clear: left;
+        padding: 6px 10px;
+        margin: 1px 20px;
+        background-color: #e7e7e7;
+        border-radius: 3px;
+        width: auto;
+        height: auto;
+    }
+
+    .image {
+        position: static;
+        width: 70px;
+    }
+
+    .td_img {
+        width: 100px;
+        position: relative;
+    }
+
+    .fixtd_time {
+        width: 140px;
+        position: relative;
+    }
+
+    .p_time {
+        text-align: right;
+        position: absolute;
+        right: 10px;
+        bottom: 0;
+    }
+
+
+</style>
+
 <div class="container">
     <h2>채팅 목록</h2>
     <div>
@@ -25,21 +101,32 @@
                 th:onclick="'location.href=\''+ @{/chat/enter/{rid} (rid = ${room.getRoom().getRid()})} + '\''">
                 <input type="hidden" id="uid" th:value="${room.getFriendMember().getUid()}">
                 <input type="hidden" id="profileImage" th:value="${room.getFriendMember().getProfileImage()}">
-                <td style="width: 15%">
-                    <div class="box">
-                        <img class="profile" id="preview-image">
+                <td class="td_img">
+                    <div class="image">
+                        <div class="box">
+                            <img class="profile" id="preview-image">
+                        </div>
                     </div>
                 </td>
-                <td style="width: 20%" th:text="${room.getFriendMember().getName()}"></td>
-                <td style="width: 40%" th:text="${room.getRoom().getLastSentContent()}"></td>
-                <td th:if="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yyyy.MM.dd')} == ${#dates.format(#dates.createNow(), 'yyyy.MM.dd')}"
-                    th:text="${#dates.format(room.getRoom().getLastSentTimeAt(), 'a K:mm')}"></td>
-                <td th:if="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yyyy')} == ${#dates.format(#dates.createNow(), 'yyyy')}"
-                    th:unless="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yyyy.MM.dd')} == ${#dates.format(#dates.createNow(), 'yyyy.MM.dd')}"
-                    th:text="${#dates.format(room.getRoom().getLastSentTimeAt(), 'M월 dd일')}"></td>
-                <td th:unless="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yyyy')} == ${#dates.format(#dates.createNow(), 'yyyy')}"
-                    th:text="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yy.M.dd')}"></td>
 
+                <td>
+
+                    <p class="item name" th:text="${room.getFriendMember().getName()}"></p>
+                    <p class="item message" th:text="${room.getRoom().getLastSentContent()}"></p>
+
+                </td>
+                <td class="fixtd_time">
+                    <p class="p_time"
+                       th:if="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yyyy.MM.dd')} == ${#dates.format(#dates.createNow(), 'yyyy.MM.dd')}"
+                       th:text="${#dates.format(room.getRoom().getLastSentTimeAt(), 'a K:mm')}"></p>
+                    <p class="p_time"
+                       th:if="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yyyy')} == ${#dates.format(#dates.createNow(), 'yyyy')}"
+                       th:unless="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yyyy.MM.dd')} == ${#dates.format(#dates.createNow(), 'yyyy.MM.dd')}"
+                       th:text="${#dates.format(room.getRoom().getLastSentTimeAt(), 'M월 dd일')}"></p>
+                    <p class="p_time"
+                       th:unless="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yyyy')} == ${#dates.format(#dates.createNow(), 'yyyy')}"
+                       th:text="${#dates.format(room.getRoom().getLastSentTimeAt(), 'yy.M.dd')}"></p>
+                </td>
             </tr>
             </tbody>
         </table>

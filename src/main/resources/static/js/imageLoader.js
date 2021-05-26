@@ -14,9 +14,13 @@ for (let i = 0; i < previewImages.length; i++) {
         uid = uidlist.item(i).value;
     let profileImgFileName = profileImgFileNameList.item(i).value;
 
-    let profileImgPath = S3url  + encodeURI(profileImgFileName);
-    setMultiProfileImage(previewImage, profileImgPath);
+    setMultiProfileImage(previewImage, getprofileImgPath(profileImgFileName));
 
+}
+
+function getprofileImgPath(profileImgFileName) {
+    let profileImgPath = S3url  + encodeURI(profileImgFileName) + "?" +Date.now();
+    return profileImgPath;
 }
 
 function setMultiProfileImage(previewImage, profileImgPath) {

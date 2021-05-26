@@ -51,14 +51,4 @@ class MemberServiceTest {
     }
 
 
-//    @Test
-//    public void 경로검증() throws URISyntaxException {
-//
-//        String path = File.separator + "static" + File.separator + "images" + File.separator;
-//        String fileName = "defaultProfileImage.png";
-//        URL res = getClass().getClassLoader().getResource(path + fileName);
-//        File File = Paths.get(res.toURI()).toFile();
-//        System.out.println("File is exist ? " + File.exists());
-//    }
-
 }

@@ -2,6 +2,7 @@ package kr.hogink.mbti.MBTILovers.web.chat.message;
 
 import kr.hogink.mbti.MBTILovers.web.chat.room.Room;
 import kr.hogink.mbti.MBTILovers.web.chat.room.RoomService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -12,16 +13,11 @@ import org.springframework.stereotype.Controller;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 public class MessageController {
 
     private final SimpMessagingTemplate messagingTemplate;
-
     private final RoomService roomService;
-
-    public MessageController(SimpMessagingTemplate messagingTemplate, RoomService roomService) {
-        this.messagingTemplate = messagingTemplate;
-        this.roomService = roomService;
-    }
 
     @MessageMapping("/chat.sendMessage") //기존 request mapping 역할
     public void sendMessage(@Payload Message chatMessage) {
