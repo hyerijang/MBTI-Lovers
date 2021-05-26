@@ -63,7 +63,6 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-
     public void setLastConnectTime(Member member) {
         member.setConnectedTimeAt(LocalDateTime.now());
     }
@@ -89,38 +88,46 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public List<Member> findNearUser(double x, double y, int number) {
-        List<Member> nearPoint = memberRepository.findNearPoint(x,y,number);
+    public List<Member> findNearUser(double latitude, double longitude, int number) {
+        List<Member> nearPoint = memberRepository.findNearPoint(latitude, longitude, number);
         return nearPoint;
     }
 
     /**
      * 인근 유저를 찾아주는 함수입니다. 친구인 유저와 차단된 유저는 표시되지 않습니다.
-     * @param y
-     * @param x
+     *
+     * @param latitude
+     * @param longitude
      * @param number
      * @param uid
      * @return
      */
     @Override
-    public List<Member> findNearUserNotFriend(double y, double x, int number, String uid) {
-        List<Member> nearPoint = memberRepository.findNearPointNotFriend(x,y,number,uid);
+    public List<Member> findNearUserNotFriend(double latitude, double longitude, int number, String uid) {
+        List<Member> nearPoint = memberRepository.findNearPointNotFriend(latitude, longitude, number, uid);
+        System.out.println("######################################################################");
+        System.out.println( latitude +" "+longitude +  " " + number + " " + uid);
+
+        for (int i = 0; i < nearPoint.size(); i++) {
+            Member member = nearPoint.get(i);
+            System.out.println(member.getUid());
+        }
+        System.out.println("######################################################################");
         return nearPoint;
     }
 
     /**
-     *
      * @param optMember 멤버
-     * @param latitude 위도
+     * @param latitude  위도
      * @param longitude 경도
      */
     @Override
-    public void setPoint(Optional<Member> optMember,  double latitude, double longitude) {
+    public void setPoint(Optional<Member> optMember, double latitude, double longitude) {
         if (optMember.isPresent()) {
             Member member = optMember.get();
 
             //위치좌표 Point로 변환
-            String pointWKT = String.format("POINT(%s %s)",  latitude, longitude);
+            String pointWKT = String.format("POINT(%s %s)", latitude, longitude);
             try {
                 Point point = (Point) new WKTReader().read(pointWKT);
                 member.setLocation(point);
