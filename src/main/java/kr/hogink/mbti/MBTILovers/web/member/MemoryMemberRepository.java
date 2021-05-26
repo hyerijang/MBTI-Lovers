@@ -4,12 +4,12 @@ import java.util.*;
 
 public class MemoryMemberRepository implements MemberRepository {
     @Override
-    public List<Member> findNearPoint(double x, double y, int n) {
+    public List<Member> findNearPoint(double latitude, double longitude, int n) {
         return null;
     }
 
     @Override
-    public List<Member> findNearPointNotFriend(double x, double y, int n, String uid) {
+    public List<Member> findNearPointNotFriend(double latitude, double longitude, int n, String uid) {
         return null;
     }
 

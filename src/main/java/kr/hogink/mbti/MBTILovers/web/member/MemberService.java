@@ -18,8 +18,8 @@ public interface MemberService {
 
     void renewLastConnectTime(Member member);
 
-    List<Member> findNearUser(double y, double x, int number);
-    List<Member> findNearUserNotFriend(double y, double x, int number, String uid);
+    List<Member> findNearUser(double latitude, double longitude, int number);
+    List<Member> findNearUserNotFriend(double latitude, double longitude, int number, String uid);
 
     void setPoint(Optional<Member> optMember, double latitude, double longitude);
 }
