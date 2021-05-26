@@ -9,7 +9,7 @@ public class MemoryMemberRepository implements MemberRepository {
     }
 
     @Override
-    public List<Member> findNearPoint(int number) {
+    public List<Member> findNearPointNotFriend(double x, double y, int n, String uid) {
         return null;
     }
 

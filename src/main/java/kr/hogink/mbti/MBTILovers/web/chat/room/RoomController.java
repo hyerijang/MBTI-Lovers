@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,7 +53,7 @@ public class RoomController {
     @GetMapping(value = "/chatList")
 
     public String list(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
-        List<Friend> roomMappingList = friendService.findAllByUid(cookieUid);
+        List<Friend> roomMappingList = friendService.getListAllFriend(cookieUid);
 
         //최신순으로 정렬
         if (!roomMappingList.isEmpty()) {

@@ -26,18 +26,32 @@
 
         }
 
-        .btn-chat {
+        .btn-left {
+            text-align: right;
+            position: absolute;
+            left: 10px;
+            bottom: 0;
+        }
+
+        .btn-right {
             text-align: right;
             position: absolute;
             right: 10px;
             bottom: 0;
         }
+
+        .btn_none {
+            display: none;
+        }
+
     </style>
 </head>
 <body>
 <input hidden id="user_gender" th:value="${member.getGender()}">
 <input hidden id="user_mbti" th:value="${member.getMbti()}">
+<input hidden id="relation" th:value="${relation}">
 <input id="uid" type="hidden" th:value="${uid}" name="uid"/>
+<input id="fid" type="hidden" th:value="${member.getUid()}" name="fid" class="submit_input"/>
 
 <main class="my-form">
     <div class="cotainer">
@@ -122,13 +136,41 @@
 
 
                         <div class="fixtd_btn">
+                            <form name="friendDTO" action="/friends/block" method="post">
+                                <input type="hidden" th:value="${member.getUid()}" name="fid" class="submit_input"/>
+                                <button type="submit" class="btn btn-danger btn-left btn_none " id="btn_block">
+                                    차단
+                                </button>
+                            </form>
+
                             <form name="roomDTO" action="/room" method="post">
-                                <input id="fid" type="hidden" th:value="${member.getUid()}" name="fid"/>
-                                <button type="submit" class="btn btn-primary btn-chat">
+                                <input type="hidden" th:value="${member.getUid()}" name="fid" class="submit_input"/>
+                                <button type="submit" class="btn btn-primary btn-right btn_none" id="btn_chat">
                                     1:1 채팅
                                 </button>
-
                             </form>
+
+                            <form name="friendDTO" action="/friends/acceptRequest" method="post">
+                                <input type="hidden" th:value="${member.getUid()}" name="fid" class="submit_input"/>
+                                <button type="submit" class="btn btn-primary btn-right btn_none" id="btn_accept">
+                                    친구 신청 수락
+                                </button>
+                            </form>
+
+                            <form name="friendDTO" action="/friends/cancelRequest" method="post">
+                                <input type="hidden" th:value="${member.getUid()}" name="fid" class="submit_input"/>
+                                <button type="submit" class="btn btn-primary btn-right btn_none" id="btn_cancel">
+                                    친구 신청 취소
+                                </button>
+                            </form>
+
+                            <form name="friendDTO" action="/friends/cancelBlock" method="post">
+                                <input type="hidden" th:value="${member.getUid()}" name="fid" class="submit_input"/>
+                                <button type="submit" class="btn btn-primary btn-right btn_none" id="btn_cancel_block">
+                                    차단 취소
+                                </button>
+                            </form>
+
                         </div>
                     </div>
 
@@ -182,9 +224,27 @@
         array_selectTag[i].disabled = true;
     }
 
-    //예외) 친구신청용 input만 허용
-    var friendRequetInput = document.getElementById("fid");
-    friendRequetInput.disabled = false;
+    //예외) submit 버튼만 허용
+    var btn = document.getElementsByClassName("submit_input");
+    for (var i = 0; i < btn.length; i++) {
+        btn[i].disabled = false;
+    }
+
+    var relation = document.getElementById("relation").value.trim();
+
+    console.log(relation);
+    if (relation == "FRIEND") {
+        document.getElementById("btn_chat").style.display = "block";
+        document.getElementById("btn_block").style.display = "block";
+
+    } else if (relation == "RECEIVED_REQUEST") {
+        document.getElementById("btn_block").style.display = "block";
+        document.getElementById("btn_accept").style.display = "block";
+    } else if (relation == "REQUEST") {
+        document.getElementById("btn_cancel").style.display = "block";
+    }else if (relation == "BLOCK") {
+        document.getElementById("btn_cancel_block").style.display = "block";
+    }
 
 </script>
 

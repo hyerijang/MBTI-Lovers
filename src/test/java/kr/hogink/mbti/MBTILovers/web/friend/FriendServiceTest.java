@@ -25,7 +25,7 @@ class FriendServiceTest {
     RoomService roomService;
 
     @Test
-    void 친구추가() {
+    void 친구수락() {
         //회원가입
         String member1Uid = "user1";
         String member2Uid = "user2";
@@ -34,16 +34,15 @@ class FriendServiceTest {
         memberService.join(member1);
         memberService.join(member2);
 
-        //친구추가
+        //member1이 친구수락함
         Friend friend = new Friend();
         friend.setUid(member1Uid);
         friend.setFid(member2Uid);
         friend.setRelation(Friend.RelationType.FRIEND);
-        //        Room room = new Room();
-        //        roomService.createChatRoom(room);
-        //        friend.setRoom(room);
         friendService.saveFriend(friend);
-        System.out.println(friend.getFriendMember().getMbti());
+        
+        //member2 친구리스트에 member1이 추가 됨
+        assertThat(friendService.getFriend(member2Uid,member1Uid).getRelation()).isEqualTo(Friend.RelationType.FRIEND);
     }
 
     @Test

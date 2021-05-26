@@ -20,5 +20,7 @@ public interface FriendRepository extends JpaRepository<Friend, FriendId> {
 
     Optional<Friend> findOneByUidAndRoom(String uid, Room room);
 
+    <T> List<T> findAllByUidAndRelation(String uid, Friend.RelationType relationType);
 
+    void deleteByUidAndFid(String uid, String fid);
 }
