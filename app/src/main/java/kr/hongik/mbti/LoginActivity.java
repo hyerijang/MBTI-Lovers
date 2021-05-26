@@ -196,7 +196,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
     /**
      * 로그인 버튼 text 변경
      */
@@ -219,14 +218,14 @@ public class LoginActivity extends AppCompatActivity {
                             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                             android.Manifest.permission.ACCESS_COARSE_LOCATION,
                             Manifest.permission.ACCESS_FINE_LOCATION)   // 위치
-                    .withListener(new MultiplePermissionsListener(){
+                    .withListener(new MultiplePermissionsListener() {
                         @Override
                         public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) { // 권한 여부를 다 묻고 실행되는 메소드
                             // check if all permissions are granted
                             if (multiplePermissionsReport.areAllPermissionsGranted()) {
-                                Toast.makeText(LoginActivity.this, "모든 권한 허용", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(LoginActivity.this, "모든 권한 허용", Toast.LENGTH_SHORT).show();
                                 if (uid != null) {
-                                    Toast.makeText(LoginActivity.this, uid + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(LoginActivity.this, uid + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
                                     Intent i = new Intent(getApplicationContext(), webViewActivity.class);
                                     i.putExtra("myurl", DomainUrl + "/user/loginPost");
                                     i.putExtra("uid", uid);
@@ -242,7 +241,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "허가 되지 않은 권한이 있습니다. 권한을 확인해주세요.", Toast.LENGTH_LONG).show();        // 거부한 권한 이름이 저장된 list
                             showSettingsDialog(); // 권한 거부시 앱 정보 설정 페이지를 띄우기 위한 임의 메소드
                             if (uid != null) {
-                                Toast.makeText(LoginActivity.this, uid + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(LoginActivity.this, uid + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
                                 Intent i = new Intent(getApplicationContext(), webViewActivity.class);
                                 i.putExtra("myurl", DomainUrl + "/user/loginPost");
                                 i.putExtra("uid", uid);
@@ -296,7 +295,7 @@ public class LoginActivity extends AppCompatActivity {
                             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                             android.Manifest.permission.ACCESS_COARSE_LOCATION,
                             Manifest.permission.ACCESS_FINE_LOCATION)   // 위치
-                    .withListener(new MultiplePermissionsListener(){
+                    .withListener(new MultiplePermissionsListener() {
                         @Override
                         public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) { // 권한 여부를 다 묻고 실행되는 메소드
                             // check if all permissions are granted
