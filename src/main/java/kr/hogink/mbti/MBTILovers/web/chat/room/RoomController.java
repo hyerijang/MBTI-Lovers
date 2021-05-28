@@ -25,7 +25,7 @@ public class RoomController {
 
 
     private final FriendService friendService;
-    private final  RoomService roomService;
+    private final RoomService roomService;
     private final MemberService memberService;
 
 
@@ -86,8 +86,7 @@ public class RoomController {
                 roomService.createChatRoom(room);
                 friend.setRoom(room);
                 friendService.saveFriend(friend);
-            }
-            else
+            } else
                 log.info("이미 생성된 방이 존재합니다.");
             return "redirect:/chat/enter/" + friend.getRoom().getRid();
         }
@@ -111,18 +110,25 @@ public class RoomController {
         model.addAttribute("senderUid", user.getUid());
 
         //친구 정보
-        Optional<Friend> friendMember = friendService.getFriendName(user.getUid(), room);
-        String fid = null;
-        if (friendMember.isPresent()) {
-            fid = friendMember.get().getFid();
-            String fname = memberService.findOneByUid(fid).get().getName();
-            model.addAttribute("fid", fid);
-            model.addAttribute("fname", fname);
-
-            model.addAttribute("f_profileImage", memberService.findOneByUid(fid).get().getProfileImage());
-        }
+        Optional<Friend> friend = friendService.getFriendName(user.getUid(), room);
 
         log.info(room.getRid() + "번 채팅방에 " + user.getUid() + "님 입장");
+
+        String fid = null;
+        if (friend.isPresent()) {
+            fid = friend.get().getFid();
+            Optional<Member> fMember = memberService.findOneByUid(fid);
+            if (fMember.isPresent()) {
+                model.addAttribute("fid", fid);
+                model.addAttribute("fname", fMember.get().getName());
+                model.addAttribute("f_profileImage", fMember.get().getProfileImage());
+                model.addAttribute("f_relation", friend.get().getRelation());
+                if (friend.get().getRelation() == Friend.RelationType.BLOCKED)
+                    log.info("상대 유저로부터 차단되었습니다.");
+                else if (friend.get().getRelation() == Friend.RelationType.BLOCK)
+                    log.info("내가 차단한 유저입니다.");
+            }
+        }
 
         return "chat/roomdetail";
 
