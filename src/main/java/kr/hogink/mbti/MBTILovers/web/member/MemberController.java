@@ -1,11 +1,12 @@
 package kr.hogink.mbti.MBTILovers.web.member;
 
 import kr.hogink.mbti.MBTILovers.web.friend.Friend;
+import kr.hogink.mbti.MBTILovers.web.friend.FriendId;
+import kr.hogink.mbti.MBTILovers.web.friend.FriendRepository;
 import kr.hogink.mbti.MBTILovers.web.friend.FriendService;
 import kr.hogink.mbti.MBTILovers.web.login.LoginType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -28,6 +29,8 @@ import static kr.hogink.mbti.MBTILovers.web.login.LoginType.USER_UID_COOKIE;
 public class MemberController {
     private final MemberService memberService;
     private final FriendService friendService;
+    private final MemberRepository memberRepository;
+    private final FriendRepository friendRepository;
 
     @GetMapping(value = "/members/new")
     public String createFrom(Model model, HttpSession session) {
@@ -103,7 +106,7 @@ public class MemberController {
 
             Friend friend = friendService.getFriend(cookieUid, fid);
             if (friend != null) {
-                model.addAttribute("relation",friend.getRelation());
+                model.addAttribute("relation", friend.getRelation());
             }
             return "members/readMemberForm.html";
         }
@@ -111,7 +114,26 @@ public class MemberController {
         return "redirect:/";
     }
 
+    //데모시연용 유저 회원 탈퇴
+    @GetMapping(value = "/members/withdrawal")
+    public String withdrawal(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+        Optional<Member> member = memberService.findOneByUid(cookieUid);
+        if (member.isPresent()) {
+            //내 정보 삭제 (상대방의 친구목록에서 함께 삭제됨)
+            log.debug("내 정보 삭제");
+            memberRepository.deleteById(cookieUid);
+            List<Friend> list = friendRepository.findAllByUid(cookieUid);
 
+            log.debug("나의 친구목록 삭제");
+            for (Friend f : list) {
+                friendRepository.delete(f);
+            }
+            //탈퇴 시 채팅 내역은 삭제되지 않고 서버에 보관됩니다.
+            //TODO : 탈퇴시 상대방 역시 나와의 채팅 내역을 볼 수 없음. 연관관계 수정할 것
+        }
+        log.debug("회원탈퇴 성공");
+        return "redirect:/user/logout";
+    }
 
 
 }
