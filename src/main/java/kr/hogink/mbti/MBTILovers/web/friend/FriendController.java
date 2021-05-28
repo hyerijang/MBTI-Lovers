@@ -19,17 +19,18 @@ public class FriendController {
 
     private final FriendService friendService;
 
-    @GetMapping(value = "/friends")
-    public String list(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
-        List<Friend> friends = friendService.getListRelationFriend(cookieUid);
-        if (!friends.isEmpty()) {
-            Collections.sort(friends, FriendController::compare);
-        }
-        model.addAttribute("friends", friends);
+//    @GetMapping(value = "/")
+//    public String list(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+//        List<Friend> friends = friendService.getListRelationFriend(cookieUid);
+//        if (!friends.isEmpty()) {
+//            Collections.sort(friends, FriendController::compare);
+//        }
+//        model.addAttribute("friends", friends);
+//
+//        return "friend/friendsList";
+//    }
 
-        return "friend/friendsList";
-    }
-
+    //보낸 친구 신청 리스트
     @GetMapping(value = "/friends/request")
     public String requestList(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
         List<Friend> friends = friendService.getListRelationRequest(cookieUid);
@@ -41,6 +42,7 @@ public class FriendController {
         return "friend/requestList";
     }
 
+    //받은 친구 신청 리스트
     @GetMapping(value = "/friends/received")
     public String receivedList(Model model, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
         List<Friend> friends = friendService.getListRelationReceived(cookieUid);
@@ -73,7 +75,7 @@ public class FriendController {
         friend.setRelation(FRIEND);
         friendService.saveFriend(friend);
 
-        return "redirect:/friends";
+        return "redirect:/";
     }
 
 
@@ -87,7 +89,7 @@ public class FriendController {
         friend.setRelation(REQUEST);
         friendService.saveFriend(friend);
 
-        return "redirect:/friends";
+        return "redirect:/friends/request";
     }
 
     // 친구 신청 취소
@@ -95,7 +97,7 @@ public class FriendController {
     public String cancel(FriendDTO friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
         log.info("친구 신청 취소" + "나 : " + cookieUid + "상대방 : " + friendDTO.getFid());
         friendService.removeRecord(cookieUid, friendDTO.getFid());
-        return "redirect:/friends";
+        return "redirect:/";
     }
 
     // 친구 차단
@@ -108,7 +110,7 @@ public class FriendController {
         friend.setRelation(BLOCK);
         friendService.saveFriend(friend);
 
-        return "redirect:/friends";
+        return "redirect:/";
     }
 
     //차단 취소
@@ -123,11 +125,11 @@ public class FriendController {
         }
         friend.setRelation(NONE);
         friendService.saveFriend(friend);
-        return "redirect:/friends";
+        return "redirect:/";
     }
 
 
-    private static int compare(Friend a, Friend b) {
+    public static int compare(Friend a, Friend b) {
         //오름차순 정렬
         String nameA = a.getFriendMember().getName();
         String nameB = b.getFriendMember().getName();

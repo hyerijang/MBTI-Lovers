@@ -6,7 +6,7 @@
     <!--딤처리 팝업-->
     <link rel="stylesheet" href="/css/popup/layerPopup.css"/>
 
-    <title>메인</title>
+    <title>마이페이지</title>
 </head>
 
 <body style="padding-bottom: 100px">
@@ -35,26 +35,26 @@
 
 <div class="container">
 
-    <h2>MBTI-Lovers</h2>
+    <h2>마이페이지</h2>
 
 
     <div class="list-group">
-        <p class="list-group-item list-group-item-success" th:if="${user} != null" th:text="${user.getName()}" >유저이름</p>
-        <a class="list-group-item" href="/members/edit">내 정보</a>
-        <a class="list-group-item" href="https://www.16personalities.com/ko/%EB%AC%B4%EB%A3%8C-%EC%84%B1%EA%B2%A9-%EC%9C%A0%ED%98%95-%EA%B2%80%EC%82%AC">MBTI 검사하기</a>
-        <a class="list-group-item" href="/friends/block">차단한 유저 목록</a>
-        <a class="list-group-item list-group-item-danger"href="/user/logout">로그아웃</a>
-        <a class="list-group-item list-group-item-dark text-danger btn-popup"href="#popup-layer-error-position" >회원탈퇴</a>
+        <p class="list-group-item list-group-item-success" th:if="${user} != null" th:text="${user.getName()}+'님 안녕하세요!'" >유저이름</p>
+        <a class="list-group-item" href="/members/edit">회원 정보 수정</a>
+        <a class="list-group-item " target='_blank' href="https://www.16personalities.com/ko">MBTI 검사하기</a>
+        <a class="list-group-item " href="/friends/block">차단한 유저 목록</a>
+        <a class="list-group-item "href="/user/logout">로그아웃</a>
+        <a class="list-group-item list-group-item-danger btn-popup"href="#popup-layer-error-position" >회원탈퇴</a>
     </div>
 
 </div>
 <nav class="navbar fixed-bottom navbar-light navbar-fixed-bottom bg-faded justify-content-between flex-nowrap flex-row border bg-primary ">
     <div class="container-fluid justify-content-center">
         <ul class="nav navbar-nav flex-row float-right nav-fill w-100">
-            <li class="nav-item"><a class="nav-link pr-3 text-white" href="/friends">친구</a></li>
+            <li class="nav-item"><a class="nav-link pr-3 text-white" href="/">친구</a></li>
             <li class="nav-item"><a class="nav-link pr-3 text-white" href="/chatList">채팅</a></li>
             <li class="nav-item "><a class="nav-link pr-3 text-white" href="/matching">매칭</a></li>
-            <li class="nav-item "><a class="nav-link pr-3 disabled" href="/">메뉴</a></li>
+            <li class="nav-item "><a class="nav-link pr-3 disabled" href="/mypage">마이페이지</a></li>
         </ul>
     </div>
 </nav>
