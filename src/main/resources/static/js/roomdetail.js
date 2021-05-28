@@ -33,6 +33,7 @@ var fname = document.getElementById("fname").value;
 //상대방 프로필 이미지
 var profileImgFileName = document.getElementById("f_profileImage").value;
 var fid = document.getElementById("fid").value;
+var relation = document.getElementById("f_relation").value;
 
 
 //채팅방 입장시 소켓 서버와 연결
@@ -42,16 +43,24 @@ var messageRef;
 
 function connect() {
 
+    //이전 메세지 로드
     LoadAllMessageFromFirebase();
 
-    if (userName) {
-        usernamePage.classList.add("hidden");
-        chatPage.classList.remove("hidden");
+    //친구관계인 경우에만 서로 채팅 가능
+    if (relation == "FRIEND") {
+        //소켓서버와 연결
+        if (userName) {
+            usernamePage.classList.add("hidden");
+            chatPage.classList.remove("hidden");
 
-        var socket = new SockJS("/ws-stomp");
-        stompClient = Stomp.over(socket);
+            var socket = new SockJS("/ws-stomp");
+            stompClient = Stomp.over(socket);
 
-        stompClient.connect({}, onConnected, onError);
+            stompClient.connect({}, onConnected, onError);
+        }
+    }
+    else {
+        console.log("친구관계가 아니므로 채팅을 보낼 수 없습니다.")
     }
     // event.preventDefault();
 }
