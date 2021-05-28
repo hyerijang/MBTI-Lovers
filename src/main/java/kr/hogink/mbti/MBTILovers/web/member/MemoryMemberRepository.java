@@ -2,7 +2,7 @@ package kr.hogink.mbti.MBTILovers.web.member;
 
 import java.util.*;
 
-public class MemoryMemberRepository implements MemberRepository {
+public abstract class MemoryMemberRepository implements MemberRepository {
     @Override
     public List<Member> findNearPoint(double latitude, double longitude, int n) {
         return null;

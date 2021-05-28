@@ -24,4 +24,6 @@ public interface MemberRepository {
 
     @Query(value = "SELECT r.*  FROM (SELECT m.* \tFROM member m \tleft join friend f \ton f.uid = ?4 and m.uid = f.fid where f.uid is null or f.relation not in (\"FRIEND\",\"BLOCK\"))  as r where r.location is not null order by ST_Distance(location, POINT(?1, ?2))  limit ?3", nativeQuery = true)
     List<Member> findNearPointNotFriend(double latitude, double longitude, int n, String uid);
+
+    void deleteById(String s);
 }

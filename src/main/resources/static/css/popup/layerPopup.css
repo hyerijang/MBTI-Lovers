@@ -69,3 +69,23 @@ a.btn-layerClose:hover {
     background-color: #1f326a;
     color: #fff;
 }
+
+
+a.btn-layer {
+    display: inline-block;
+    height: 25px;
+    padding: 0 14px 0;
+    border: 1px solid #740320;
+    background-color: #fc2222;
+    font-size: 13px;
+    color: #fff;
+    line-height: 25px;
+    left: 30px;
+    position: absolute;
+}
+
+a.btn-layer:hover {
+    border: 1px solid #400909;
+    background-color: #6a1f1f;
+    color: #fff;
+}

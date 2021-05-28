@@ -14,4 +14,5 @@ public interface MemberRepositoryImpl extends JpaRepository<Member, String>, Mem
     Optional<Member> findByName(String name);
 
 
+
 }
