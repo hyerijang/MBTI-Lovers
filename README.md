@@ -29,7 +29,7 @@ OS : window 10
 ### Database
 - firebase
 
-# 웹서버
+# 웹서버 [![Build Status](https://travis-ci.com/hyerijang/MBTI-Lovers-webServer.svg?branch=master)](https://travis-ci.com/hyerijang/MBTI-Lovers-webServer)
  [[github]MBTI-Lovers-webServer](https://github.com/hyerijang/MBTI-Lovers-webServer) 
 ## Environment
 Tool : intelliJ , SourceTree  
