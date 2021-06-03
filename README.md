@@ -4,7 +4,7 @@
 홍익대학교 2021 1학기 졸업전시회 출품작 - MBTI연애해 입니다.  
 > 본 프로젝트는 2020년 2학기부터 2021년 1학기동안 진행된 모바일 앱 제작 프로젝트입니다.
 
-> 본 프로젝트는 **안드로이드 웹앱**으로 구현되었으며 현재 레포지토리에는 웹 서버 코드만을 포함하고 있습니다. 안드로이드 파트는  [[github]MBTI-Lovers](https://github.com/hyerijang/MBTI-Lovers) 에서 확인 가능합니다.
+> 본 프로젝트는 **안드로이드 웹앱**으로 구현되었으며 현재 포지토리에는 웹 서버 코드만을 포함하고 있습니다. 안드로이드 파트는  [[github]MBTI-Lovers](https://github.com/hyerijang/MBTI-Lovers) 에서 확인 가능합니다.
 
 
 # Description
