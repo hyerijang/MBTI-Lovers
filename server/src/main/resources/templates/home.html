@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap.css"/>
+    <!--딤처리 팝업-->
+    <link rel="stylesheet" href="/css/popup/layerPopup.css"/>
+
+    <title>마이페이지</title>
+</head>
+
+<body style="padding-bottom: 100px">
+<!--팝업-->
+<div class="dim-layer">
+    <div class="dimBg"></div>
+
+    <div id="popup-layer-error-position" class="pop-layer">
+        <div class="pop-container">
+            <div class="pop-conts">
+                <!--content //-->
+                <p class="ctxt mb20 lead">경고</p>
+                <p class="ctxt mb20">
+                    정말 탈퇴하시겠습니까?
+
+                </p>
+                <div class="btn-r">
+                    <a href="/members/withdrawal" class="btn-layer">yes</a>
+                    <a href="#" class="btn-layerClose">No</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+
+    <h2>마이페이지</h2>
+
+
+    <div class="list-group">
+        <p class="list-group-item list-group-item-success" th:if="${user} != null" th:text="${user.getName()}+'님 안녕하세요!'" >유저이름</p>
+        <a class="list-group-item" href="/members/edit">회원 정보 수정</a>
+        <a class="list-group-item " target='_blank' href="https://www.16personalities.com/ko">MBTI 검사하기</a>
+        <a class="list-group-item " href="/friends/block">차단한 유저 목록</a>
+        <a class="list-group-item "href="/user/logout">로그아웃</a>
+        <a class="list-group-item list-group-item-danger btn-popup"href="#popup-layer-error-position" >회원탈퇴</a>
+    </div>
+
+</div>
+<nav class="navbar fixed-bottom navbar-light navbar-fixed-bottom bg-faded justify-content-between flex-nowrap flex-row border bg-primary ">
+    <div class="container-fluid justify-content-center">
+        <ul class="nav navbar-nav flex-row float-right nav-fill w-100">
+            <li class="nav-item"><a class="nav-link pr-3 text-white" href="/">친구</a></li>
+            <li class="nav-item"><a class="nav-link pr-3 text-white" href="/chatList">채팅</a></li>
+            <li class="nav-item "><a class="nav-link pr-3 text-white" href="/matching">매칭</a></li>
+            <li class="nav-item "><a class="nav-link pr-3 disabled" href="/mypage">마이페이지</a></li>
+        </ul>
+    </div>
+</nav>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js'></script>
+<!--팝업 이벤트-->
+<script src="/js/popup/layerPopup.js"></script>
+
+</body>
+</html>

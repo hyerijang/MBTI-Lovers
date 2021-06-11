@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap.css"/>
+</head>
+<body>
+<div class="container">
+    <h2>유저 목록</h2>
+    <div>
+        <table border="1">
+            <thead>
+            <tr>
+                <th>이름</th>
+                <th>나이</th>
+                <th>성별</th>
+                <th>mbti</th>
+                <th>상태메세지</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="member : ${members}">
+                <td th:text="${member.name}"></td>
+                <td th:text="${member.age}"></td>
+                <td th:text="${member.gender}"></td>
+                <td th:text="${member.mbti}"></td>
+                <td th:text="${member.stateMessage}"></td>
+                <form name="friendDTO" action="/friends/acceptRequest" method="post">
+                    <input id="fid" type="hidden" th:value="${member.uid}" name="fid"/>
+                    <td>
+                        <button type="submit" class="btn btn-primary">
+                            친구신청(자동 수락)
+                        </button>
+                    </td>
+                </form>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div> <!-- /container -->
+
+<nav class="navbar fixed-bottom navbar-light navbar-fixed-bottom bg-faded justify-content-between flex-nowrap flex-row border bg-primary ">
+    <div class="container-fluid justify-content-center">
+        <ul class="nav navbar-nav flex-row float-right nav-fill w-100">
+            <li class="nav-item"><a class="nav-link pr-3 text-white" href="/">친구</a></li>
+            <li class="nav-item"><a class="nav-link pr-3 text-white" href="/chatList">채팅</a></li>
+            <li class="nav-item "><a class="nav-link pr-3 disabled" href="/matching">매칭</a></li>
+            <li class="nav-item "><a class="nav-link pr-3 text-white" href="/mypage">마이페이지</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js'></script>
+</body>
+</html>
