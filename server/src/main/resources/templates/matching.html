@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1"
+            charset="utf-8"
+    />
+    <title>매칭</title>
+
+    <!--기본 설정-->
+    <style>
+        .customoverlay {
+            position: relative;
+            bottom: 85px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            border-bottom: 2px solid #ddd;
+            float: left;
+        }
+
+        .customoverlay:nth-of-type(n) {
+            border: 0;
+            box-shadow: 0px 1px 2px #888;
+        }
+
+        .customoverlay a {
+            display: block;
+            text-decoration: none;
+            color: #000;
+            text-align: center;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            overflow: hidden;
+            background: #d95050;
+            background: #d95050 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;
+        }
+
+        .customoverlay .title {
+            display: block;
+            text-align: center;
+            background: #fff;
+            margin-right: 35px;
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .customoverlay:after {
+            content: "";
+            position: absolute;
+            margin-left: -12px;
+            left: 50%;
+            bottom: -12px;
+            width: 22px;
+            height: 12px;
+            background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png");
+        }
+    </style>
+    <!--마커 트레이서-->
+    <style>
+        .node {
+            position: absolute;
+            background-image: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/sign-info-64.png);
+            cursor: pointer;
+            width: 64px;
+            height: 64px;
+        }
+
+        .tooltip {
+            background-color: #fff;
+            position: absolute;
+            border: 2px solid #333;
+            font-size: 25px;
+            font-weight: bold;
+            padding: 3px 5px 0;
+            left: 65px;
+            top: 14px;
+            border-radius: 5px;
+            white-space: nowrap;
+            display: none;
+        }
+
+        .tracker {
+            position: absolute;
+            margin: -35px 0 0 -30px;
+            display: none;
+            cursor: pointer;
+            z-index: 3;
+        }
+
+        .icon {
+            position: absolute;
+            left: 6px;
+            top: 9px;
+            width: 48px;
+            height: 48px;
+            /*background-image: url(https://mbti-image.s3.ap-northeast-2.amazonaws.com/image/2/plum.jpg);*/
+        }
+
+        .balloon {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-image: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/balloon.png);
+            -ms-transform-origin: 50% 34px;
+            -webkit-transform-origin: 50% 34px;
+            transform-origin: 50% 34px;
+        }
+    </style>
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap.css"/>
+    <!-- 프로필 이미지 css-->
+    <link rel="stylesheet" href="/css/profile-image-upload.css"/>
+    <!--프로필 이미지 hover-->
+    <!--    <style>-->
+    <!--        .profile:hover {-->
+    <!--            opacity:0.6;-->
+    <!--            color:#ffffff;-->
+
+    <!--        }-->
+    <!--    </style>-->
+
+    <!--말풍선-->
+    <style>
+        .speech-bubble {
+            position: relative;
+            background: #ffffff;
+            border-radius: .4em;
+        }
+
+        .speech-bubble:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border: 0.625em solid transparent;
+            border-top-color: #ffffff;
+            border-bottom: 0;
+            margin-left: -0.625em;
+            margin-bottom: -0.625em;
+        }
+    </style>
+
+    <!--딤처리 팝업-->
+    <link rel="stylesheet" href="/css/popup/layerPopup.css"/>
+
+    <!-- 위치 컨트롤러-->
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        .radius_border {
+            border: 1px solid #919191;
+            border-radius: 70%;
+        }
+
+
+        .current_location_control {
+            position: absolute;
+            bottom: 70px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            overflow: hidden;
+            z-index: 1;
+            background-color: #f5f5f5;
+
+        }
+
+        .current_location_control span {
+            display: block;
+            width: 36px;
+            height: 40px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .current_location_control span img {
+            width: 30px;
+            height: 30px;
+            padding: 4px;
+            border: none;
+            box-sizing: content-box;
+        }
+
+        /*.custom_zoomcontrol span:first-child {*/
+        /*    border-bottom: 1px solid #bfbfbf;*/
+        /*}*/
+    </style>
+</head>
+
+<body>
+<!--옵션-->
+<label hidden><input type="checkbox" name="option" value="friend" id="chk_friend"> 친구 포함</label>
+
+<!--내 uid-->
+<input type="hidden" id="uid" name="uid" th:value="${uid}">
+
+<!--내 위치 정보-->
+<form action="/members/position" method="post" name="userLocation" target="iframe1">
+    <!--위치-->
+    <input type="hidden" id="currentLat" name="currentLat" th:value="${lat}">
+    <input type="hidden" id="currentLng" name="currentLng" th:value="${lng}">
+
+</form>
+
+<!--친구신청 폼-->
+<form name="friendDTO" action="/friends/request" method="post">
+    <input id="fid" type="hidden" name="fid"/>
+</form>
+
+<iframe id="iframe1" name="iframe1" style="display:none"></iframe>
+
+<!--팝업-->
+<div class="dim-layer">
+    <div class="dimBg"></div>
+
+    <div id="popup-layer-error-position" class="pop-layer">
+        <div class="pop-container">
+            <div class="pop-conts">
+                <!--content //-->
+                <p class="ctxt mb20 lead">Error </p>
+                <p class="ctxt mb20">
+                    위치정보를 가져올 수 없습니다.<br>
+                    위치 서비스가 켜져 있는지 확인해주세요.
+                </p>
+
+
+                <div class="btn-r">
+                    <a href="#" class="btn-layerClose">Close</a>
+                </div>
+                <!--// content-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--지도-->
+<div id="map" style="width: 100vw; height: calc(100vh - 60px); position:relative; overflow:hidden;">
+
+
+</div>
+<!-- 현재 위치로 이동시켜주는 컨트롤러 -->
+<div class="current_location_control radius_border">
+        <span onclick="setCurrentLocation()"><img
+                src="https://mbti-image.s3.ap-northeast-2.amazonaws.com/map/current_location.png"
+                alt="현재위치"></span>
+</div>
+<!-- 네비게이션 바 -->
+<nav
+        class="navbar fixed-bottom navbar-light navbar-fixed-bottom bg-faded justify-content-between flex-nowrap flex-row border bg-primary"
+>
+    <div class="container-fluid justify-content-center">
+        <ul class="nav navbar-nav flex-row float-right nav-fill w-100">
+            <li class="nav-item">
+                <a class="nav-link pr-3 text-white" href="/">친구</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link pr-3 text-white" href="/chatList">채팅</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link pr-3 disabled" href="/matching">매칭</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link pr-3 text-white" href="/mypage">마이페이지</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!--프로필 이미지-->
+
+<script src="/js/profileImage/imageLoader.js"></script>
+<!-- appKey -->
+<script
+        type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=	3647b3904ac7908c780ea13b0dc4c066"
+></script>
+
+<!-- 맵 초기화 -->
+<script>
+
+    //유저 정보
+    var currentLat = document.getElementById("currentLat"); //위도
+    var currentLng = document.getElementById("currentLng"); //경도
+
+
+    console.log(currentLng.value);
+
+    var hongikuniv = {
+        "longitude": "37.5525192523979", "latitude": "126.924990619497 "
+    };
+
+    var geoLocation = {
+        "longitude": "", "latitude": ""
+    };
+
+    //지도 이미지 해상도 낮춤
+    kakao.maps.disableHD();
+
+    var map = makeMap(hongikuniv);
+
+    function makeMap(position) {
+
+        geoLocation.longitude = position.longitude;
+        geoLocation.latitude = position.latitude;
+
+        console.log("지도생성:" + geoLocation.longitude + " " + geoLocation.latitude);
+
+        var mapContainer = document.getElementById("map"), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(geoLocation.longitude, geoLocation.latitude), // 지도의 중심좌표
+                level: 3, // 지도의 확대 레벨
+            };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        return map;
+    }
+</script>
+
+<!-- 단말의 현위치 좌표값 -->
+<script>
+
+    var uid = document.getElementById("uid").value;
+    // console.log("내 uid:" + uid);
+
+    //유저 현재 위치 갱신
+    setLocation();
+
+
+    function setLocation() {
+        const options = {
+            enableHighAccuracy: true,
+            maximumAge: 30000,
+            timeout: 27000
+        };
+
+
+        // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
+        if (navigator.geolocation) {
+            // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+            navigator.geolocation.getCurrentPosition(success, error, options);
+        }
+
+        function success(position) {
+            geoLocation.latitude = position.coords.latitude; // 위도
+            geoLocation.longitude = position.coords.longitude; // 경도
+
+            var locPosition = new kakao.maps.LatLng(geoLocation.latitude, geoLocation.longitude); //접속 위치
+
+            // 지도 중심좌표를 접속위치로 변경합니다
+            map.setCenter(locPosition);
+
+            // 지도 중심좌표를 얻어옵니다
+            var latlng = map.getCenter();
+
+            console.log("[현재 위치] 위도 및 경도" + latlng.getLat() + "," + latlng.getLng());
+
+            document.getElementById("currentLat").setAttribute("value", latlng.getLat()); //위도
+            document.getElementById("currentLng").setAttribute("value", latlng.getLng()); //경도
+
+            document.userLocation.submit();
+
+
+            //근처유저 위치 정보 가져오기
+            getNearUser(geoLocation.latitude, geoLocation.longitude);
+
+        }
+
+        function error() {
+            // GeoLocation을 이용해서 접속 위치를 얻어오기 실패
+            if (currentLng.value != "") {
+                console.log("기존 위치 정보로 지리 정보를 대체합니다.")
+                geoLocation.latitude = currentLat.value;
+                geoLocation.longitude = currentLng.value;
+                console.log("기존 위치 :" + geoLocation.longitude + " " + geoLocation.latitude);
+
+                var locPosition = new kakao.maps.LatLng(geoLocation.latitude, geoLocation.longitude); //접속 위치
+                map.setCenter(locPosition);
+            } else {
+                console.log("기존 위치 정보 없음");
+
+            }
+            layer_popup("#popup-layer-error-position");
+
+            //근처유저 위치 정보 가져오기
+            getNearUser(geoLocation.latitude, geoLocation.longitude);
+
+        }
+
+
+    }
+
+
+</script>
+
+<!--지도 영역 밖의 마커위치 추적하기-->
+<script>
+    /**
+     * AbstractOverlay를 상속받을 객체를 선언합니다.
+     */
+    function TooltipMarker(position, tooltipText) {
+        this.position = position;
+        var node = (this.node = document.createElement("div"));
+        node.className = "node";
+
+        var tooltip = document.createElement("div");
+        (tooltip.className = "tooltip"),
+            tooltip.appendChild(document.createTextNode(tooltipText));
+        node.appendChild(tooltip);
+
+        // 툴팁 엘리먼트에 마우스 인터렉션에 따라 보임/숨김 기능을 하도록 이벤트를 등록합니다.
+        node.onmouseover = function () {
+            tooltip.style.display = "block";
+        };
+        node.onmouseout = function () {
+            tooltip.style.display = "none";
+        };
+    }
+
+    // AbstractOverlay 상속. 프로토타입 체인을 연결합니다.
+    TooltipMarker.prototype = new kakao.maps.AbstractOverlay();
+
+    // AbstractOverlay의 필수 구현 메소드.
+    // setMap(map)을 호출했을 경우에 수행됩니다.
+    // AbstractOverlay의 getPanels() 메소드로 MapPanel 객체를 가져오고
+    // 거기에서 오버레이 레이어를 얻어 생성자에서 만든 엘리먼트를 자식 노드로 넣어줍니다.
+    TooltipMarker.prototype.onAdd = function () {
+        var panel = this.getPanels().overlayLayer;
+        panel.appendChild(this.node);
+    };
+
+    // AbstractOverlay의 필수 구현 메소드.
+    // setMap(null)을 호출했을 경우에 수행됩니다.
+    // 생성자에서 만든 엘리먼트를 오버레이 레이어에서 제거합니다.
+    TooltipMarker.prototype.onRemove = function () {
+        this.node.parentNode.removeChild(this.node);
+    };
+
+    // AbstractOverlay의 필수 구현 메소드.
+    // 지도의 속성 값들이 변화할 때마다 호출됩니다. (zoom, center, mapType)
+    // 엘리먼트의 위치를 재조정 해 주어야 합니다.
+    TooltipMarker.prototype.draw = function () {
+        // 화면 좌표와 지도의 좌표를 매핑시켜주는 projection객체
+        var projection = this.getProjection();
+
+        // overlayLayer는 지도와 함께 움직이는 layer이므로
+        // 지도 내부의 위치를 반영해주는 pointFromCoords를 사용합니다.
+        var point = projection.pointFromCoords(this.position);
+
+        // 내부 엘리먼트의 크기를 얻어서
+        var width = this.node.offsetWidth;
+        var height = this.node.offsetHeight;
+
+        // 해당 위치의 정중앙에 위치하도록 top, left를 지정합니다.
+        this.node.style.left = point.x - width / 2 + "px";
+        this.node.style.top = point.y - height / 2 + "px";
+    };
+
+    // 좌표를 반환하는 메소드
+    TooltipMarker.prototype.getPosition = function () {
+        return this.position;
+    };
+
+    /**
+     * 지도 영역 외부에 존재하는 마커를 추적하는 기능을 가진 객체입니다.
+     * 클리핑 알고리즘을 사용하여 tracker의 좌표를 구하고 있습니다.
+     */
+    function MarkerTracker(map, marker, imageSrc) {
+        // 클리핑을 위한 outcode
+        var OUTCODE = {
+            INSIDE: 0, // 0b0000
+            TOP: 8, //0b1000
+            RIGHT: 2, // 0b0010
+            BOTTOM: 4, // 0b0100
+            LEFT: 1, // 0b0001
+        };
+
+        // viewport 영역을 구하기 위한 buffer값
+        // target의 크기가 60x60 이므로
+        // 여기서는 지도 bounds에서 상하좌우 30px의 여분을 가진 bounds를 구하기 위해 사용합니다.
+        var BOUNDS_BUFFER = 30;
+
+        // 클리핑 알고리즘으로 tracker의 좌표를 구하기 위한 buffer값
+        // 지도 bounds를 기준으로 상하좌우 buffer값 만큼 축소한 내부 사각형을 구하게 됩니다.
+        // 그리고 그 사각형으로 target위치와 지도 중심 사이의 선을 클리핑 합니다.
+        // 여기서는 tracker의 크기를 고려하여 40px로 잡습니다.
+        var CLIP_BUFFER = 40;
+
+        // trakcer 엘리먼트
+        var tracker = document.createElement("div");
+        tracker.className = "tracker";
+
+        // 내부 아이콘
+        var icon = document.createElement("div");
+        icon.className = "icon";
+
+        // 외부에 있는 target의 위치에 따라 회전하는 말풍선 모양의 엘리먼트
+        var balloon = document.createElement("div");
+        balloon.className = "balloon";
+
+        //임시 Css
+        var box = document.createElement("div");
+        box.className = "box";
+        box.style.borderRadius = "70%"
+
+        var profile = document.createElement("img");
+        profile.className = "profile";
+        profile.id = "preview-image";
+        profile.src = imageSrc
+        box.appendChild(profile);
+        icon.appendChild(box);
+        //임시추가
+
+        tracker.appendChild(balloon);
+        tracker.appendChild(icon);
+
+        map.getNode().appendChild(tracker);
+
+        // traker를 클릭하면 target의 위치를 지도 중심으로 지정합니다.
+        tracker.onclick = function () {
+            map.setCenter(marker.getPosition());
+            setVisible(false);
+        };
+
+        // target의 위치를 추적하는 함수
+        function tracking() {
+            var proj = map.getProjection();
+
+            // 지도의 영역을 구합니다.
+            var bounds = map.getBounds();
+
+            // 지도의 영역을 기준으로 확장된 영역을 구합니다.
+            var extBounds = extendBounds(bounds, proj);
+
+            // target이 확장된 영역에 속하는지 판단하고
+            if (extBounds.contain(marker.getPosition())) {
+                // 속하면 tracker를 숨깁니다.
+                setVisible(false);
+            } else {
+                // target이 영역 밖에 있으면 계산을 시작합니다.
+
+                // 지도 bounds를 기준으로 클리핑할 top, right, bottom, left를 재계산합니다.
+                //
+                //  +-------------------------+
+                //  | Map Bounds              |
+                //  |   +-----------------+   |
+                //  |   | Clipping Rect   |   |
+                //  |   |                 |   |
+                //  |   |        *       (A)  |     A
+                //  |   |                 |   |
+                //  |   |                 |   |
+                //  |   +----(B)---------(C)  |
+                //  |                         |
+                //  +-------------------------+
+                //
+                //        B
+                //
+                //                                       C
+                // * 은 지도의 중심,
+                // A, B, C가 TooltipMarker의 위치,
+                // (A), (B), (C)는 각 TooltipMarker에 대응하는 tracker입니다.
+                // 지도 중심과 각 TooltipMarker를 연결하는 선분이 있다고 가정할 때,
+                // 그 선분과 Clipping Rect와 만나는 지점의 좌표를 구해서
+                // tracker의 위치(top, left)값을 지정해주려고 합니다.
+                // tracker 자체의 크기가 있기 때문에 원래 지도 영역보다 안쪽의 가상 영역을 그려
+                // 클리핑된 지점을 tracker의 위치로 사용합니다.
+                // 실제 tracker의 position은 화면 좌표가 될 것이므로
+                // 계산을 위해 좌표 변환 메소드를 사용하여 모두 화면 좌표로 변환시킵니다.
+
+                // TooltipMarker의 위치
+                var pos = proj.containerPointFromCoords(marker.getPosition());
+
+                // 지도 중심의 위치
+                var center = proj.containerPointFromCoords(map.getCenter());
+
+                // 현재 보이는 지도의 영역의 남서쪽 화면 좌표
+                var sw = proj.containerPointFromCoords(bounds.getSouthWest());
+
+                // 현재 보이는 지도의 영역의 북동쪽 화면 좌표
+                var ne = proj.containerPointFromCoords(bounds.getNorthEast());
+
+                // 클리핑할 가상의 내부 영역을 만듭니다.
+                var top = ne.y + CLIP_BUFFER;
+                var right = ne.x - CLIP_BUFFER;
+                var bottom = sw.y - CLIP_BUFFER;
+                var left = sw.x + CLIP_BUFFER;
+
+                // 계산된 모든 좌표를 클리핑 로직에 넣어 좌표를 얻습니다.
+                var clipPosition = getClipPosition(
+                    top,
+                    right,
+                    bottom,
+                    left,
+                    center,
+                    pos
+                );
+
+                // 클리핑된 좌표를 tracker의 위치로 사용합니다.
+                tracker.style.top = clipPosition.y + "px";
+                tracker.style.left = clipPosition.x + "px";
+
+                // 말풍선의 회전각을 얻습니다.
+                var angle = getAngle(center, pos);
+
+                // 회전각을 CSS transform을 사용하여 지정합니다.
+                // 브라우저 종류에따라 표현되지 않을 수도 있습니다.
+                // https://caniuse.com/#feat=transforms2d
+                balloon.style.cssText +=
+                    "-ms-transform: rotate(" +
+                    angle +
+                    "deg);" +
+                    "-webkit-transform: rotate(" +
+                    angle +
+                    "deg);" +
+                    "transform: rotate(" +
+                    angle +
+                    "deg);";
+
+                // target이 영역 밖에 있을 경우 tracker를 노출합니다.
+                setVisible(true);
+            }
+        }
+
+        // 상하좌우로 BOUNDS_BUFFER(30px)만큼 bounds를 확장 하는 함수
+        //
+        //  +-----------------------------+
+        //  |              ^              |
+        //  |              |              |
+        //  |     +-----------------+     |
+        //  |     |                 |     |
+        //  |     |                 |     |
+        //  |  <- |    Map Bounds   | ->  |
+        //  |     |                 |     |
+        //  |     |                 |     |
+        //  |     +-----------------+     |
+        //  |              |              |
+        //  |              v              |
+        //  +-----------------------------+
+        //
+        // 여기서는 TooltipMaker가 완전히 안보이게 되는 시점의 영역을 구하기 위해서 사용됩니다.
+        // TooltipMarker는 60x60 의 크기를 가지고 있기 때문에
+        // 지도에서 완전히 사라지려면 지도 영역을 상하좌우 30px만큼 더 드래그해야 합니다.
+        // 이 함수는 현재 보이는 지도 bounds에서 상하좌우 30px만큼 확장한 bounds를 리턴합니다.
+        // 이 확장된 영역은 TooltipMarker가 화면에서 보이는지를 판단하는 영역으로 사용됩니다.
+        function extendBounds(bounds, proj) {
+            // 주어진 bounds는 지도 좌표 정보로 표현되어 있습니다.
+            // 이것을 BOUNDS_BUFFER 픽셀 만큼 확장하기 위해서는
+            // 픽셀 단위인 화면 좌표로 변환해야 합니다.
+            var sw = proj.pointFromCoords(bounds.getSouthWest());
+            var ne = proj.pointFromCoords(bounds.getNorthEast());
+
+            // 확장을 위해 각 좌표에 BOUNDS_BUFFER가 가진 수치만큼 더하거나 빼줍니다.
+            sw.x -= BOUNDS_BUFFER;
+            sw.y += BOUNDS_BUFFER;
+
+            ne.x += BOUNDS_BUFFER;
+            ne.y -= BOUNDS_BUFFER;
+
+            // 그리고나서 다시 지도 좌표로 변환한 extBounds를 리턴합니다.
+            // extBounds는 기존의 bounds에서 상하좌우 30px만큼 확장된 영역 객체입니다.
+            return new kakao.maps.LatLngBounds(
+                proj.coordsFromPoint(sw),
+                proj.coordsFromPoint(ne)
+            );
+        }
+
+        // Cohen–Sutherland clipping algorithm
+        // 자세한 내용은 아래 위키에서...
+        // https://en.wikipedia.org/wiki/Cohen%E2%80%93Sutherland_algorithm
+        function getClipPosition(top, right, bottom, left, inner, outer) {
+            function calcOutcode(x, y) {
+                var outcode = OUTCODE.INSIDE;
+
+                if (x < left) {
+                    outcode |= OUTCODE.LEFT;
+                } else if (x > right) {
+                    outcode |= OUTCODE.RIGHT;
+                }
+
+                if (y < top) {
+                    outcode |= OUTCODE.TOP;
+                } else if (y > bottom) {
+                    outcode |= OUTCODE.BOTTOM;
+                }
+
+                return outcode;
+            }
+
+            var ix = inner.x;
+            var iy = inner.y;
+            var ox = outer.x;
+            var oy = outer.y;
+
+            var code = calcOutcode(ox, oy);
+
+            while (true) {
+                if (!code) {
+                    break;
+                }
+
+                if (code & OUTCODE.TOP) {
+                    ox = ox + ((ix - ox) / (iy - oy)) * (top - oy);
+                    oy = top;
+                } else if (code & OUTCODE.RIGHT) {
+                    oy = oy + ((iy - oy) / (ix - ox)) * (right - ox);
+                    ox = right;
+                } else if (code & OUTCODE.BOTTOM) {
+                    ox = ox + ((ix - ox) / (iy - oy)) * (bottom - oy);
+                    oy = bottom;
+                } else if (code & OUTCODE.LEFT) {
+                    oy = oy + ((iy - oy) / (ix - ox)) * (left - ox);
+                    ox = left;
+                }
+
+                code = calcOutcode(ox, oy);
+            }
+
+            return {x: ox, y: oy};
+        }
+
+        // 말풍선의 회전각을 구하기 위한 함수
+        // 말풍선의 anchor가 TooltipMarker가 있는 방향을 바라보도록 회전시킬 각을 구합니다.
+        function getAngle(center, target) {
+            var dx = target.x - center.x;
+            var dy = center.y - target.y;
+            var deg = (Math.atan2(dy, dx) * 180) / Math.PI;
+
+            return ((-deg + 360) % 360 | 0) + 90;
+        }
+
+        // tracker의 보임/숨김을 지정하는 함수
+        function setVisible(visible) {
+            tracker.style.display = visible ? "block" : "none";
+        }
+
+        // Map 객체의 'zoom_start' 이벤트 핸들러
+        function hideTracker() {
+            setVisible(false);
+        }
+
+        // target의 추적을 실행합니다.
+        this.run = function () {
+            kakao.maps.event.addListener(map, "zoom_start", hideTracker);
+            kakao.maps.event.addListener(map, "zoom_changed", tracking);
+            kakao.maps.event.addListener(map, "center_changed", tracking);
+            tracking();
+        };
+
+        // target의 추적을 중지합니다.
+        this.stop = function () {
+            kakao.maps.event.removeListener(map, "zoom_start", hideTracker);
+            kakao.maps.event.removeListener(map, "zoom_changed", tracking);
+            kakao.maps.event.removeListener(map, "center_changed", tracking);
+            setVisible(false);
+        };
+    }
+</script>
+
+<!-- 마커 및 마커트레이서 생성 함수 -->
+<script>
+
+    function createMarkerContent(uid, imageSrc) {
+        var content = document.createElement('div');
+        content.className = "marker"
+        //마커 크기
+        content.style.height = "64px";
+        content.style.width = "64px";
+
+
+        var box = document.createElement("div");
+        box.className = "box";
+        box.style.borderRadius = "70%"
+
+
+        var img = document.createElement("img");
+        img.className = "profile";
+        img.id = "preview-image";
+        img.src = imageSrc;
+
+        content.appendChild(box);
+        box.appendChild(img);
+
+        img.addEventListener('click', function (event) {
+            //클릭 이벤트 발생 시 팝업 레이어 띄움
+            console.log("#layer-" + uid);
+            layer_popup("#layer-" + uid);
+        });
+
+        return content;
+
+    }
+
+    function createMarker(markerPosition, markerContent) {
+
+        var marker = new kakao.maps.CustomOverlay({
+            map: map,
+            clickable: true,
+            position: markerPosition,
+            content: markerContent,
+        });
+
+
+        marker.setMap(map);
+        return marker;
+    }
+
+    function createTracer(marker, imageSrc) {
+        markerTracker = new MarkerTracker(map, marker, imageSrc);
+        markerTracker.run();
+    }
+
+
+    function createSpeechBubbleContent(name) {
+        var content = document.createElement('div');
+        content.className = "speech-bubble"
+        content.innerHTML = name;
+        return content
+    }
+
+    function createSpeechBubbleOverlay(marker, id, content) {
+
+        var overlay = new kakao.maps.CustomOverlay({
+            yAnchor: 2.5,
+            content: content,
+            position: marker.getPosition()
+        });
+
+        return overlay;
+
+    }
+
+    //팝업 생성함수
+    function createPopup(member, imageSrc) {
+
+        var dimLayer = document.createElement("div");
+        dimLayer.className = "dim-layer";
+
+        var dimBg = document.createElement("div");
+        dimBg.className = "dimBg";
+
+        var popLayer = document.createElement("div");
+        popLayer.className = "pop-layer";
+        popLayer.id = "layer-" + member.uid;
+
+        var popContainer = document.createElement("div");
+        popContainer.className = "pop-container";
+
+        var popConts = document.createElement("p")
+        popConts.className = "pop-conts"
+
+        dimLayer = document.getElementsByClassName("dim-layer")[0];
+        dimLayer.appendChild(popLayer);
+        popLayer.appendChild(popContainer);
+        popContainer.appendChild(popConts);
+
+
+        var box = document.createElement("div");
+        box.className = "box";
+        box.style.borderRadius = "70%"
+
+
+        var img = document.createElement("img");
+        img.className = "profile";
+        img.id = "preview-image";
+        img.src = imageSrc;
+
+        popConts.appendChild(box);
+        box.appendChild(img);
+
+        var member_name = document.createElement("p");
+        member_name.className = "ctxt mb20 lead";
+        member_name.innerText = member.name;
+
+        var member_info = document.createElement("p");
+        member_info.innerText = member.mbti + "/" + member.gender + "/" + member.age + "세\n";
+
+        var member_stm = document.createElement("p");
+        member_stm.innerText = member.stateMessage;
+
+        popConts.appendChild(member_name);
+        popConts.appendChild(member_info);
+        popConts.appendChild(member_stm);
+
+
+        var btnR = document.createElement("div");
+        btnR.className = "btn-r";
+        popConts.appendChild(btnR);
+        //친구신청  버튼
+        //자기 자신의 프로필 볼때는 생성되지 않음
+        if (member.uid != uid) {
+            var aF = document.createElement("a");
+            aF.href = "#";
+            aF.onclick = function (event) {
+                console.log("친구신청");
+                var f = document.friendDTO; //폼 name
+                f.fid.value = member.uid;
+                f.action = "/friends/request";//이동할 페이지
+                f.method = "post";//POST방식
+                f.submit();
+            }
+            aF.className = "btn-layerClose";
+            aF.style.float = "left";
+            aF.innerText = "친구신청";
+            btnR.appendChild(aF);
+
+        }
+
+
+        //닫기 버튼
+        var a = document.createElement("a");
+        a.href = "#";
+        a.className = "btn-layerClose";
+        a.innerText = "Close";
+        btnR.appendChild(a);
+    }
+
+
+</script>
+
+<!--지도 중심좌표 정보 출력-->
+<script>
+    //지도의 중심좌표 변경시 그 좌표를 출력합니다
+    // 마우스 드래그로 지도 이동이 완료되었을 때 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
+    kakao.maps.event.addListener(map, 'dragend', function () {
+
+        // 지도 중심좌표를 얻어옵니다
+        var latlng = map.getCenter();
+
+        geoLocation.longitude = latlng.getLng();
+        geoLocation.latitude = latlng.getLat();
+
+        console.log("중심좌표 변경" + ": " + geoLocation.latitude + "," + geoLocation.longitude);
+        // getInfo(userLocation.x, userLocation.y);
+    });
+
+
+</script>
+<!--근처 유저 정보 가져오기-->
+<script>
+
+    var nearUserJson = null;
+
+    function getNearUser(x, y) {
+
+        var request = new XMLHttpRequest();
+
+        var option_friend = document.getElementById("chk_friend");
+
+        if (option_friend.checked)
+            request.open('GET', "matching/near/" + x + "/" + y, true);
+        else
+            request.open('GET', "matching/nearNotFriend/" + x + "/" + y, true);
+
+        request.onload = function () {
+            if (request.status >= 200 && request.status < 400) {
+                // Success!
+                nearUserJson = JSON.parse(request.responseText);
+                // console.log("현재 지역에서 가까운 유저 10명")
+                // console.log(nearUser);
+                makerNearUserMarker(nearUserJson);
+            } else {
+                // We reached our target server, but it returned an error
+
+            }
+        };
+
+        request.onerror = function () {
+            // There was a connection error of some sort
+        };
+
+        request.send();
+
+        return nearUserJson;
+    }
+
+</script>
+
+<!-- 근처 유저 정보 (json) 로 마커생성-->
+<script>
+
+    function makerNearUserMarker(json) {
+        console.log("가까운 유저 10명의 마커를 만듭니다.");
+        json.forEach(function (member) {
+            var uid = member.uid;
+            //member.location.coordinates[0] : lat
+            //member.location.coordinates[1] : lng
+            var position = new kakao.maps.LatLng(member.location.coordinates[0], member.location.coordinates[1]);
+            var name = member.name;
+            const mbti = member.mbti;
+
+            var imageSrc = getprofileImgPath(member.profileImage);
+
+            if (member.profileImage == "") {
+                imageSrc = defaultProfileImgPath;
+            }
+
+            // console.log(imageSrc);
+
+            var markerContent = createMarkerContent(uid, imageSrc);
+            var marker = createMarker(position, markerContent);
+            createTracer(marker, imageSrc);
+
+
+            //말풍선 오버레이
+            var content = "[" + mbti + "]" + name;
+            var speechBubbleOverlay = createSpeechBubbleOverlay(marker, uid, createSpeechBubbleContent(content));
+
+            speechBubbleOverlay.setMap(map);
+
+            createPopup(member, imageSrc);
+
+        });
+    }
+
+</script>
+
+<!-- 현재 위치 이동 컨트롤러-->
+<script>
+
+    // 현재 위치 이동 컨트롤러에 사용
+    function setCurrentLocation() {
+        setLocation();
+    }
+
+
+</script>
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<!--유저 마커 클릭시  팝업 이벤트-->
+<script src="/js/popup/layerPopup.js"></script>
+
+
+</body>
+</html>
