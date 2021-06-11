@@ -15,6 +15,7 @@ cache:
 script: "sudo ./gradlew build -x test"
 
 before_install:
+  - cd server
   - sudo chmod 777 ./gradlew
 
 before_deploy:
