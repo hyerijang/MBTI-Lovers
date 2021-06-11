@@ -34,7 +34,7 @@ deploy:
     local_dir: deploy # before_deploy에서 생성한 디렉토리
     wait-until-deployed: true
     on:
-      repo: hyerijang/MBTI-Lovers-webServer
+      repo: hyerijang/MBTI-Lovers
       branch: master
 
   - provider: codedeploy
@@ -48,7 +48,7 @@ deploy:
     region: ap-northeast-2
     wait-until-deployed: true
     on:
-      repo: hyerijang/MBTI-Lovers-webServer
+      repo: hyerijang/MBTI-Lovers
       branch: master
 
 # CI 실행 완료시 메일로 알람

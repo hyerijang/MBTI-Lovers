@@ -28,7 +28,7 @@ OS : window 10
 ### Database
 - firebase
 
-# server [![Build Status](https://travis-ci.com/hyerijang/MBTI-Lovers-webServer.svg?branch=master)](https://travis-ci.com/hyerijang/MBTI-Lovers-webServer)
+# server
 ## Environment
 Tool : intelliJ , SourceTree  
 OS : window 10 / ubuntu 18.04.5
