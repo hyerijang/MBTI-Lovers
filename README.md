@@ -12,13 +12,12 @@
 - 회원 가입 후 매칭을 통해 내 주변 유저들의 프로필을 조회하고 친구 신청을 할 수 있습니다. 친구가 된 유저는 친구목록에 추가되고 채팅방을 생성하여 서로 채팅할 수 있습니다.
 
 # 실행 화면
-
+<div>
 <img src = "https://user-images.githubusercontent.com/46921979/121854586-551b3180-cd2d-11eb-843a-c2219d9e2312.png" width ="24%">
 <img src = "https://user-images.githubusercontent.com/46921979/121854594-56e4f500-cd2d-11eb-8bd3-16a51caaab64.png" width ="24%">
-<img src = "https://user-images.githubusercontent.com/46921979/121854607-59474f00-cd2d-11eb-80ab-594435c31096.png" width ="24%">
+<img src = "https://user-images.githubusercontent.com/46921979/121857950-138c8580-cd31-11eb-9c33-229a758f289a.png" width ="24%">
 <img src = "https://user-images.githubusercontent.com/46921979/121854611-5b111280-cd2d-11eb-943d-9ba4114d0dd3.png" width ="24%">
-
-
+</div>
 # client (android)
 ## Environment
 Tool : Android Studio
