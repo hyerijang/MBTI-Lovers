@@ -102,9 +102,9 @@ function sendMessage(event) {
 //메세지 수신
 function onMessageReceived(payload) {
     //메세지 출력
-    //받은 메세지를 json형태로 배열에 저장
     var message = JSON.parse(payload.body);
-    LoadlastMessageFromFirebase();
+    printMessage(message);
+    // LoadlastMessageFromFirebase();
 
 }
 
