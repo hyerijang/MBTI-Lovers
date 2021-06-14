@@ -38,8 +38,7 @@ if [ -z $CURRENT_PID ]; then
 
 		echo "> WAR Name: $WAR_NAME"
 		
-		echo "> 백그라운드로 실행합니다."
-		echo "> 종료를 원하시면 script 폴더의 exit.sh를 실행시켜주세요"
+		echo "> WAR 파일을 백그라운드로 실행합니다."
 		cd $REPOSITORY
 		chmod 755 $REPOSITORY/$WAR_NAME
 		nohup java -jar $REPOSITORY/$WAR_NAME &
