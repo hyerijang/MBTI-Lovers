@@ -1,4 +1,4 @@
-# MBTI Lovers Web Server
+# MBTI Lovers 
 [![Build Status](https://travis-ci.com/hyerijang/MBTI-Lovers.svg?branch=master)](https://travis-ci.com/hyerijang/MBTI-Lovers)
 
 홍익대학교 2021 1학기 졸업전시회 출품작 - MBTI연애해 입니다.  
