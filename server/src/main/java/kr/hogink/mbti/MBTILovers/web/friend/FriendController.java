@@ -117,7 +117,7 @@ public class FriendController {
     @PostMapping("/friends/cancelBlock")
     public String cancelBlock(FriendDTO friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
 
-        log.info("친구 차단 취소" + "나 : " + cookieUid + "상대방 : " + friendDTO.getFid());
+        log.info("친구 차단 취소 " + "나 : " + cookieUid + "상대방 : " + friendDTO.getFid());
         Friend friend = friendService.getFriend(cookieUid, friendDTO.getFid());
         //채팅내역 없는 경우 삭제
         if (friend.getRoom() == null) {
