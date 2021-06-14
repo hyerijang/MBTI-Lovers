@@ -2,7 +2,7 @@ package kr.hogink.mbti.MBTILovers.web.member;
 
 import java.util.*;
 
-public abstract class MemoryMemberRepository implements MemberRepository {
+public class MemoryMemberRepository implements MemberRepository {
     @Override
     public List<Member> findNearPoint(double latitude, double longitude, int n) {
         return null;
@@ -11,6 +11,11 @@ public abstract class MemoryMemberRepository implements MemberRepository {
     @Override
     public List<Member> findNearPointNotFriend(double latitude, double longitude, int n, String uid) {
         return null;
+    }
+
+    @Override
+    public void deleteById(String s) {
+
     }
 
     private static final Map<String, Member> store = new HashMap<>();
