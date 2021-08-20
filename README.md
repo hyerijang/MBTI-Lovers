@@ -18,10 +18,13 @@
 <img src = "https://user-images.githubusercontent.com/46921979/121857950-138c8580-cd31-11eb-9c33-229a758f289a.png" width ="24%">
 <img src = "https://user-images.githubusercontent.com/46921979/121854611-5b111280-cd2d-11eb-943d-9ba4114d0dd3.png" width ="24%">
 </div>
-# client (android)
+
+
+
+# Client (android)
 ## Environment
-Tool : Android Studio
-OS : window 10
+- Tool : Android Studio
+- OS : window 10
 
 ## Dependencies
 ### Language
@@ -33,11 +36,13 @@ OS : window 10
 ### Database
 - firebase
 
-# server
+
+
+# Server
 
 ## Environment
-Tool : intelliJ  
-OS : window 10 / ubuntu 18.04.5
+- Tool : intelliJ  
+- OS : window 10 / ubuntu 18.04.5
 
 ## Dependencies
 ### Language
