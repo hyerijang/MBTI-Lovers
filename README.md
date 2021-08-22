@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.com/hyerijang/MBTI-Lovers.svg?branch=master)](https://travis-ci.com/hyerijang/MBTI-Lovers)
 
 홍익대학교 2021 1학기 졸업전시회 출품작 - MBTI연애해 입니다.  
-> 본 프로젝트는 2020년 2학기부터 2021년 1학기동안 진행된 **안드로이드 웹앱**  프로젝트입니다.
+> 본 프로젝트는 2020년 2학기부터 2021년 1학기동안 진행된 **안드로이드 하이브리드 앱**  프로젝트입니다.
 
 
 # Description
