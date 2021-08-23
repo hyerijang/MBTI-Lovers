@@ -55,7 +55,6 @@
 
 ### Spring Boot
 - Spring Data JPA
-- Spring AOP
 
 
 ### Database
