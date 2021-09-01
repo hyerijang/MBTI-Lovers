@@ -2,9 +2,11 @@ package kr.hogink.mbti.MBTILovers.web;
 
 import kr.hogink.mbti.MBTILovers.web.login.AuthInterceptor;
 import kr.hogink.mbti.MBTILovers.web.login.LoginInterceptor;
-import kr.hogink.mbti.MBTILovers.web.member.MemberService;
+import kr.hogink.mbti.MBTILovers.web.service.MemberService;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 @Configuration
 public class WebConfig extends WebMvcConfigurationSupport {

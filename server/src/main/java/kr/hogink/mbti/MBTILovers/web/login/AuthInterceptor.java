@@ -1,7 +1,7 @@
 package kr.hogink.mbti.MBTILovers.web.login;
 
-import kr.hogink.mbti.MBTILovers.web.member.Member;
-import kr.hogink.mbti.MBTILovers.web.member.MemberService;
+import kr.hogink.mbti.MBTILovers.web.domain.member.Member;
+import kr.hogink.mbti.MBTILovers.web.service.MemberService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
