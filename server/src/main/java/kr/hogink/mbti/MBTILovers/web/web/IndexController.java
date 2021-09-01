@@ -19,7 +19,7 @@ import java.util.List;
 @SessionAttributes(LoginType.USER_MEMBER_SESSION)
 @Log4j2
 @RequiredArgsConstructor
-public class HomeController {
+public class IndexController {
 
     private final FriendService friendService;
 
@@ -46,7 +46,7 @@ public class HomeController {
 
     @GetMapping("/favicon.ico")
     public String favicon() {
-        log.warn("/favicon.ico 로 접근");
+//        log.warn("/favicon.ico 로 접근");
         return "redirect:/";
     }
 

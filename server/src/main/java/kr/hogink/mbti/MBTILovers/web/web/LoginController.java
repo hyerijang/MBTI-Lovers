@@ -1,8 +1,8 @@
 package kr.hogink.mbti.MBTILovers.web.web;
 
 import kr.hogink.mbti.MBTILovers.web.domain.member.Member;
+import kr.hogink.mbti.MBTILovers.web.login.LoginDto;
 import kr.hogink.mbti.MBTILovers.web.login.LoginType;
-import kr.hogink.mbti.MBTILovers.web.login.LoginVO;
 import kr.hogink.mbti.MBTILovers.web.service.MemberService;
 import kr.hogink.mbti.MBTILovers.web.service.login.LoginService;
 import lombok.RequiredArgsConstructor;
@@ -29,26 +29,26 @@ public class LoginController {
 
     //로그인 페이지
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String loginGET(LoginVO loginVO) {
+    public String loginGET(LoginDto loginDto) {
         return "user/login";
     }
 
     //로그인 처리
     @RequestMapping(value = "/loginPost", method = RequestMethod.POST)
-    public void loginPost(LoginVO loginVO, HttpSession session, Model model) {
+    public void loginPost(LoginDto loginDto, HttpSession session, Model model) {
         //신규 유저인 경우 loginVO에 신규유저 uid 넣음
         String newUseruid = (String) session.getAttribute(LoginType.NEW_USER_UID_SESSION);
         if (newUseruid != null)
-            loginVO.setUid(newUseruid);
+            loginDto.setUid(newUseruid);
 
-        Optional<Member> member = loginService.login(loginVO);
+        Optional<Member> member = loginService.login(loginDto);
 
         if (member.isPresent()) {
             //model에 멤버 객체를 currentUser라는 이름의 변수에 저장
             model.addAttribute(LoginType.USER_MEMBER_SESSION, member.get());
         } else {
             //신규 가입
-            session.setAttribute(LoginType.NEW_USER_UID_SESSION, loginVO.getUid());
+            session.setAttribute(LoginType.NEW_USER_UID_SESSION, loginDto.getUid());
         }
 
     }
