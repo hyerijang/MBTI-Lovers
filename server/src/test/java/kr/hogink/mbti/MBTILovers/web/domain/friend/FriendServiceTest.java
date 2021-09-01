@@ -29,8 +29,8 @@ class FriendServiceTest {
         //회원가입
         String member1Uid = "user1";
         String member2Uid = "user2";
-        Member member1 = new Member(member1Uid);
-        Member member2 = new Member(member2Uid);
+        Member member1 = new Member();
+        Member member2 = new Member();
         memberService.join(member1);
         memberService.join(member2);
 

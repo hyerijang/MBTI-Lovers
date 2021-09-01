@@ -4,7 +4,8 @@ import kr.hogink.mbti.MBTILovers.web.service.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+
+import javax.transaction.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,10 +21,15 @@ public class MemberServiceIntegrationTest {
     @Test
     void 회원가입() {
         //given
-        Member member = new Member();
+        Member member = Member.builder()
+                .name("김홍익")
+                .age(12)
+                .gender("남자")
+                .mbti("ENFP")
+                .build();
         String saveId = "testuser";
         member.setUid(saveId);
-        member.setName("테스트유저");
+
         //when
         memberService.join(member);
         //then

@@ -15,8 +15,6 @@ public interface MemberService {
 
     Optional<Member> findOneByUid(String memberUid);
 
-    void renewLastConnectTime(Member member);
-
     List<Member> findNearUser(double latitude, double longitude, int number);
 
     List<Member> findNearUserNotFriend(double latitude, double longitude, int number, String uid);

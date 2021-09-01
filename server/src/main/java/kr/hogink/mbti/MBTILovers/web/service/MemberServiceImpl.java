@@ -9,7 +9,6 @@ import org.locationtech.jts.io.WKTReader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,8 +32,6 @@ public class MemberServiceImpl implements MemberService {
         validateUid(member);
         //같은 UID인 중복회원 x
         validateDuplicateMember(member);
-        //현재시각 저장
-        setLastConnectTime(member);
         memberRepository.save(member);
         return member.getUid();
     }
@@ -43,9 +40,6 @@ public class MemberServiceImpl implements MemberService {
     public String edit(Member member) {
         //UID 검증
         validateUid(member);
-        //현재시각 저장
-        setLastConnectTime(member);
-        memberRepository.save(member);
         return member.getUid();
     }
 
@@ -63,15 +57,6 @@ public class MemberServiceImpl implements MemberService {
                 });
     }
 
-
-    public void setLastConnectTime(Member member) {
-        member.setConnectedTimeAt(LocalDateTime.now());
-    }
-
-    public void renewLastConnectTime(Member member) {
-        setLastConnectTime(member);
-        memberRepository.save(member);
-    }
 
     /**
      * 전체 회원 조회

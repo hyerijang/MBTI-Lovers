@@ -1,6 +1,6 @@
 package kr.hogink.mbti.MBTILovers.web.web.dto;
 
-public class MemberForm {
+public class MemberDto {
 
     private String uid;
     private String name;

@@ -2,7 +2,7 @@ package kr.hogink.mbti.MBTILovers.web.web;
 
 import kr.hogink.mbti.MBTILovers.web.domain.friend.Friend;
 import kr.hogink.mbti.MBTILovers.web.domain.friend.FriendService;
-import kr.hogink.mbti.MBTILovers.web.web.dto.FriendDTO;
+import kr.hogink.mbti.MBTILovers.web.web.dto.FriendDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -72,7 +72,7 @@ public class FriendController {
 
     // 친구 수락
     @PostMapping("/friends/acceptRequest")
-    public String accept(FriendDTO friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+    public String accept(FriendDto friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
 
         log.info("친구 수락" + "나 : " + cookieUid + "상대방 : " + friendDTO.getFid());
         Friend friend = friendService.getFriend(cookieUid, friendDTO.getFid());
@@ -86,7 +86,7 @@ public class FriendController {
 
     // 친구 신청
     @PostMapping("/friends/request")
-    public String request(FriendDTO friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+    public String request(FriendDto friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
 
         log.info("친구 신청" + "나 : " + cookieUid + "상대방 : " + friendDTO.getFid());
         Friend friend = friendService.getFriend(cookieUid, friendDTO.getFid());
@@ -99,7 +99,7 @@ public class FriendController {
 
     // 친구 신청 취소
     @PostMapping("/friends/cancelRequest")
-    public String cancel(FriendDTO friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+    public String cancel(FriendDto friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
         log.info("친구 신청 취소" + "나 : " + cookieUid + "상대방 : " + friendDTO.getFid());
         friendService.removeRecord(cookieUid, friendDTO.getFid());
         return "redirect:/";
@@ -107,7 +107,7 @@ public class FriendController {
 
     // 친구 차단
     @PostMapping("/friends/block")
-    public String block(FriendDTO friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+    public String block(FriendDto friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
 
         log.info("친구 차단" + "나 : " + cookieUid + "상대방 : " + friendDTO.getFid());
         Friend friend = friendService.getFriend(cookieUid, friendDTO.getFid());
@@ -120,7 +120,7 @@ public class FriendController {
 
     //차단 취소
     @PostMapping("/friends/cancelBlock")
-    public String cancelBlock(FriendDTO friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+    public String cancelBlock(FriendDto friendDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
 
         log.info("친구 차단 취소 " + "나 : " + cookieUid + "상대방 : " + friendDTO.getFid());
         Friend friend = friendService.getFriend(cookieUid, friendDTO.getFid());

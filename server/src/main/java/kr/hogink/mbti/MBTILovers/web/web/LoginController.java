@@ -44,8 +44,6 @@ public class LoginController {
         Optional<Member> member = loginService.login(loginVO);
 
         if (member.isPresent()) {
-            //기존 유저면 접속시간 갱신
-            memberService.renewLastConnectTime(member.get());
             //model에 멤버 객체를 currentUser라는 이름의 변수에 저장
             model.addAttribute(LoginType.USER_MEMBER_SESSION, member.get());
         } else {

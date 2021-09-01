@@ -7,7 +7,7 @@ import kr.hogink.mbti.MBTILovers.web.domain.member.Member;
 import kr.hogink.mbti.MBTILovers.web.login.LoginType;
 import kr.hogink.mbti.MBTILovers.web.service.MemberService;
 import kr.hogink.mbti.MBTILovers.web.service.chat.room.RoomService;
-import kr.hogink.mbti.MBTILovers.web.web.dto.chat.RoomDTO;
+import kr.hogink.mbti.MBTILovers.web.web.dto.chat.RoomDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -79,7 +79,7 @@ public class RoomController {
 
     // 채팅방 생성
     @PostMapping("/room")
-    public String createRoom(RoomDTO roomDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
+    public String createRoom(RoomDto roomDTO, @CookieValue(name = USER_UID_COOKIE) String cookieUid) {
 
         Friend friend = friendService.getFriendInfo(cookieUid, roomDTO.getFid()).get();
         if (friend != null) {

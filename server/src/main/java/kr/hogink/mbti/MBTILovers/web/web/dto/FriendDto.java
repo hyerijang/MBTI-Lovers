@@ -1,6 +1,6 @@
 package kr.hogink.mbti.MBTILovers.web.web.dto;
 
-public class FriendDTO {
+public class FriendDto {
 
     private String fid;
 

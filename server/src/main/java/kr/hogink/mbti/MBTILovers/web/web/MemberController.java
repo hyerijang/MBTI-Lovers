@@ -7,7 +7,7 @@ import kr.hogink.mbti.MBTILovers.web.domain.member.Member;
 import kr.hogink.mbti.MBTILovers.web.domain.member.MemberRepository;
 import kr.hogink.mbti.MBTILovers.web.login.LoginType;
 import kr.hogink.mbti.MBTILovers.web.service.MemberService;
-import kr.hogink.mbti.MBTILovers.web.web.dto.MemberForm;
+import kr.hogink.mbti.MBTILovers.web.web.dto.MemberDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -44,7 +44,7 @@ public class MemberController {
 
 
     @PostMapping("/members/new")
-    public String create(MemberForm form) {
+    public String create(MemberDto form) {
         Member member = new Member();
         member.setUid(form.getUid());
         member.setName(form.getName());
@@ -76,7 +76,7 @@ public class MemberController {
 
 
     @PostMapping("/members/edit")
-    public String edit(MemberForm form, HttpSession session, HttpServletRequest request) {
+    public String edit(MemberDto form, HttpSession session, HttpServletRequest request) {
 
         String uid = (String) session.getAttribute(LoginType.NEW_USER_UID_SESSION);
         if (uid == null) {
