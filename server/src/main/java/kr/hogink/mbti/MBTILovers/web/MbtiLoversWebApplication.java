@@ -4,11 +4,18 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 
 import java.util.Locale;
 import java.util.TimeZone;
 
 @SpringBootApplication
+@PropertySources({
+        @PropertySource("classpath:s3.properties"),
+        @PropertySource("classpath:db.properties")
+})
+
 public class MbtiLoversWebApplication extends SpringBootServletInitializer {
 
 

@@ -45,3 +45,5 @@ nohup.out
 /server/sql/
 /server/aws/
 /SSL/
+server/src/main/resources/db.properties
+server/src/main/resources/s3.properties
