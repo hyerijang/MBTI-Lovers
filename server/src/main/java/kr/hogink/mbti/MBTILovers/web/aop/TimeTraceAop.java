@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TimeTraceAop {
 
-    @Around("execution(* kr.hogink.mbti.MBTILovers.web..*(..))")
+    @Around("execution(* kr.hogink.mbti.MBTILovers.web.service..*(..))")
     public Object execute(ProceedingJoinPoint JoinPoint) throws Throwable {
 
         long start = System.currentTimeMillis();

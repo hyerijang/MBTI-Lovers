@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.com/hyerijang/MBTI-Lovers.svg?branch=master)](https://travis-ci.com/hyerijang/MBTI-Lovers)
 
 홍익대학교 2021 1학기 졸업전시회 출품작 - MBTI연애해 입니다.  
-> 본 프로젝트는 2020년 2학기부터 2021년 1학기동안 진행된 **안드로이드 웹앱**  프로젝트입니다.
+> 본 프로젝트는 2020년 2학기부터 2021년 1학기동안 진행된 **안드로이드 하이브리드 앱**  프로젝트입니다.
 
 
 # Description
@@ -18,10 +18,13 @@
 <img src = "https://user-images.githubusercontent.com/46921979/121857950-138c8580-cd31-11eb-9c33-229a758f289a.png" width ="24%">
 <img src = "https://user-images.githubusercontent.com/46921979/121854611-5b111280-cd2d-11eb-943d-9ba4114d0dd3.png" width ="24%">
 </div>
-# client (android)
+
+
+
+# Client (android)
 ## Environment
-Tool : Android Studio
-OS : window 10
+- Tool : Android Studio
+- OS : window 10
 
 ## Dependencies
 ### Language
@@ -33,11 +36,13 @@ OS : window 10
 ### Database
 - firebase
 
-# server
+
+
+# Server
 
 ## Environment
-Tool : intelliJ  
-OS : window 10 / ubuntu 18.04.5
+- Tool : intelliJ  
+- OS : window 10 / ubuntu 18.04.5
 
 ## Dependencies
 ### Language
@@ -49,9 +54,7 @@ OS : window 10 / ubuntu 18.04.5
 
 
 ### Spring Boot
-- Spring MVC
 - Spring Data JPA
-- Spring AOP
 
 
 ### Database
