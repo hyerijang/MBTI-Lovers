@@ -8,8 +8,9 @@ import kr.hogink.mbti.MBTILovers.web.service.login.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.Cookie;
@@ -28,13 +29,13 @@ public class LoginController {
     private final LoginService loginService;
 
     //로그인 페이지
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @GetMapping("/login")
     public String loginGET(LoginDto loginDto) {
         return "user/login";
     }
 
     //로그인 처리
-    @RequestMapping(value = "/loginPost", method = RequestMethod.POST)
+    @PostMapping("/loginPost")
     public void loginPost(LoginDto loginDto, HttpSession session, Model model) {
         //신규 유저인 경우 loginVO에 신규유저 uid 넣음
         String newUseruid = (String) session.getAttribute(LoginType.NEW_USER_UID_SESSION);
@@ -55,7 +56,7 @@ public class LoginController {
 
 
     // 로그아웃 처리
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    @GetMapping("/logout")
     public String logout(HttpServletRequest request,
                          HttpServletResponse response,
                          HttpSession session) throws Exception {

@@ -29,6 +29,8 @@ public interface FriendService {
 
     <T> List<T> getListRelationBlock(String uid);
 
+    <T> List<T> getListAsc(String uid, Friend.RelationType type);
+
     void removeRecord(String uid, String fid);
 
 }
