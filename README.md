@@ -19,6 +19,20 @@
 <img src = "https://user-images.githubusercontent.com/46921979/121854611-5b111280-cd2d-11eb-943d-9ba4114d0dd3.png" width ="24%">
 </div>
 
+# Architecture
+
+
+<div>
+<img src = "https://user-images.githubusercontent.com/46921979/121853662-25b7f500-cd2c-11eb-9fe5-918292bcc6fc.png" width="30%">
+<img src = "https://user-images.githubusercontent.com/46921979/133964343-e48de6a6-a134-4eb4-bb24-b491fe3553a6.jpg" width="65%">
+  
+</div>
+
+## 채팅 구조
+STOMP를 활용한 토픽 구독 방식으로 설계 
+
+![MBTI 채팅 구조](https://user-images.githubusercontent.com/46921979/121853189-914d9280-cd2b-11eb-92b3-3712423c5aa8.png)
+
 
 
 # Client (android)
@@ -72,17 +86,12 @@
 - AWS CodeDeploy
 
 
-# Architecture
-## client - server
-<img src = "https://user-images.githubusercontent.com/46921979/121853662-25b7f500-cd2c-11eb-9fe5-918292bcc6fc.png" width="70%">
 
-## server : chat
-STOMP를 활용한 토픽 구독 방식으로 설계 
-![MBTI 채팅 구조](https://user-images.githubusercontent.com/46921979/121853189-914d9280-cd2b-11eb-92b3-3712423c5aa8.png)
 
 
 # Installation
-배포 파일은 백그라운드로 실행됩니다.
+배포 파일은 백그라운드로 실행됩니다.  
+키 및 인증 파일이 포함되어있지 않으므로 아래 방법으로 정상 실행되지 않습니다. 유의해주시길 바랍니다.
 
     $ git clone https://github.com/hyerijang/MBTI-Lovers.git
     $ cd MBTI-Lovers/server
