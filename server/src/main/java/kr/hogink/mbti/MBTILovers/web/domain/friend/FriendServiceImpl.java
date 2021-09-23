@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,7 @@ public class FriendServiceImpl implements FriendService {
         this.friendRepository = friendRepository;
         this.memberRepository = memberRepository;
     }
+
 
     @Override
     public List<Friend> getListAllFriend(String uid) {
@@ -94,6 +96,15 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
+    public List<Friend> getListAsc(String uid, Friend.RelationType type) {
+        List<Friend> friends = friendRepository.findAllByUidAndRelation(uid, type);
+        if (!friends.isEmpty()) {
+            Collections.sort(friends, FriendServiceImpl::compare);
+        }
+        return friends;
+    }
+
+    @Override
     public void removeRecord(String uid, String fid) {
         Optional<Friend> friend = friendRepository.findOneByUidAndFid(uid, fid);
         if (friend.isPresent()) {
@@ -150,6 +161,14 @@ public class FriendServiceImpl implements FriendService {
                 log.warn("존재하지 않는 유저에게 친구 신청을 할 수 없습니다.");
             }
         }
+
+    }
+
+    public static int compare(Friend a, Friend b) {
+        //오름차순 정렬
+        String nameA = a.getFriendMember().getName();
+        String nameB = b.getFriendMember().getName();
+        return nameA.compareTo(nameB);
 
     }
 }

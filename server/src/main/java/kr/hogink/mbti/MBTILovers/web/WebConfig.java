@@ -22,7 +22,11 @@ public class WebConfig extends WebMvcConfigurationSupport {
         // 로그인된 유저인지 검증
         // 경로는 "/경로" 여야함
         registry.addInterceptor(new AuthInterceptor(memberService))
-                .addPathPatterns("/*").excludePathPatterns("/upload").excludePathPatterns("/uploadProfileImage").excludePathPatterns("/base64Upload");
+                .addPathPatterns("/*")
+                .excludePathPatterns("/upload")
+                .excludePathPatterns("/uploadProfileImage")
+                .excludePathPatterns("/base64Upload")
+                .excludePathPatterns("/api/**");
 
 
         //로그인 인터셉터
